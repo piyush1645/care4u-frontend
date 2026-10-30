@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Patient Registration | MediCare System</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/auth/register.css">
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-md py-10">
+    <button onclick="history.back()"
+        class="fixed top-3 left-3 sm:top-6 sm:left-6 flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm text-on-surface-variant hover:text-primary transition-all z-50 cursor-pointer hover:-translate-y-0.5 hover:shadow-md">
+        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+        <span class="hidden sm:inline font-label-md text-label-md font-medium">
+            Back
+        </span>
+    </button>
+    <!-- Top Navigation Suppression: Transactional Screen (Login/Sign-up) -->
+    <!-- Content starts here -->
+    <div class="w-full max-w-[640px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <!-- Logo/Header Area -->
+        <div class="flex flex-col items-center mb-lg">
+            <div class="w-16 h-16 bg-primary-container rounded-xl flex items-center justify-center mb-base shadow-sm">
+                <span class="material-symbols-outlined text-white text-[32px]"
+                    style="font-variation-settings: 'FILL' 1;">medical_services</span>
+            </div>
+            <h1 class="font-headline-xl text-headline-xl text-primary text-center">MediCare System</h1>
+            <p class="font-body-md text-body-md text-on-surface-variant text-center mt-xs">Create your patient portal
+                account to manage appointments</p>
+        </div>
+        <!-- Main Registration Card -->
+        <div
+            class="glass-bg rounded-xl shadow-[0px_4px_24px_rgba(0,0,0,0.06)] p-lg border border-surface-container-highest">
+
+            <div id="error-message" class="hidden mb-4 p-4 text-sm text-error bg-error-container rounded-lg"
+                role="alert"></div>
+
+            <form class="space-y-md" id="registrationForm">
+                <!-- Bento-style grid for form sections -->
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                    <!-- First Name -->
+                    <div class="col-span-1 space-y-xs">
+                        <label for="firstName"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            First Name
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">person</span>
+                            <input
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="John" required id="firstName" name="firstName" type="text" minlength="2"
+                                maxlength="50" />
+                        </div>
+                    </div>
+
+                    <!-- Middle Name -->
+                    <div class="col-span-1 space-y-xs">
+                        <label for="middleName"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Middle Name
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">person</span>
+                            <input
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="William" id="middleName" name="middleName" type="text" minlength="2"
+                                maxlength="50" />
+                        </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="col-span-1 space-y-xs">
+                        <label for="lastName"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Last Name
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">person</span>
+                            <input
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="Doe" required id="lastName" name="lastName" type="text" minlength="2"
+                                maxlength="50" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <!-- Email -->
+                    <div class="space-y-xs">
+                        <label for="email" class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Email Address
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">mail</span>
+                            <input id="email" name="email"
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="john@example.com" required type="email" />
+                        </div>
+                    </div>
+                    <!-- Mobile Number -->
+                    <div class="space-y-xs">
+                        <label for="mobile" class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Mobile Number
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">smartphone</span>
+                            <input id="mobile" name="mobile"
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="+1 (555) 000-0000" required type="tel" pattern="^\+?[1-9]\d{9,14}$"
+                                title="Invalid mobile number format" />
+                        </div>
+                    </div>
+                    <!-- Date of Birth -->
+                    <div class="space-y-xs">
+                        <label for="dateOfBirth"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Date of Birth
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">calendar_today</span>
+                            <input id="dateOfBirth" name="dateOfBirth"
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                required type="date" />
+                        </div>
+                    </div>
+                    <!-- Gender Selection -->
+                    <div class="space-y-xs">
+                        <label for="gender" class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Gender
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">wc</span>
+                            <select id="gender" name="gender" required
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface appearance-none cursor-pointer">
+                                <option disabled selected value="">Select Gender</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Blood Group Selection -->
+                    <div class="space-y-xs">
+                        <label for="bloodGroup"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Blood Group
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">bloodtype</span>
+                            <select id="bloodGroup" name="bloodGroup" required
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface appearance-none cursor-pointer">
+                                <option disabled selected value="">Select Blood Group</option>
+                                <option value="A_POSITIVE">A+</option>
+                                <option value="A_NEGATIVE">A-</option>
+                                <option value="B_POSITIVE">B+</option>
+                                <option value="B_NEGATIVE">B-</option>
+                                <option value="AB_POSITIVE">AB+</option>
+                                <option value="AB_NEGATIVE">AB-</option>
+                                <option value="O_POSITIVE">O+</option>
+                                <option value="O_NEGATIVE">O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+                    <!-- Password -->
+                    <div class="space-y-xs">
+                        <label for="password"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Password
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">lock</span>
+                            <input id="password" name="password"
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="••••••••" required type="password" minlength="8"
+                                pattern="(?=.*[0-9])(?=.*[A-Z]).{8,}"
+                                title="Must contain at least one number and one uppercase letter, and at least 8 or more characters" />
+                        </div>
+                    </div>
+                    <!-- Confirm Password -->
+                    <div class="space-y-xs">
+                        <label for="confirmPassword"
+                            class="font-label-md text-label-md text-on-surface flex items-center gap-1">
+                            Confirm Password
+                            <span class="text-error text-xs">*</span>
+                        </label>
+                        <div class="form-input-container flex items-center px-base h-11 rounded-lg">
+                            <span class="material-symbols-outlined text-outline mr-base">lock_reset</span>
+                            <input id="confirmPassword" name="confirmPassword"
+                                class="bg-transparent border-none focus:ring-0 w-full font-body-sm text-body-sm text-on-surface"
+                                placeholder="••••••••" required type="password" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-base space-y-md">
+                    <button
+                        class="w-full h-11 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-primary-container active:scale-[0.98] transition-all flex items-center justify-center gap-base"
+                        type="submit">
+                        Register Account
+                        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                    </button>
+                    <div class="flex items-center justify-center">
+                        <span class="font-body-sm text-body-sm text-on-surface-variant">Already have an account? </span>
+                        <a class="ml-1 font-label-md text-label-md text-primary hover:underline transition-all"
+                            href="/auth/login">Login</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Trust Footer Info -->
+        <div class="mt-md flex flex-wrap justify-center gap-lg text-outline">
+            <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">security</span>
+                <span class="font-label-sm text-label-sm">HIPAA Compliant</span>
+            </div>
+            <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">encrypted</span>
+                <span class="font-label-sm text-label-sm">256-bit Encryption</span>
+            </div>
+            <div class="flex items-center gap-xs">
+                <span class="material-symbols-outlined text-[18px]">verified</span>
+                <span class="font-label-sm text-label-sm">Verified Facility</span>
+            </div>
+        </div>
+    </div>
+    <!-- Background Illustration Elements -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-40">
+        <div class="absolute top-[10%] left-[5%] w-64 h-64 bg-primary-container/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[10%] right-[5%] w-96 h-96 bg-secondary-container/20 rounded-full blur-[120px]">
+        </div>
+    </div>
+    
+    <script src="/js/auth/registerPage.js"></script>
+</body>
+
+</html>

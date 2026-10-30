@@ -1,0 +1,22 @@
+/**
+ * admin/doctors.css
+ * Styles specific to the Doctor table pages:
+ *   - admin/doctors.ejs (overview list)
+ *   - admin/doctor/list.ejs (detailed management list)
+ * Also includes page-level base styles shared by these pages.
+ */
+
+body {
+    background-color: #F4F5F7;
+}
+
+.doctor-row:hover {
+    background-color: #f0f3ff;
+}
+
+.status-pill {
+    border-radius: 9999px;
+    padding: 2px 12px;
+    font-weight: 500;
+    font-size: 12px;
+}

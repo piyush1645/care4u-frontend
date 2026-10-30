@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Staff Registration | MediFlow Admin</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+    <link rel="stylesheet" href="/css/admin/staff-register.css">
+</head>
+<body class="bg-background text-on-surface">
+    <%- include('../partial/navBar') %>
+
+    <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] h-20 bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-md z-40 backdrop-blur-sm">
+        <div class="flex items-center">
+            <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+            <h2 class="font-headline-lg text-headline-lg text-primary">
+                Register New Staff
+            </h2>
+        </div>
+    </header>
+
+    <main class="ml-0 lg:ml-[260px] pt-24 p-md min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div id="validation-summary" class="hidden mb-6 p-4 rounded-lg border border-red-200 bg-red-50" role="alert" aria-live="polite">
+                <p class="font-semibold text-error flex items-center gap-2 text-sm">
+                    <span class="material-symbols-outlined text-[18px]">error</span>
+                    Please fix the following before submitting:
+                </p>
+                <ul id="validation-summary-list" class="mt-2 ml-1 list-disc list-inside text-sm text-error space-y-1"></ul>
+            </div>
+
+            <div id="error-message" class="hidden mb-6 p-4 text-sm text-error bg-error-container rounded-lg flex items-start gap-2" role="alert" aria-live="assertive">
+                <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">warning</span>
+                <span id="error-message-text"></span>
+            </div>
+            <div id="success-message" class="hidden mb-6 p-4 text-sm text-success bg-success-container rounded-lg flex items-start gap-2" role="status" aria-live="polite">
+                <span class="material-symbols-outlined text-[18px] shrink-0 mt-0.5">check_circle</span>
+                <span id="success-message-text"></span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <form id="staffRegisterForm" class="flex-1 space-y-6 max-w-4xl bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30" novalidate>
+                    <!-- Names -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                        <div class="field-group" data-field="firstName">
+                            <label for="firstName" class="block font-label-md text-label-md mb-2 text-on-surface-variant">First Name <span class="text-error">*</span></label>
+                            <input type="text" id="firstName" name="firstName" maxlength="50" autocomplete="given-name" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="John" aria-describedby="firstName-error">
+                            <p id="firstName-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="middleName">
+                            <label for="middleName" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Middle Name</label>
+                            <input type="text" id="middleName" name="middleName" maxlength="50" autocomplete="additional-name" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="William" aria-describedby="middleName-error">
+                            <p id="middleName-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="lastName">
+                            <label for="lastName" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Last Name <span class="text-error">*</span></label>
+                            <input type="text" id="lastName" name="lastName" maxlength="50" autocomplete="family-name" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="Doe" aria-describedby="lastName-error">
+                            <p id="lastName-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                    </div>
+
+                    <!-- Credentials -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                        <div class="field-group" data-field="email">
+                            <label for="email" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Email Address <span class="text-error">*</span></label>
+                            <input type="email" id="email" name="email" maxlength="100" autocomplete="email" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="john.doe@mediflow.com" aria-describedby="email-error">
+                            <p id="email-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="mobile">
+                            <label for="mobile" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Mobile Number <span class="text-error">*</span></label>
+                            <input type="tel" id="mobile" name="mobile" maxlength="15" autocomplete="tel" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="e.g. 9876543210" aria-describedby="mobile-error">
+                            <p id="mobile-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="password">
+                            <label for="password" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Password <span class="text-error">*</span></label>
+                            <input type="password" id="password" name="password" maxlength="128" autocomplete="new-password" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" placeholder="Min. 8 chars, 1 uppercase, 1 number" aria-describedby="password-error">
+                            <p id="password-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                    </div>
+
+                    <!-- Personal details & branch -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                        <div class="field-group" data-field="gender">
+                            <label for="gender" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Gender <span class="text-error">*</span></label>
+                            <select id="gender" name="gender" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" aria-describedby="gender-error">
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                            <p id="gender-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="dateOfBirth">
+                            <label for="dateOfBirth" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Date of Birth <span class="text-error">*</span></label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" aria-describedby="dateOfBirth-error">
+                            <p id="dateOfBirth-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                        <div class="field-group" data-field="hospitalId">
+                            <label for="hospitalId" class="block font-label-md text-label-md mb-2 text-on-surface-variant">Hospital Branch <span class="text-error">*</span></label>
+                            <select id="hospitalId" name="hospitalId" class="form-input w-full px-3 py-2 border border-outline rounded-lg focus:outline-none bg-surface" aria-describedby="hospitalId-error">
+                                <% if (!hospitals || hospitals.length === 0) { %>
+                                    <option value="" disabled selected>No hospital branches available</option>
+                                <% } else { %>
+                                    <option value="" disabled selected>Select Hospital</option>
+                                    <% hospitals.forEach(hospital => { %>
+                                        <option value="<%= hospital.id %>"><%= hospital.branchName || hospital.name %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                            <p id="hospitalId-error" class="field-error hidden" role="alert"></p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-md pt-4">
+                        <a href="/admin/staff" class="px-5 py-2.5 border border-outline rounded-xl hover:bg-surface-container-high transition-colors">Cancel</a>
+                        <button type="submit" id="submitBtn" class="px-6 py-2.5 bg-primary text-on-primary font-semibold rounded-xl hover:bg-primary-container hover:shadow-md transition-all flex items-center gap-2" <%= (!hospitals || hospitals.length === 0) ? 'disabled' : '' %>>
+                            Register Staff
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Profile Photo Sidebar -->
+                <div class="w-full lg:w-80 shrink-0">
+                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col items-center sticky top-24 border border-outline-variant/30">
+                        <h3 class="font-headline-sm text-headline-sm text-primary mb-6 w-full text-center">Profile Photo</h3>
+
+                        <div class="relative group mb-6">
+                            <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-surface-variant/50 bg-surface-container-low shadow-sm">
+                                <img id="profileImagePreview" src="/images/default-avatar.svg" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" alt="Profile Photo" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+
+                        <div class="field-group w-full" data-field="profilePhoto">
+                            <input type="file" id="profilePhotoInput" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden">
+                            <button type="button" id="profilePhotoBtn" class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim px-4 py-2 rounded-lg font-label-lg transition-colors flex items-center justify-center gap-2 mb-3 shadow-sm">
+                                <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+                                Select Photo
+                            </button>
+                            <p id="profilePhoto-error" class="field-error hidden justify-center" role="alert"></p>
+                        </div>
+                        <p class="text-[11px] text-on-surface-variant/70 text-center">Optional. JPG, PNG or WebP, max 5 MB. Preview only — saved after registration support is added.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/admin/registerStaff.js"></script>
+</body>
+</html>

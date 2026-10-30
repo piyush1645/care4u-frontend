@@ -1,0 +1,43 @@
+/**
+ * admin/staff-register.css
+ * Styles specific to the Staff Registration view.
+ */
+
+body {
+    background-color: #F4F5F7;
+}
+
+.form-input {
+    transition: all 0.2s ease-in-out;
+}
+
+.form-input:focus {
+    border-color: #003d9b;
+    box-shadow: 0 0 0 2px rgba(0, 61, 155, 0.1);
+}
+
+.form-input.is-invalid {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.12);
+}
+
+.form-input.is-invalid:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.18);
+}
+
+.field-error {
+    color: #dc2626;
+    font-size: 0.75rem;
+    margin-top: 0.375rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    line-height: 1.25rem;
+}
+
+.field-error .material-symbols-outlined {
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+}

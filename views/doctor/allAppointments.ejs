@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MedCentral | All Appointments</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+    <script src="/js/doctor/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/doctor/common.css">
+</head>
+
+<body class="bg-background text-on-surface flex h-screen overflow-hidden">
+    <!-- Side Navigation Bar -->
+    <%- include("partials/leftNavBar.ejs") %>
+
+        <!-- Main Wrapper -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden w-full">
+            <!-- Top Navigation Bar -->
+            <%- include("partials/topHeader.ejs") %>
+
+                <!-- Main Content Area -->
+                <main class="p-4 lg:p-xl flex-1 overflow-y-auto">
+                    <div class="max-w-[1600px] mx-auto space-y-6">
+                        <!-- Header Section -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-4">
+                            <div>
+                                <h2 class="font-display-lg text-display-lg text-primary">All Appointments</h2>
+                                <p class="text-body-lg text-on-surface-variant mt-1">Review and manage patient clinical history across the health system.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-4">
+                                <button
+                                    class="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-outline-variant rounded-lg text-label-lg hover:bg-surface-container-low transition-colors w-full sm:w-auto font-medium">
+                                    <span class="material-symbols-outlined text-[18px]">filter_list</span>
+                                    Advanced Filters
+                                </button>
+                                <a href="/doctor/export-appointments-csv"
+                                    class="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-outline-variant rounded-lg text-label-lg hover:bg-surface-container-low transition-colors w-full sm:w-auto font-medium">
+                                    <span class="material-symbols-outlined text-[18px]">download</span>
+                                    Export CSV
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Filter Bar -->
+                        <div class="tonal-elevation-1 rounded-xl p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end bg-surface-container-lowest">
+                            <div class="col-span-1">
+                                <label class="block text-label-sm text-on-surface-variant mb-2 px-1 font-semibold">Date Range</label>
+                                <select
+                                    class="w-full border-none bg-surface-container-low rounded-lg text-body-md focus:ring-2 focus:ring-primary px-4 py-2">
+                                    <option>Last 30 Days</option>
+                                    <option>Last 90 Days</option>
+                                    <option>Year to Date</option>
+                                    <option>Custom Range</option>
+                                </select>
+                            </div>
+                            <div class="col-span-1">
+                                <label class="block text-label-sm text-on-surface-variant mb-2 px-1 font-semibold">Visit Type</label>
+                                <select
+                                    class="w-full border-none bg-surface-container-low rounded-lg text-body-md focus:ring-2 focus:ring-primary px-4 py-2">
+                                    <option>All Types</option>
+                                    <option>Follow-up</option>
+                                    <option>Consultation</option>
+                                    <option>Lab Results</option>
+                                    <option>Imaging</option>
+                                </select>
+                            </div>
+                            <div class="col-span-1">
+                                <label class="block text-label-sm text-on-surface-variant mb-2 px-1 font-semibold">Status</label>
+                                <select
+                                    class="w-full border-none bg-surface-container-low rounded-lg text-body-md focus:ring-2 focus:ring-primary px-4 py-2">
+                                    <option>All Statuses</option>
+                                    <option>Completed</option>
+                                    <option>Past</option>
+                                    <option>Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-span-1">
+                                <button
+                                    class="w-full bg-primary text-on-primary py-2 rounded-lg font-label-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2 font-bold shadow-sm">
+                                    <span class="material-symbols-outlined text-[18px]">refresh</span>
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Data Table Section -->
+                        <div class="tonal-elevation-1 rounded-xl overflow-x-auto border border-outline-variant/30 bg-surface-container-lowest">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-surface-container-low border-b border-outline-variant">
+                                    <tr>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold">Patient Name</th>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold">Patient ID</th>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold">Date & Time</th>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold">Visit Type</th>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold">Status</th>
+                                        <th class="px-6 py-4 font-label-lg text-on-surface-variant font-bold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-outline-variant/30">
+                                    <% allAppointments.forEach((app) => { %>
+                                    <tr class="hover:bg-surface-container-lowest transition-colors group">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <img alt="<%= app.patientName %> Profile"
+                                                    class="w-10 h-10 rounded-full object-cover border border-outline-variant"
+                                                    src="<%= app.patientPhoto || '/images/default-avatar.svg' %>"
+                                                    onerror="this.onerror=null; this.src='/images/default-avatar.svg';" />
+                                                <div>
+                                                    <a href="/doctor/patients/<%= app.patientId %>" class="font-label-lg text-on-surface hover:text-primary transition-colors hover:underline"><%= app.patientName %></a>
+                                                    <p class="text-label-sm text-on-surface-variant">Reason: <%= app.reason %></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 font-body-md text-on-surface-variant">#MC-<%= app.patientId %></td>
+                                        <td class="px-6 py-4">
+                                            <p class="font-body-md text-on-surface"><%= app.date %></p>
+                                            <p class="text-label-sm text-on-surface-variant"><%= app.time %></p>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex flex-col gap-1.5 items-start">
+                                                <span class="px-3 py-1 bg-surface-container-high rounded-full text-label-sm text-on-surface font-semibold">
+                                                    <%= app.reason %>
+                                                </span>
+                                                <% if (app.type === 'ONLINE') { %>
+                                                    <span class="flex items-center gap-1 px-2.5 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 rounded text-[11px] font-bold uppercase tracking-wider">
+                                                        <span class="material-symbols-outlined text-[14px]">video_call</span>
+                                                        Online
+                                                    </span>
+                                                <% } else { %>
+                                                    <span class="flex items-center gap-1 px-2.5 py-0.5 bg-slate-50 text-slate-600 border border-slate-200 rounded text-[11px] font-bold uppercase tracking-wider">
+                                                        <span class="material-symbols-outlined text-[14px]">home</span>
+                                                        In-Person
+                                                    </span>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <% 
+                                                let statusClass = "bg-surface-container-high text-on-surface";
+                                                let displayStatus = app.status;
+                                                if (app.meeting && app.meeting.status === 'IN_PROGRESS') {
+                                                    statusClass = "bg-emerald-100 text-emerald-800 border border-emerald-200";
+                                                    displayStatus = "LIVE CALL";
+                                                } else if(app.status === 'COMPLETED') {
+                                                    statusClass = "bg-emerald-50 text-emerald-700 border border-emerald-100";
+                                                } else if(app.status === 'CANCELLED') {
+                                                    statusClass = "bg-red-50 text-red-700 border border-red-100";
+                                                } else if(app.status === 'BOOKED') {
+                                                    statusClass = "bg-blue-50 text-blue-700 border border-blue-100";
+                                                } else if(app.status === 'ON_GOING') {
+                                                    statusClass = "bg-amber-50 text-amber-700 border border-amber-100";
+                                                } else if(app.status === 'NO_SHOW') {
+                                                    statusClass = "bg-slate-100 text-slate-700 border border-slate-200";
+                                                }
+                                            %>
+                                            <% if (app.meeting && app.meeting.status === 'IN_PROGRESS') { %>
+                                                <span class="px-3 py-1 <%= statusClass %> rounded-full text-label-sm font-bold uppercase"><%= displayStatus %></span>
+                                            <% } else { %>
+                                                <select onchange="updateAppointmentStatus(this, '<%= app.id %>')" class="px-3 py-1 <%= statusClass %> rounded-full text-label-sm font-bold uppercase border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer shadow-sm">
+                                                    <option class="text-blue-700 bg-white" value="BOOKED" <%= app.status === 'BOOKED' ? 'selected' : '' %>>Booked</option>
+                                                    <option class="text-amber-700 bg-white" value="ON_GOING" <%= app.status === 'ON_GOING' ? 'selected' : '' %>>On Going</option>
+                                                    <option class="text-emerald-700 bg-white" value="COMPLETED" <%= app.status === 'COMPLETED' ? 'selected' : '' %>>Completed</option>
+                                                    <option class="text-slate-700 bg-white" value="NO_SHOW" <%= app.status === 'NO_SHOW' ? 'selected' : '' %>>No Show</option>
+                                                    <option class="text-red-700 bg-white" value="CANCELLED" <%= app.status === 'CANCELLED' ? 'selected' : '' %>>Cancelled</option>
+                                                </select>
+                                            <% } %>
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="flex items-center justify-end gap-3">
+                                                <a href="/doctor/patients/<%= app.patientId %>" class="text-primary font-label-lg hover:underline transition-all inline-block font-semibold">View Details</a>
+                                                
+                                                <% if (app.type === 'ONLINE' && user && user.role === 'DOCTOR') { %>
+                                                    <div class="inline-flex items-center gap-2 border-l border-outline-variant/30 pl-3 appointment-zoom-actions" data-appointment-id="<%= app.id %>">
+                                                        <% 
+                                                        const isTimeForDoctor = !app.startTimeMs || (new Date().getTime() >= app.startTimeMs);
+                                                        %>
+                                                        <% if (!isTimeForDoctor) { %>
+                                                            <button disabled class="flex items-center gap-1 px-3 py-1.5 bg-slate-100 text-slate-400 rounded-lg text-label-sm cursor-not-allowed border border-slate-200 font-semibold">
+                                                                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                                Available at <%= new Date(app.startTimeMs).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
+                                                            </button>
+                                                        <% } else { %>
+                                                            <% if (!app.meeting || app.meeting.status === 'UPCOMING') { %>
+                                                                <button onclick="startZoomCall(this, '<%= app.id %>')" class="flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary rounded-lg text-label-sm hover:opacity-90 transition-all font-bold shadow-sm font-semibold">
+                                                                    <span class="material-symbols-outlined text-[16px]">video_call</span>
+                                                                    Start Call
+                                                                </button>
+                                                            <% } else if (app.meeting.status === 'IN_PROGRESS') { %>
+                                                                <a href="<%= app.meeting.startUrl %>" target="_blank" class="flex items-center gap-1 px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-label-sm hover:bg-emerald-700 transition-all font-bold shadow-sm font-semibold">
+                                                                    <span class="material-symbols-outlined text-[16px]">play_arrow</span>
+                                                                    Join
+                                                                </a>
+                                                                <button onclick="endZoomCall(this, '<%= app.id %>')" class="flex items-center gap-1 px-3 py-1.5 bg-error text-on-error rounded-lg text-label-sm hover:bg-red-700 transition-all font-bold shadow-sm font-semibold">
+                                                                    <span class="material-symbols-outlined text-[16px]">call_end</span>
+                                                                    Cut
+                                                                </button>
+                                                            <% } else if (app.meeting.status === 'COMPLETED') { %>
+                                                                <span class="text-label-sm text-on-surface-variant/60 flex items-center gap-1 font-semibold">
+                                                                    <span class="material-symbols-outlined text-[16px] text-slate-400">check_circle</span>
+                                                                    Ended
+                                                                </span>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                    <% if(allAppointments.length === 0) { %>
+                                        <tr>
+                                            <td colspan="6" class="px-6 py-8 text-center text-on-surface-variant">No appointments found.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                            <!-- Pagination -->
+                            <div class="bg-surface-container-low px-6 py-4 flex items-center justify-between">
+                                <p class="text-label-sm text-on-surface-variant">Showing page <%= pagination.page %> of <%= Math.max(1, pagination.totalPages) %> (<%= pagination.total %> total results)</p>
+                                <div class="flex gap-2">
+                                    <a href="?page=<%= pagination.page - 1 %>&limit=<%= pagination.limit %>"
+                                        class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant hover:bg-surface-container-high <%= pagination.page <= 1 ? 'pointer-events-none opacity-50' : '' %>">
+                                        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+                                    </a>
+                                    
+                                    <% for(let i = 1; i <= pagination.totalPages; i++) { %>
+                                        <a href="?page=<%= i %>&limit=<%= pagination.limit %>"
+                                            class="w-8 h-8 flex items-center justify-center rounded border <%= pagination.page == i ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant bg-white text-on-surface-variant hover:bg-surface-container-high' %>"><%= i %></a>
+                     <% } %>
+
+                                    <a href="?page=<%= pagination.page + 1 %>&limit=<%= pagination.limit %>"
+                                        class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-white text-on-surface-variant hover:bg-surface-container-high <%= pagination.page >= pagination.totalPages ? 'pointer-events-none opacity-50' : '' %>">
+                                        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+        <script src="/js/doctor/allAppointments.js"></script>
+    </div>
+</body>
+
+</html>

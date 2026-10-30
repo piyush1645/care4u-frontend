@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Edit Staff Profile | MedPortal</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+</head>
+
+<body class="bg-background text-on-surface h-screen overflow-hidden flex">
+
+    <!-- Sidebar -->
+    <%- include("../partial/navBar.ejs") %>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 ml-0 lg:ml-[260px] flex flex-col h-screen overflow-hidden">
+
+            <!-- Header -->
+            <header class="h-20 shrink-0 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6">
+                <div class="flex items-center">
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[24px]">menu</span>
+                    </button>
+                    <h2 class="font-headline-lg text-headline-md font-bold text-primary">
+                        Staff Management
+                    </h2>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-8">
+
+                <!-- Page Heading -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="font-display-lg text-display-lg text-primary">
+                            Edit Staff Profile
+                        </h2>
+
+                        <p class="text-body-lg text-on-surface-variant mt-1">
+                            Update personal and account information for <%= staff.firstName %> <%= staff.lastName %>
+                        </p>
+                    </div>
+
+                    <a href="/admin/staffProfile?staffId=<%= staff.id %>"
+                        class="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant rounded-lg text-label-lg hover:bg-surface-container-low transition-colors">
+                        Cancel
+                    </a>
+                </div>
+
+                <div class="flex flex-col xl:flex-row gap-8 w-full">
+
+                    <!-- Form -->
+                    <form id="editStaffProfileForm" class="flex-1 min-w-0 space-y-8">
+
+                        <!-- Account Credentials -->
+                        <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                            <h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+                                <span class="material-symbols-outlined">lock</span>
+                                Account Credentials
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Email Address <span class="text-error">*</span>
+                                    </label>
+                                    <input type="email" name="email" value="<%= staff.credential?.email %>" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Phone Number <span class="text-error">*</span>
+                                    </label>
+                                    <input type="text" name="mobile" value="<%= staff.credential?.mobile %>" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                            <h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+                                <span class="material-symbols-outlined">person</span>
+                                Personal Information
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        First Name <span class="text-error">*</span>
+                                    </label>
+                                    <input type="text" name="firstName" value="<%= staff.firstName %>" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Middle Name
+                                    </label>
+                                    <input type="text" name="middleName" value="<%= staff.middleName || '' %>"
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Last Name <span class="text-error">*</span>
+                                    </label>
+                                    <input type="text" name="lastName" value="<%= staff.lastName %>" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Date of Birth <span class="text-error">*</span>
+                                    </label>
+                                    <% let dobFormatted="" ; if(staff.dateOfBirth) { const d=new Date(staff.dateOfBirth); dobFormatted=d.toISOString().split('T')[0]; } %>
+                                    <input type="date" name="dateOfBirth" value="<%= dobFormatted %>" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Gender <span class="text-error">*</span>
+                                    </label>
+                                    <select name="gender" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                        <option value="MALE" <%=staff.gender==='MALE' ? 'selected' : '' %>>Male</option>
+                                        <option value="FEMALE" <%=staff.gender==='FEMALE' ? 'selected' : '' %>>Female</option>
+                                        <option value="OTHER" <%=staff.gender==='OTHER' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">
+                                        Assigned Branch <span class="text-error">*</span>
+                                    </label>
+                                    <select name="hospitalId" required
+                                        class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                        <% hospitals.forEach(hospital => { %>
+                                            <option value="<%= hospital.id %>" <%= String(staff.hospitalId) === String(hospital.id) ? 'selected' : '' %>>
+                                                <%= hospital.branchName %>
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="flex justify-end gap-4 pb-12">
+                            <button type="submit"
+                                class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-lg active:scale-95 transition-transform hover:shadow-lg flex items-center gap-2">
+                                <span class="material-symbols-outlined">save</span>
+                                Save Changes
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- Photo Sidebar -->
+                    <div class="w-full xl:w-80 shrink-0">
+                        <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col items-center xl:sticky xl:top-8">
+                            <h3 class="font-headline-sm text-headline-sm text-primary mb-6 text-center">
+                                Profile Photo
+                            </h3>
+
+                            <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-surface-variant/50 mb-6">
+                                <img id="profileImagePreview"
+                                    src="<%= staff.profilePhoto || '/images/default-avatar.svg' %>"
+                                    onerror="this.onerror=null; this.src='/images/default-avatar.svg';"
+                                    class="w-full h-full object-cover">
+                            </div>
+
+                            <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
+
+                            <button type="button" onclick="document.getElementById('profilePhotoInput').click()"
+                                class="w-full bg-secondary-container text-on-secondary-container px-4 py-2 rounded-lg mb-3">
+                                Select Photo
+                            </button>
+
+                            <button type="button" id="uploadPhotoBtn"
+                                class="w-full bg-primary text-on-primary px-4 py-2 rounded-lg hidden">
+                                Upload & Save
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    <script src="/js/admin/staffEditProfile.js"></script>
+</body>
+
+</html>

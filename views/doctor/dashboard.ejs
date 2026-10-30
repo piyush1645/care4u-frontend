@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - MediCare</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="/js/doctor/dashboard-tailwind.js"></script>
+    <link rel="stylesheet" href="/css/doctor/common.css">
+</head>
+
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+
+
+    <!-- Left Sidebar -->
+    <%- include("partials/leftNavBar.ejs") %>
+
+        <!-- Main Content wrapper -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+
+            <!-- Top Header -->
+            <%- include("partials/topHeader.ejs") %>
+
+                <!-- Page Content: Scrollable -->
+                <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+                    <div class="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                        <!-- Main Dashboard Content (Left/Center area) -->
+                        <div class="xl:col-span-2 space-y-6">
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-800">Welcome Back, Dr. <%= doctor.firstName %>
+                                        <%= doctor.lastName %> 👋</h2>
+                                <p class="text-slate-500 text-sm mt-1">Here is a quick overview of your schedule.</p>
+                            </div>
+
+                            <!-- Metric Cards -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div
+                                    class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-blue-50 text-primary flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined">group</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">
+                                            <%= summary.totalAppointments %>
+                                        </p>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide font-medium">Patients
+                                            Today</p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined">check_circle</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">
+                                            <%= summary.ongoing %>
+                                        </p>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide font-medium">Completed
+                                        </p>
+                                    </div>
+                                </div>
+                                <div
+                                    class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined">schedule</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold">
+                                            <%= summary.booked %>
+                                        </p>
+                                        <p class="text-xs text-slate-500 uppercase tracking-wide font-medium">Upcoming
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming List Area -->
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 min-h-[300px]">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-bold text-lg">Next Appointments</h3>
+                                    <a href="/doctor/appointments" class="text-primary text-sm font-medium hover:underline">
+                                        View All
+                                    </a>
+                                </div>
+
+                                <% if (upcomingAppointments && upcomingAppointments.length> 0) { %>
+
+                                    <div class="space-y-4">
+                                        <% upcomingAppointments.forEach((appointment)=> { %>
+                                            <div
+                                                class="border border-slate-200 rounded-xl p-4 hover:bg-slate-50 transition">
+                                                <div class="flex justify-between items-start">
+                                                    <div>
+                                                        <h4 class="font-semibold text-slate-800">
+                                                            <% if (appointment.patientId) { %>
+                                                                <a href="/doctor/patients/<%= appointment.patientId %>" class="hover:text-primary transition-colors hover:underline"><%= appointment.patientName %></a>
+                                                            <% } else { %>
+                                                                <%= appointment.patientName %>
+                                                            <% } %>
+                                                        </h4>
+                                                        <p class="text-sm text-slate-500">
+                                                            <%= appointment.reason || "General Consultation" %>
+                                                        </p>
+                                                    </div>
+
+                                                    <span
+                                                        class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                                                        <%= appointment.status %>
+                                                    </span>
+                                                </div>
+
+                                                <div class="mt-3 flex items-center gap-4 text-sm text-slate-600">
+                                                    <div class="flex items-center gap-1">
+                                                        <span
+                                                            class="material-symbols-outlined text-base">calendar_today</span>
+                                                        <%= appointment.date %>
+                                                    </div>
+
+                                                    <div class="flex items-center gap-1">
+                                                        <span
+                                                            class="material-symbols-outlined text-base">schedule</span>
+                                                        <%= appointment.time %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+
+                                    <% } else { %>
+
+                                        <div class="flex flex-col items-center justify-center py-12 text-slate-400">
+                                            <span class="material-symbols-outlined text-5xl mb-3 opacity-30">
+                                                event_available
+                                            </span>
+                                            <p class="text-sm">No immediately upcoming appointments.</p>
+                                        </div>
+
+                                        <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Right Sidebar Area: Calendar & Leaves -->
+                        <div class="xl:col-span-1 space-y-6">
+                            
+
+                            <!-- Upcoming Leaves Card -->
+                            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
+                                    <h3 class="font-bold text-lg flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-amber-600">event_busy</span>
+                                        Upcoming Leaves
+                                    </h3>
+                                    <a href="/doctor/leaves" class="text-primary text-sm font-medium hover:underline">
+                                        Manage
+                                    </a>
+                                </div>
+                                <div class="space-y-3 max-h-[250px] overflow-y-auto pr-1">
+                                    <% if (upcomingLeaves && upcomingLeaves.length > 0) { %>
+                                        <% upcomingLeaves.forEach(leave => { %>
+                                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center justify-between">
+                                                <div>
+                                                    <p class="font-semibold text-sm text-slate-800">
+                                                        <%= new Date(leave.leaveDate).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}) %>
+                                                    </p>
+                                                    <% if (leave.leaveStartTime && leave.leaveEndTime) { %>
+                                                        <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+                                                            <span class="material-symbols-outlined text-xs">schedule</span>
+                                                            <%= new Date(leave.leaveStartTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}) %> - 
+                                                            <%= new Date(leave.leaveEndTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}) %>
+                                                        </p>
+                                                    <% } else { %>
+                                                        <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+                                                            <span class="material-symbols-outlined text-xs">calendar_today</span>
+                                                            Full Day
+                                                        </p>
+                                                    <% } %>
+                                                </div>
+                                                <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+                                                    On Leave
+                                                </span>
+                                            </div>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <div class="flex flex-col items-center justify-center py-6 text-slate-400">
+                                            <span class="material-symbols-outlined text-4xl mb-2 opacity-30">event_busy</span>
+                                            <p class="text-xs italic">No upcoming leaves scheduled.</p>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+        </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Monthly Earnings Summary - <%= monthLabel %> | MedPortal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <style>
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-border {
+                border: 1px solid #e2e8f0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen py-8 px-4 flex flex-col items-center">
+    <!-- Action Controls (Hidden on Print) -->
+    <div class="w-full max-w-4xl mb-6 flex justify-between items-center no-print">
+        <a href="javascript:window.close()" class="flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+            <span class="material-symbols-outlined text-base">arrow_back</span> Close Tab
+        </a>
+        
+        <button onclick="window.print()" class="bg-[#002868] text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-900 active:scale-95 transition-all flex items-center gap-1.5 shadow-sm">
+            <span class="material-symbols-outlined text-lg">print</span> Print / Save as PDF
+        </button>
+    </div>
+
+    <!-- Formal Statement Container -->
+    <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-xl shadow-md p-8 sm:p-12 print-border">
+        <!-- Header -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 border-b border-slate-200 pb-6 mb-8">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-[#002868] text-white rounded-xl flex items-center justify-center shadow-sm">
+                    <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl text-[#002868] tracking-tight">Monthly Payout Summary</h1>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider"><%= hospitalName %></p>
+                </div>
+            </div>
+            
+            <div class="text-left sm:text-right">
+                <h2 class="font-bold text-lg text-slate-800 uppercase tracking-wide mb-1">Billing Statement</h2>
+                <p class="text-sm font-bold text-[#002868]"><%= monthLabel %></p>
+            </div>
+        </header>
+
+        <!-- Doctor Details Info -->
+        <div class="mb-8">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Practitioner Details</p>
+            <h3 class="font-bold text-slate-800 text-lg"><%= doctorName %></h3>
+            <p class="text-sm text-slate-500 mt-1">Affiliated Branch: <%= hospitalName %></p>
+        </div>
+
+        <!-- Monthly Breakdown Table -->
+        <div class="mb-8">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-300 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50">
+                        <th class="p-3">Invoice ID</th>
+                        <th class="p-3">Date</th>
+                        <th class="p-3">Patient Name</th>
+                        <th class="p-3">Gross Fees</th>
+                        <th class="p-3">Tax charges</th>
+                        <th class="p-3 text-right">Total Payout</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                    <% if (invoices && invoices.length > 0) { %>
+                        <% invoices.forEach(inv => { %>
+                            <tr>
+                                <td class="p-3 font-mono text-xs text-slate-500 font-semibold">#<%= inv.id %></td>
+                                <td class="p-3 text-slate-700"><%= inv.date %></td>
+                                <td class="p-3 text-slate-700 font-semibold"><%= inv.patientName %></td>
+                                <td class="p-3 text-primary">₹<%= inv.consultationFees %></td>
+                                <td class="p-3 text-slate-500">₹<%= inv.taxCharges %></td>
+                                <td class="p-3 text-right font-bold text-[#002868]">₹<%= inv.totalAmount %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-slate-400 italic">
+                                No billing invoices recorded for this month.
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Totals Card -->
+        <div class="grid grid-cols-3 gap-6 bg-slate-50 rounded-xl p-6 border border-slate-200 mt-8">
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total Gross Earnings</p>
+                <h4 class="font-bold text-slate-800 text-lg">₹<%= totalEarnings %></h4>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total Tax charges</p>
+                <h4 class="font-bold text-slate-800 text-lg">₹<%= totalTax %></h4>
+            </div>
+            
+            <div class="text-right">
+                <p class="text-xs font-bold text-[#002868] uppercase tracking-wider mb-1">Net Monthly Volume</p>
+                <h4 class="font-bold text-[#002868] text-xl">₹<%= totalAmount %></h4>
+            </div>
+        </div>
+
+        <!-- Footer statement -->
+        <footer class="mt-12 pt-8 border-t border-slate-100 text-center text-xs text-slate-400">
+            <p>Generated electronically from MedPortal Doctor Finance Console on <%= new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+            <p class="mt-1">Confidential. Contains billing details for doctor consultations.</p>
+        </footer>
+    </div>
+
+    <!-- Automatically trigger printing dialog on page load -->
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>

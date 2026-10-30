@@ -1,0 +1,531 @@
+/* ============================================================
+   Login Page Styles
+   MediCare System — Practitioner Login
+   ============================================================ */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+
+/* ── Full-screen split layout ───────────────────────────── */
+.login-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* ── Left panel ─────────────────────────────────────────── */
+.left-panel {
+    position: relative;
+    overflow: hidden;
+}
+
+.left-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+}
+
+.left-panel:hover img {
+    transform: scale(1.04);
+}
+
+.left-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 61, 155, 0.55) 0%, rgba(0, 82, 204, 0.20) 60%, transparent 100%);
+    z-index: 1;
+}
+
+.brand-badge {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    padding: 10px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+    background: #003d9b;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #003d9b;
+    line-height: 1.2;
+}
+
+.brand-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: #737685;
+    letter-spacing: 0.03em;
+}
+
+/* ── Stats bar (bottom of left panel) ──────────────────── */
+.stats-bar {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    right: 28px;
+    z-index: 10;
+    display: flex;
+    gap: 12px;
+}
+
+.stat-pill {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.stat-pill .val {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003d9b;
+    line-height: 1;
+}
+
+.stat-pill .lbl {
+    font-size: 11px;
+    color: #434654;
+    margin-top: 3px;
+}
+
+/* ── Right panel ────────────────────────────────────────── */
+.right-panel {
+    background: #f8f9fe;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 64px;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-wrapper {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Decorative blobs */
+.blob-1 {
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    background: rgba(0, 61, 155, 0.06);
+    border-radius: 50%;
+    filter: blur(40px);
+    pointer-events: none;
+}
+
+.blob-2 {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(0, 108, 71, 0.05);
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+}
+
+/* ── Form header ────────────────────────────────────────── */
+.form-header {
+    margin-bottom: 36px;
+}
+
+.form-header .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #006c47;
+    background: rgba(0, 108, 71, 0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.form-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #101c2d;
+    margin: 0 0 10px;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
+.form-header p {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Input group ────────────────────────────────────────── */
+.input-group {
+    margin-bottom: 22px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.input-row label {
+    margin-bottom: 0;
+}
+
+.forgot-link {
+    font-size: 12px;
+    font-weight: 600;
+    color: #003d9b;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.forgot-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 16px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    color: #9ca3af;
+    pointer-events: none;
+    transition: color 0.25s;
+    font-size: 20px;
+}
+
+.input-wrap:focus-within .input-icon {
+    color: #003d9b;
+}
+
+.input-wrap input {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #101c2d;
+    outline: none;
+    transition: all 0.25s;
+    font-family: 'Inter', sans-serif;
+}
+
+.input-wrap input:hover {
+    border-color: #c7d2e7;
+}
+
+.input-wrap input:focus {
+    border-color: #003d9b;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 61, 155, 0.08);
+}
+
+.input-wrap input::placeholder {
+    color: #b0b8c8;
+}
+
+/* ── Remember me ────────────────────────────────────────── */
+.remember-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    margin-top: 4px;
+}
+
+.remember-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #003d9b;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.remember-row label {
+    font-size: 13px;
+    color: #6b7280;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+/* ── Login button ───────────────────────────────────────── */
+.btn-login {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #003d9b 0%, #0052cc 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 20px rgba(0, 61, 155, 0.28);
+}
+
+.btn-login:hover {
+    background: linear-gradient(135deg, #0047b8 0%, #005de0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0, 61, 155, 0.38);
+}
+
+.btn-login:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 61, 155, 0.25);
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 24px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e9ecf2;
+}
+
+.divider span {
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ── Google button ──────────────────────────────────────── */
+.btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: #ffffff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-google:hover {
+    background: #f8f9fe;
+    border-color: #003d9b;
+    box-shadow: 0 2px 12px rgba(0, 61, 155, 0.08);
+}
+
+/* ── Form footer ────────────────────────────────────────── */
+.form-footer {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.form-footer a {
+    color: #003d9b;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ── Loading spinner ────────────────────────────────────── */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+/* ── Mobile: stack vertically ───────────────────────────── */
+@media (max-width: 768px) {
+    html, body {
+        overflow: auto;
+    }
+
+    .login-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .left-panel {
+        height: 180px;
+    }
+
+    .stats-bar {
+        display: none;
+    }
+
+    .right-panel {
+        padding: 36px 28px;
+    }
+}
+
+/* Custom error, password toggle and back button classes from login.ejs */
+.error-message {
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: #003d9b;
+}
+
+.back-btn {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+.back-btn:hover {
+    transform: translateY(-2px);
+    color: #003d9b;
+}
+
+@media (max-width: 640px) {
+    .back-btn {
+        top: 12px;
+        left: 12px;
+        padding: 8px;
+    }
+    .back-btn-text {
+        display: none;
+    }
+}
+

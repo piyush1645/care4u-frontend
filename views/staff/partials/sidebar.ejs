@@ -1,0 +1,85 @@
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden transition-opacity" onclick="toggleSidebar()"></div>
+
+<!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
+<aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-white text-slate-700 flex flex-col transition-transform duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none border-r border-slate-100 h-full">
+    
+    <!-- Logo -->
+    <div class="h-20 flex items-center px-6 shrink-0 mt-2 border-b border-slate-100 mb-2">
+        <div class="w-10 h-10 bg-[#002868] text-white rounded-lg flex items-center justify-center mr-3 shrink-0 shadow-sm">
+            <span class="material-symbols-outlined text-[22px]">medical_services</span>
+        </div>
+        <div class="flex flex-col">
+            <h1 class="font-bold text-[#002868] text-[18px] leading-tight">Care4U</h1>
+            <p class="text-[11px] text-slate-500 font-medium">Staff Portal</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto thin-scroll py-2 px-4 space-y-0.5">
+        <a href="/staff/dashboard" id="nav-dashboard" class="nav-link-inactive w-full text-left sidebar-link">
+            <span class="material-symbols-outlined text-[20px]">dashboard</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="/staff/appointments" id="nav-appointments" class="nav-link-inactive w-full text-left sidebar-link">
+            <span class="material-symbols-outlined text-[20px]">event_available</span>
+            <span>Appointments</span>
+        </a>
+        <a href="/staff/patients" id="nav-patients" class="nav-link-inactive w-full text-left sidebar-link">
+            <span class="material-symbols-outlined text-[20px]">group</span>
+            <span>Patients</span>
+        </a>
+
+        <a href="/staff/profile" id="nav-profile" class="nav-link-inactive w-full text-left sidebar-link">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            <span>My Profile</span>
+        </a>
+    </nav>
+
+    <!-- Bottom Actions -->
+    <div class="p-4 shrink-0 border-t border-slate-100 space-y-2">
+        <a href="/staff/patients" id="openRegisterPatientBtn"
+            class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg font-medium text-[14px] shadow-sm transition-colors active:scale-[0.98]">
+            <span class="material-symbols-outlined text-[18px]">person_add</span> Register Patient
+        </a>
+        <a href="/staff/patients" id="openBookingModalBtn"
+            class="w-full flex items-center justify-center gap-2 bg-[#002868] hover:bg-[#001f52] text-white py-2.5 rounded-lg font-medium text-[14px] shadow-sm transition-colors active:scale-[0.98]">
+            <span class="material-symbols-outlined text-[18px]">add_circle</span> New Appointment
+        </a>
+        <a href="/logout"
+            class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors text-[#dc2626] font-semibold text-[14px]">
+            <span class="material-symbols-outlined text-[18px]">logout</span> Logout
+        </a>
+    </div>
+</aside>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    if (sidebar) sidebar.classList.toggle('-translate-x-full');
+    if (overlay) overlay.classList.toggle('hidden');
+}
+
+(function highlightNav() {
+    const path = window.location.pathname;
+    const routes = [
+        { id: 'nav-dashboard',    match: '/staff/dashboard' },
+        { id: 'nav-appointments', match: '/staff/appointments' },
+        { id: 'nav-patients',     match: '/staff/patients' },
+        { id: 'nav-profile',      match: '/staff/profile' },
+    ];
+    for (const r of routes) {
+        if (path === r.match || path.startsWith(r.match + '/')) {
+            const el = document.getElementById(r.id);
+            if (el) {
+                el.classList.remove('nav-link-inactive');
+                el.classList.add('nav-link-active');
+            }
+            break;
+        }
+    }
+}());
+</script>

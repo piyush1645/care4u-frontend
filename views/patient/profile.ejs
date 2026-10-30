@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Profile - MediCare</title>
+    <%- include('partials/head') %>
+</head>
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+<%- include('partials/sidebar') %>
+
+<div class="flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+    <%- include('partials/topheader') %>
+
+    <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+        <div class="max-w-4xl mx-auto space-y-6">
+
+            <!-- Page Header -->
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">My Profile</h2>
+                    <p class="text-slate-500 text-sm mt-1">Manage your personal information.</p>
+                </div>
+                <div>
+                    <button id="editProfileToggleBtn" class="bg-primary text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">Edit Profile</button>
+                </div>
+            </div>
+
+            <!-- Banners -->
+            <div id="errorBanner" class="hidden p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium"></div>
+            <div id="successBanner" class="hidden p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-sm font-medium"></div>
+
+            <!-- Profile Header Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                    <!-- Photo + Upload -->
+                    <div class="flex flex-col items-center gap-3 shrink-0">
+                        <img id="profilePhotoDisplay" src="<%= patient.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" alt="Profile"
+                            class="w-24 h-24 rounded-2xl object-cover border-2 border-slate-200 shadow-sm" />
+                        <form id="photoUploadForm" class="flex flex-col items-center gap-2">
+                            <label class="cursor-pointer">
+                                <span class="inline-block bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-slate-200 transition-colors">
+                                    Choose Photo
+                                </span>
+                                <input id="profilePhotoInput" name="profilePhoto" type="file" accept="image/*" class="hidden" />
+                            </label>
+                            <button type="submit"
+                                class="bg-primary text-white px-4 py-1.5 rounded-lg text-xs font-medium hover:bg-primary/90 transition-colors">
+                                Upload
+                            </button>
+                        </form>
+                    </div>
+                    <!-- Name + Info -->
+                    <div class="flex-1 text-center sm:text-left">
+                        <h3 id="displayFullName" class="text-xl font-bold text-slate-800"><%= [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ') %></h3>
+                        <p id="displayEmail" class="text-sm text-slate-500 mt-1"><%= patient.email %></p>
+                        <p id="displayMobile" class="text-sm text-slate-500"><%= patient.mobile %></p>
+                        <div class="flex flex-wrap gap-3 mt-3 justify-center sm:justify-start">
+                            <span class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600">
+                                <span class="material-symbols-outlined text-[14px]">water_drop</span>
+                                <span id="displayBloodGroup"><%= patient.bloodGroup %></span>
+                            </span>
+                            <span class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                                <span id="displayGender"><%= patient.gender %></span>
+                            </span>
+                            <span class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600">
+                                <span class="material-symbols-outlined text-[14px]">cake</span>
+                                <span id="displayDob"><%= patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—' %></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Info (read-only) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <h4 class="font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100">Account Information</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Email</p>
+                        <p id="displayEmail2" class="text-sm font-medium text-slate-700"><%= patient.email %></p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Mobile</p>
+                        <p id="displayMobile2" class="text-sm font-medium text-slate-700"><%= patient.mobile %></p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Blood Group</p>
+                        <p id="displayBloodGroup2" class="text-sm font-medium text-slate-700"><%= patient.bloodGroup %></p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Gender</p>
+                        <p id="displayGender2" class="text-sm font-medium text-slate-700"><%= patient.gender %></p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide mb-1">Date of Birth</p>
+                        <p id="displayDob2" class="text-sm font-medium text-slate-700"><%= patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—' %></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <div id="editFormCard" class="hidden bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                <h4 class="font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100">Edit Profile</h4>
+                <form id="profileUpdateForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputFirstName" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">First Name</label>
+                        <input id="inputFirstName" name="firstName" type="text" placeholder="First name" value="<%= patient.firstName %>"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputMiddleName" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Middle Name</label>
+                        <input id="inputMiddleName" name="middleName" type="text" placeholder="Optional" value="<%= patient.middleName || '' %>"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputLastName" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Last Name</label>
+                        <input id="inputLastName" name="lastName" type="text" placeholder="Last name" value="<%= patient.lastName %>"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputGender" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Gender</label>
+                        <select id="inputGender" name="gender"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all">
+                            <option value="">Select</option>
+                            <option value="MALE" <%= patient.gender === 'MALE' ? 'selected' : '' %>>Male</option>
+                            <option value="FEMALE" <%= patient.gender === 'FEMALE' ? 'selected' : '' %>>Female</option>
+                            <option value="OTHER" <%= patient.gender === 'OTHER' ? 'selected' : '' %>>Other</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputDob" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Date of Birth</label>
+                        <input id="inputDob" name="dateOfBirth" type="date" value="<%= patient.dateOfBirth ? new Date(patient.dateOfBirth).toISOString().split('T')[0] : '' %>"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="inputBloodGroup" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Blood Group</label>
+                        <select id="inputBloodGroup" name="bloodGroup"
+                            class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all">
+                            <option value="">Select</option>
+                            <option value="A_POSITIVE" <%= patient.bloodGroup === 'A_POSITIVE' ? 'selected' : '' %>>A+</option>
+                            <option value="A_NEGATIVE" <%= patient.bloodGroup === 'A_NEGATIVE' ? 'selected' : '' %>>A-</option>
+                            <option value="B_POSITIVE" <%= patient.bloodGroup === 'B_POSITIVE' ? 'selected' : '' %>>B+</option>
+                            <option value="B_NEGATIVE" <%= patient.bloodGroup === 'B_NEGATIVE' ? 'selected' : '' %>>B-</option>
+                            <option value="AB_POSITIVE" <%= patient.bloodGroup === 'AB_POSITIVE' ? 'selected' : '' %>>AB+</option>
+                            <option value="AB_NEGATIVE" <%= patient.bloodGroup === 'AB_NEGATIVE' ? 'selected' : '' %>>AB-</option>
+                            <option value="O_POSITIVE" <%= patient.bloodGroup === 'O_POSITIVE' ? 'selected' : '' %>>O+</option>
+                            <option value="O_NEGATIVE" <%= patient.bloodGroup === 'O_NEGATIVE' ? 'selected' : '' %>>O-</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2 pt-2 flex gap-3">
+                        <button type="submit"
+                            class="bg-primary text-white px-8 py-2.5 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm">
+                            Save Changes
+                        </button>
+                        <button type="button" id="cancelEditBtn" class="bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-300 transition-colors">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="/js/patient/utils.js"></script>
+<script src="/js/patient/api-client.js"></script>
+<script src="/js/patient/fetchProfile.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('editProfileToggleBtn');
+    const editCard = document.getElementById('editFormCard');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+
+    if (toggleBtn && editCard) {
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = editCard.classList.contains('hidden');
+            if (isHidden) {
+                editCard.classList.remove('hidden');
+                toggleBtn.textContent = 'Close Edit';
+                editCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                editCard.classList.add('hidden');
+                toggleBtn.textContent = 'Edit Profile';
+            }
+        });
+    }
+
+    if (cancelBtn && editCard && toggleBtn) {
+        cancelBtn.addEventListener('click', () => {
+            editCard.classList.add('hidden');
+            toggleBtn.textContent = 'Edit Profile';
+        });
+    }
+});
+</script>
+</body>
+</html>

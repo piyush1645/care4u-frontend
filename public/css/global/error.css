@@ -1,0 +1,18 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.glow-effect {
+    box-shadow: 0 0 50px rgba(0, 41, 109, 0.1);
+}
+
+.error-code-gradient {
+    background: linear-gradient(135deg, #00296d 0%, #ba1a1a 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

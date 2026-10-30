@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Doctor Details - MediCare</title>
+    <%- include('partials/head') %>
+</head>
+<body class="text-slate-800 flex h-screen overflow-hidden">
+<%- include('partials/sidebar') %>
+<div class="flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+    <%- include('partials/topheader') %>
+    <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+        <div class="max-w-6xl mx-auto space-y-6">
+
+            <!-- Back link -->
+            <a href="/patient/doctors" class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back to Doctors
+            </a>
+
+            <!-- Not found state -->
+            <% if (!locals.doctor) { %>
+            <div id="notFoundState" class="flex flex-col items-center justify-center py-24 text-slate-400">
+                <span class="material-symbols-outlined text-5xl mb-3 opacity-30">person_off</span>
+                <p class="font-bold text-slate-600 text-lg">Doctor not found</p>
+                <a href="/patient/doctors" class="mt-4 bg-primary text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-primary/90">Back to Search</a>
+            </div>
+            <% } else { %>
+
+            <!-- Booking error -->
+            <div id="bookingError" class="hidden p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium"></div>
+
+            <!-- Main content -->
+            <div id="doctorContent" data-doctor-id="<%= doctor.id %>" data-doctor-name="Dr. <%= doctor.firstName %> <%= doctor.lastName %>" data-doctor-charges="<%= doctor.charges %>" data-doctor-speciality="<%= doctor.specialities[0] || 'General' %>" data-hospital-id="<%= doctor.hospital.id %>" data-hospital-name="<%= doctor.hospital.branchName %>" data-doctor-slot="<%= doctor.slotDuration %>" class="space-y-6">
+
+                <!-- Doctor header card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                    <div class="flex flex-col sm:flex-row gap-6 items-start">
+                        <img id="doctorPhoto" src="<%= doctor.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" alt="Dr. <%= doctor.firstName %> <%= doctor.lastName %>"
+                            class="w-28 h-28 rounded-2xl object-cover border border-slate-200 shadow-sm shrink-0" />
+                        <div class="flex-1 space-y-3">
+                            <div>
+                                <div id="specialitiesContainer" class="flex flex-wrap gap-1.5 mb-2">
+                                    <% doctor.specialities.forEach(s => { %>
+                                        <span class="px-2 py-0.5 bg-blue-50 text-primary text-[11px] font-bold rounded-full uppercase"><%= s %></span>
+                                    <% }) %>
+                                </div>
+                                <h2 id="doctorFullName" class="text-2xl font-bold text-slate-800">Dr. <%= doctor.firstName %> <%= doctor.middleName ? doctor.middleName + ' ' : '' %><%= doctor.lastName %></h2>
+                                <p id="doctorRating" class="text-sm text-emerald-600 font-medium mt-0.5">
+                                    ★ <%= doctor.rating.average %> (<%= doctor.rating.totalReviews %> reviews)
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Experience</p>
+                                    <p id="doctorExperience" class="text-sm font-bold text-slate-700 mt-0.5"><%= doctor.expereince %> yrs</p>
+                                </div>
+                                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Charges</p>
+                                    <p id="doctorCharges" class="text-sm font-bold text-slate-700 mt-0.5">₹<%= doctor.charges %></p>
+                                </div>
+                                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Slot</p>
+                                    <p id="doctorSlot" class="text-sm font-bold text-slate-700 mt-0.5"><%= doctor.slotDuration %> mins</p>
+                                </div>
+                                <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Gender</p>
+                                    <p id="doctorGender" class="text-sm font-bold text-slate-700 mt-0.5"><%= doctor.gender %></p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400 font-semibold uppercase mb-1.5">Languages</p>
+                                <div id="languagesContainer" class="flex flex-wrap gap-2">
+                                    <% doctor.preferedLanguages.split(',').forEach(lang => { %>
+                                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg text-xs font-medium"><%= lang.trim() %></span>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Two column: Info + Booking -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Left: Hospital, Education, Schedule, Reviews -->
+                    <div class="lg:col-span-2 space-y-5">
+
+                        <!-- Hospital -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px]">local_hospital</span>
+                                Hospital
+                            </h3>
+                            <p id="hospitalName" class="font-semibold text-slate-700"><%= doctor.hospital.branchName %></p>
+                            <p id="hospitalAddress" class="text-sm text-slate-500 mt-1">
+                                <%= [doctor.hospital.address.addressLine1, doctor.hospital.address.addressLine2, doctor.hospital.address.city, doctor.hospital.address.state, doctor.hospital.address.country, doctor.hospital.address.pincode].filter(Boolean).join(', ') %>
+                            </p>
+                        </div>
+
+                        <!-- Education -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px]">school</span>
+                                Education
+                            </h3>
+                            <div id="degreesList" class="space-y-3">
+                                <% if (doctor.degrees && doctor.degrees.length > 0) { %>
+                                    <% doctor.degrees.forEach(deg => { %>
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="material-symbols-outlined text-slate-400 text-[18px] mt-0.5">school</span>
+                                            <div>
+                                                <p class="font-semibold text-slate-700 text-sm"><%= deg.courseName %> (<%= deg.abbreviation %>)</p>
+                                                <p class="text-xs text-slate-500"><%= deg.institution %> · <%= deg.passingYear %></p>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p class="text-sm text-slate-400 italic">No education details listed.</p>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Schedule -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
+                                Availability
+                            </h3>
+                            <div id="scheduleList" class="space-y-3">
+                                <% if (doctor.schedules && doctor.schedules.length > 0) { %>
+                                    <% doctor.schedules.forEach(sch => { %>
+                                        <div class="flex items-start gap-2.5">
+                                            <span class="material-symbols-outlined text-slate-400 text-[18px] mt-0.5">calendar_month</span>
+                                            <div>
+                                                <p class="font-semibold text-slate-700 text-sm">Working Days: <%= sch.workingDays %></p>
+                                                <% 
+                                                    const formatScheduleTime = (value) => {
+                                                        if (!value) return '';
+                                                        return new Date(value).toLocaleTimeString('en-IN', {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                            hour12: true,
+                                                            timeZone: 'Asia/Kolkata'
+                                                        });
+                                                    };
+                                                 %>
+                                                <% if (sch.morningStartTime && sch.morningEndTime) { %>
+                                                    <p class="text-xs text-slate-500">Morning: <%= formatScheduleTime(sch.morningStartTime) %> - <%= formatScheduleTime(sch.morningEndTime) %></p>
+                                                <% } %>
+                                                <% if (sch.eveningStartTime && sch.eveningEndTime) { %>
+                                                    <p class="text-xs text-slate-500">Evening: <%= formatScheduleTime(sch.eveningStartTime) %> - <%= formatScheduleTime(sch.eveningEndTime) %></p>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p class="text-sm text-slate-400 italic">No working hours configured.</p>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Reviews -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                            <h3 class="font-bold text-slate-800 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px]">reviews</span>
+                                Patient Reviews
+                            </h3>
+                            <div id="reviewsList" class="space-y-3 max-h-80 overflow-y-auto">
+                                <% if (doctor.reviews && doctor.reviews.length > 0) { %>
+                                    <% doctor.reviews.forEach(rev => { %>
+                                        <div class="bg-slate-50 border border-slate-100 rounded-xl p-3.5 space-y-2">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <p class="font-semibold text-slate-800 text-xs"><%= rev.patient.firstName %> <%= rev.patient.lastName %></p>
+                                                    <p class="text-[10px] text-slate-400"><%= new Date(rev.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></p>
+                                                </div>
+                                                <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-lg font-bold flex items-center gap-0.5 shrink-0">
+                                                    ★ <%= rev.rating %>
+                                                </span>
+                                            </div>
+                                            <p class="text-xs text-slate-600 italic">"<%= rev.review %>"</p>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p class="text-sm text-slate-400 italic">No patient reviews yet.</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Booking Flow (sticky) -->
+                    <div class="lg:sticky lg:top-6 h-fit space-y-4">
+
+                        <!-- Step 1: Pick a date -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-4">
+                            <h3 class="font-bold text-slate-800 pb-3 border-b border-slate-100">Book Appointment</h3>
+
+                            <!-- Consultation Type Selection -->
+                            <div class="flex flex-col gap-1.5">
+                                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Consultation Type</span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" id="typeInPersonBtn" 
+                                        class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold border border-primary bg-primary text-white transition-all shadow-sm cursor-pointer">
+                                        <span class="material-symbols-outlined text-base">person</span> In Person
+                                    </button>
+                                    <button type="button" id="typeOnlineBtn" 
+                                        class="flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold border border-slate-200 bg-slate-50 text-slate-600 transition-all hover:bg-slate-100 cursor-pointer">
+                                        <span class="material-symbols-outlined text-base">video_call</span> Online (Video)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-1.5">
+                                <label for="slotDate" class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Select Date</label>
+                                <input id="slotDate" type="date"
+                                    class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                            </div>
+
+                            <button id="checkSlotsBtn"
+                                class="w-full bg-slate-100 text-slate-700 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">calendar_view_week</span>
+                                View Available Slots
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Slot grid (shown after date is picked) -->
+                        <div id="slotSection" class="hidden bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-3">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                                <h4 class="font-bold text-slate-800 text-sm">Available Slots</h4>
+                                <div class="flex items-center gap-2 text-[10px] text-slate-500 flex-wrap">
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-100 inline-block"></span>Available</span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-red-100 inline-block"></span>Booked</span>
+                                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-100 inline-block"></span>Leave</span>
+                                </div>
+                            </div>
+
+                            <!-- Loading -->
+                            <div id="slotsLoading" class="hidden text-center py-6 text-slate-400 text-sm">
+                                <span class="material-symbols-outlined text-3xl block mb-2 opacity-40">hourglass_empty</span>
+                                Loading slots...
+                            </div>
+
+                            <!-- Empty / not a working day -->
+                            <div id="slotsEmpty" class="hidden text-center py-6 text-slate-400 text-sm">
+                                <span class="material-symbols-outlined text-3xl block mb-2 opacity-40">event_busy</span>
+                                No slots available on this date.
+                            </div>
+
+                            <!-- Slots container -->
+                            <div id="slotsContainer" class="space-y-4">
+                                <!-- Morning Slots -->
+                                <div id="morningSlotSection" class="hidden space-y-2">
+                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs text-amber-500">light_mode</span>
+                                        <span id="morningSlotLabel">Morning Slots</span>
+                                    </p>
+                                    <div id="morningSlotsGrid" class="grid grid-cols-3 gap-2"></div>
+                                </div>
+                                <!-- Evening Slots -->
+                                <div id="eveningSlotSection" class="hidden space-y-2">
+                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs text-indigo-500">dark_mode</span>
+                                        <span id="eveningSlotLabel">Evening Slots</span>
+                                    </p>
+                                    <div id="eveningSlotsGrid" class="grid grid-cols-3 gap-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- Proceed button (shown after slot is selected) -->
+                            <button id="proceedBtn" disabled
+                                class="w-full bg-primary text-white py-3 rounded-xl text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/90 mt-2">
+                                Proceed to Payment
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div><!-- end doctorContent -->
+            <% } %>
+        </div>
+    </main>
+</div>
+
+<script src="/js/patient/utils.js"></script>
+<script src="/js/patient/api-client.js"></script>
+<script src="/js/patient/fetchDoctorDetail.js"></script>
+</body>
+</html>

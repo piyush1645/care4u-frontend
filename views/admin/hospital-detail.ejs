@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title><%= data.hospital.branchName %> Dashboard | MediFlow Admin</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+</head>
+
+<body class="bg-surface text-on-surface">
+    <!-- Sidebar -->
+    <%- include('partial/navBar') %>
+
+        <main class="ml-0 lg:ml-[260px] min-h-screen flex flex-col">
+            <!-- Header -->
+            <header class="h-20 shrink-0 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-6 sticky top-0 z-40 backdrop-blur-sm">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[24px]">menu</span>
+                    </button>
+                    <a href="/admin/hospitals" class="inline-flex items-center justify-center p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors border border-slate-200">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                    <h2 class="font-headline-lg text-headline-md font-bold text-primary">
+                        <%= data.hospital.branchName %> Dashboard
+                    </h2>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="p-6 space-y-6">
+
+                <!-- Hospital Profile Header -->
+                <section class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col md:flex-row gap-6 items-start md:items-center justify-between border-l-4 border-primary">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <div class="w-24 h-24 rounded-xl overflow-hidden bg-primary/5 border border-primary/20 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-primary text-[48px]">local_hospital</span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-on-surface mb-2"><%= data.hospital.branchName %></h3>
+                            <p class="text-on-surface-variant text-sm flex items-start gap-1">
+                                <span class="material-symbols-outlined text-sm mt-0.5 text-primary">location_on</span>
+                                <span>
+                                    <%= data.hospital.address ? (data.hospital.address.addressLine1 + (data.hospital.address.addressLine2 ? ', ' + data.hospital.address.addressLine2 : '')) : 'N/A' %><br>
+                                    <%= data.hospital.address ? `${data.hospital.address.city}, ${data.hospital.address.state}, ${data.hospital.address.country} - ${data.hospital.address.pincode}` : '' %>
+                                </span>
+                            </p>
+
+                            <div class="flex items-center gap-4 mt-4">
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-semibold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active Branch
+                                </span>
+                                <% if(data.hospital.review && data.hospital.review.length > 0) { %>
+                                    <% 
+                                        const sum = data.hospital.review.reduce((acc, r) => acc + r.rating, 0);
+                                        const rating = (sum / data.hospital.review.length).toFixed(1);
+                                    %>
+                                    <span class="text-amber-500 font-bold text-sm flex items-center gap-1">
+                                        <span class="material-symbols-outlined fill-1 font-bold text-[18px]">star</span>
+                                        <%= rating %> (<%= data.hospital.review.length %> reviews)
+                                    </span>
+                                <% } else { %>
+                                    <span class="text-slate-400 text-sm flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[18px]">star_outline</span> No reviews yet
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Bento Grid -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-surface-container-lowest p-6 rounded-xl custom-shadow border-t-4 border-primary">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-sm font-semibold text-on-surface-variant">Doctors</h4>
+                            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">stethoscope</span>
+                        </div>
+                        <p class="text-3xl font-bold text-on-surface"><%= data.hospital.doctor.length %></p>
+                        <p class="text-xs text-on-surface-variant mt-1">Verified professionals</p>
+                    </div>
+
+                    <div class="bg-surface-container-lowest p-6 rounded-xl custom-shadow border-t-4 border-secondary">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-sm font-semibold text-on-surface-variant">Staff Members</h4>
+                            <span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded-lg">badge</span>
+                        </div>
+                        <p class="text-3xl font-bold text-on-surface"><%= data.hospital.staff.length %></p>
+                        <p class="text-xs text-on-surface-variant mt-1">Front desk & assistants</p>
+                    </div>
+
+                    <div class="bg-surface-container-lowest p-6 rounded-xl custom-shadow border-t-4 border-tertiary">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-sm font-semibold text-on-surface-variant">Today's Appointments</h4>
+                            <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg">calendar_today</span>
+                        </div>
+                        <p class="text-3xl font-bold text-on-surface"><%= data.todayAppointments.length %></p>
+                        <p class="text-xs text-on-surface-variant mt-1">Scheduled for today</p>
+                    </div>
+
+                    <div class="bg-surface-container-lowest p-6 rounded-xl custom-shadow border-t-4 border-amber-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-sm font-semibold text-on-surface-variant">Patient Rating</h4>
+                            <span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-2 rounded-lg">thumb_up</span>
+                        </div>
+                        <% 
+                            let ratingVal = "N/A";
+                            if(data.hospital.review && data.hospital.review.length > 0) {
+                                const sum = data.hospital.review.reduce((acc, r) => acc + r.rating, 0);
+                                ratingVal = (sum / data.hospital.review.length).toFixed(1) + " / 5";
+                            }
+                        %>
+                        <p class="text-3xl font-bold text-on-surface"><%= ratingVal %></p>
+                        <p class="text-xs text-on-surface-variant mt-1">Based on reviews</p>
+                    </div>
+                </section>
+
+                <!-- Mid-level Dashboard Split -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Today's Schedule Timeline -->
+                    <div class="lg:col-span-2 bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col min-h-[400px]">
+                        <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined">schedule</span>
+                            Today's Appointments List
+                        </h3>
+
+                        <% if (data.todayAppointments && data.todayAppointments.length > 0) { %>
+                            <div class="overflow-x-auto flex-1">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-outline-variant text-label-md text-on-surface-variant">
+                                            <th class="py-3 px-4">Time</th>
+                                            <th class="py-3 px-4">Patient</th>
+                                            <th class="py-3 px-4">Doctor</th>
+                                            <th class="py-3 px-4">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-outline-variant/30 text-body-medium">
+                                        <% data.todayAppointments.forEach(appt => { %>
+                                            <tr class="hover:bg-slate-50 transition-colors">
+                                                <td class="py-3 px-4 font-semibold text-primary">
+                                                    <%= appt.appointmentStartTime %>
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    <%= appt.patient.firstName %> <%= appt.patient.lastName %>
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    Dr. <%= appt.doctor.firstName %> <%= appt.doctor.lastName %>
+                                                </td>
+                                                <td class="py-3 px-4">
+                                                    <% if (appt.status === 'COMPLETED') { %>
+                                                        <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">Completed</span>
+                                                    <% } else if (appt.status === 'PENDING') { %>
+                                                        <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">Pending</span>
+                                                    <% } else if (appt.status === 'CONFIRMED') { %>
+                                                        <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">Confirmed</span>
+                                                    <% } else { %>
+                                                        <span class="px-2.5 py-0.5 bg-slate-100 text-slate-800 rounded-full text-xs font-semibold"><%= appt.status %></span>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <% } else { %>
+                            <div class="flex-1 flex flex-col items-center justify-center text-slate-400 py-12">
+                                <span class="material-symbols-outlined text-[48px] mb-2">calendar_today</span>
+                                <p class="text-sm">No appointments scheduled for today.</p>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Appointment Status Analytics -->
+                    <div class="bg-surface-container-lowest rounded-xl p-6 custom-shadow flex flex-col">
+                        <h3 class="text-lg font-bold text-primary mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined">analytics</span>
+                            Status Distribution
+                        </h3>
+
+                        <% if (data.appointmentStats && data.appointmentStats.length > 0) { %>
+                            <div class="space-y-4 flex-1 flex flex-col justify-center">
+                                <% 
+                                    const totalAppts = data.appointmentStats.reduce((acc, stat) => acc + stat._count.id, 0);
+                                %>
+                                <% data.appointmentStats.forEach(stat => { %>
+                                    <% 
+                                        const pct = ((stat._count.id / totalAppts) * 100).toFixed(0);
+                                        let progressColor = "bg-primary";
+                                        if (stat.status === 'COMPLETED') progressColor = "bg-emerald-500";
+                                        if (stat.status === 'CANCELLED') progressColor = "bg-rose-500";
+                                        if (stat.status === 'PENDING') progressColor = "bg-amber-500";
+                                    %>
+                                    <div class="space-y-1">
+                                        <div class="flex justify-between text-sm">
+                                            <span class="font-medium text-on-surface"><%= stat.status %></span>
+                                            <span class="text-on-surface-variant font-semibold"><%= stat._count.id %> (<%= pct %>%)</span>
+                                        </div>
+                                        <div class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden">
+                                            <div class="h-full <%= progressColor %>" style="width: <%= pct %>%"></div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                                <div class="border-t border-outline-variant/30 pt-4 mt-4 text-center">
+                                    <p class="text-xs text-on-surface-variant">Total Recorded Appointments: <span class="font-bold text-on-surface text-sm"><%= totalAppts %></span></p>
+                                </div>
+                            </div>
+                        <% } else { %>
+                            <div class="flex-1 flex flex-col items-center justify-center text-slate-400 py-12">
+                                <span class="material-symbols-outlined text-[48px] mb-2">bar_chart</span>
+                                <p class="text-sm">No appointment statistics available.</p>
+                            </div>
+                        <% } %>
+                    </div>
+
+                </div>
+
+                <!-- Doctors & Staff Directory tabs -->
+                <section class="bg-surface-container-lowest rounded-xl p-6 custom-shadow">
+                    
+                    <!-- Tabs Headers -->
+                    <div class="flex border-b border-outline-variant mb-6">
+                        <button onclick="switchTab('doctors-tab', this)" class="px-6 py-3 text-primary border-b-2 border-primary font-semibold text-sm transition-all focus:outline-none tab-btn">
+                            Doctors (<%= data.hospital.doctor.length %>)
+                        </button>
+                        <button onclick="switchTab('staff-tab', this)" class="px-6 py-3 text-on-surface-variant font-medium text-sm transition-all hover:text-primary focus:outline-none tab-btn">
+                            Staff (<%= data.hospital.staff.length %>)
+                        </button>
+                    </div>
+
+                    <!-- Doctors Tab Content -->
+                    <div id="doctors-tab" class="tab-content block">
+                        <% if(data.hospital.doctor && data.hospital.doctor.length > 0) { %>
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                <% data.hospital.doctor.forEach(doc => { %>
+                                    <div class="border border-outline-variant/50 rounded-xl p-4 hover:shadow-md transition-all flex gap-4 items-start bg-surface-container-lowest">
+                                        <img src="<%= doc.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" class="w-14 h-14 rounded-full object-cover shrink-0 border border-slate-200">
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="font-bold text-on-surface text-base truncate">Dr. <%= doc.firstName %> <%= doc.lastName %></h4>
+                                            <p class="text-primary text-xs font-semibold mt-0.5 truncate">
+                                                <%= doc.speciality && doc.speciality.length > 0 ? doc.speciality[0].name : "General Practitioner" %>
+                                            </p>
+                                            <div class="space-y-1 mt-3">
+                                                <p class="text-xs text-on-surface-variant flex items-center gap-1.5 truncate">
+                                                    <span class="material-symbols-outlined text-[14px]">mail</span>
+                                                    <%= doc.credential?.email %>
+                                                </p>
+                                                <p class="text-xs text-on-surface-variant flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[14px]">phone</span>
+                                                    <%= doc.credential?.mobile %>
+                                                </p>
+                                            </div>
+                                            <div class="mt-4 flex justify-between items-center">
+                                                <% if(doc.credential?.isActive) { %>
+                                                    <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-semibold">Active</span>
+                                                <% } else { %>
+                                                    <span class="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[11px] font-semibold">Inactive</span>
+                                                <% } %>
+                                                <a href="/admin/doctorProfile?doctorId=<%= doc.id %>" class="text-primary text-xs font-bold hover:underline flex items-center gap-0.5">
+                                                    Profile <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } else { %>
+                            <div class="text-center py-12 text-slate-400">
+                                <span class="material-symbols-outlined text-[48px] mb-2">stethoscope</span>
+                                <p>No doctors assigned to this branch yet.</p>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Staff Tab Content -->
+                    <div id="staff-tab" class="tab-content hidden">
+                        <% if(data.hospital.staff && data.hospital.staff.length > 0) { %>
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                <% data.hospital.staff.forEach(st => { %>
+                                    <div class="border border-outline-variant/50 rounded-xl p-4 hover:shadow-md transition-all flex gap-4 items-start bg-surface-container-lowest">
+                                        <img src="<%= st.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" class="w-14 h-14 rounded-full object-cover shrink-0 border border-slate-200">
+                                        <div class="min-w-0 flex-1">
+                                            <h4 class="font-bold text-on-surface text-base truncate"><%= st.firstName %> <%= st.lastName %></h4>
+                                            <p class="text-slate-500 text-xs font-medium mt-0.5">Hospital Staff Member</p>
+                                            <div class="space-y-1 mt-3">
+                                                <p class="text-xs text-on-surface-variant flex items-center gap-1.5 truncate">
+                                                    <span class="material-symbols-outlined text-[14px]">mail</span>
+                                                    <%= st.credential?.email %>
+                                                </p>
+                                                <p class="text-xs text-on-surface-variant flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[14px]">phone</span>
+                                                    <%= st.credential?.mobile %>
+                                                </p>
+                                            </div>
+                                            <div class="mt-4 flex justify-between items-center">
+                                                <% if(st.credential?.isActive) { %>
+                                                    <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-semibold">Active</span>
+                                                <% } else { %>
+                                                    <span class="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[11px] font-semibold">Inactive</span>
+                                                <% } %>
+                                                <a href="/admin/staffProfile?staffId=<%= st.id %>" class="text-primary text-xs font-bold hover:underline flex items-center gap-0.5">
+                                                    Profile <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } else { %>
+                            <div class="text-center py-12 text-slate-400">
+                                <span class="material-symbols-outlined text-[48px] mb-2">badge</span>
+                                <p>No staff members assigned to this branch yet.</p>
+                            </div>
+                        <% } %>
+                    </div>
+
+                </section>
+
+            </div>
+        </main>
+
+    <script src="/js/admin/hospitalDetail.js"></script>
+    
+</body>
+
+</html>

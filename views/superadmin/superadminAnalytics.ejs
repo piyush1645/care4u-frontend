@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Super Admin Analytics | Care4U</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F5F7;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+
+    <!-- Sidebar Overlay for mobile -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar (matching the Care4U sidebar design) -->
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-[260px] bg-white text-slate-700 flex flex-col border-r border-slate-100 shadow-sm -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 shrink-0 mt-2 border-b border-slate-100 mb-2">
+            <div class="w-10 h-10 bg-primary text-on-primary rounded-lg flex items-center justify-center mr-3 shrink-0 shadow-sm">
+                <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
+            </div>
+            <div class="flex flex-col">
+                <h1 class="font-bold text-primary text-[18px] leading-tight">MediCare</h1>
+                <p class="text-[11px] text-slate-500 font-medium">Super Admin Portal</p>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-1 overflow-y-auto py-2 px-4 space-y-1">
+            <a href="/superadmin/dashboard" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors font-medium mb-1">
+                <span class="material-symbols-outlined mr-3">dashboard</span>
+                <span class="text-[14px]">Dashboard</span>
+            </a>
+            <a href="/superadmin/analytics" class="flex items-center gap-4 px-4 py-3 rounded-lg bg-primary text-on-primary font-medium mb-1 shadow-sm">
+                <span class="material-symbols-outlined mr-3">analytics</span>
+                <span class="text-[14px]">Analytics</span>
+            </a>
+        </nav>
+
+        <!-- Bottom Actions & User Profile -->
+        <div class="px-6 py-4 shrink-0 border-t border-slate-100 flex flex-col gap-3">
+            <div class="flex items-center gap-3 py-2 px-1">
+                <div class="w-9 h-9 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-sm shrink-0">
+                    SA
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-semibold text-slate-700 truncate">Super Admin</p>
+                    <p class="text-[10px] text-slate-500 truncate">superadmin@hms.com</p>
+                </div>
+            </div>
+            <a href="/logout"
+                class="flex items-center gap-4 px-4 py-2.5 rounded-lg hover:bg-red-50 transition-colors text-[#dc2626] font-medium">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <span class="text-[14px]">Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Header (aligned correctly to desktop viewport offset) -->
+    <header class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] h-20 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-md z-30 backdrop-blur-sm">
+        <div class="flex items-center">
+            <!-- Mobile Sidebar Toggle -->
+            <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+            <div>
+                <h2 class="font-headline-lg text-xl sm:text-headline-lg text-primary">Super Admin Analytics</h2>
+                <p class="font-label-sm text-label-sm text-on-surface-variant hidden sm:block">Monitor platform operations, user adoption, financial telemetry, and server health</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="refreshAnalytics()" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg flex items-center justify-center" title="Sync Data">
+                <span class="material-symbols-outlined text-[20px]">sync</span>
+            </button>
+            <div class="text-right hidden sm:block">
+                <p class="text-xs font-semibold text-slate-700">Root Access</p>
+                <p class="text-[10px] text-slate-400">Global Admin</p>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm border border-slate-200">
+                SA
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="ml-0 lg:ml-[260px] pt-24 p-md min-h-screen space-y-md">
+        
+        <!-- Tab Sub-Navigation (Reduces clutter & boosts architecture) -->
+        <div class="bg-surface-container-lowest p-1 rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 flex overflow-x-auto whitespace-nowrap gap-1 max-w-full scrollbar-none">
+            <button onclick="switchSubTab('overview')" id="tabOverview" class="px-5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-200 bg-primary text-on-primary shadow-sm flex items-center gap-2 shrink-0">
+                <span class="material-symbols-outlined text-[16px]">insights</span> Executive & Growth
+            </button>
+            <button onclick="switchSubTab('engagement')" id="tabEngagement" class="px-5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 shrink-0">
+                <span class="material-symbols-outlined text-[16px]">groups</span> Engagement & Adoption
+            </button>
+            <button onclick="switchSubTab('revenue')" id="tabRevenue" class="px-5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 shrink-0">
+                <span class="material-symbols-outlined text-[16px]">payments</span> Revenue & Appointments
+            </button>
+            <button onclick="switchSubTab('system')" id="tabSystem" class="px-5 py-2.5 rounded-lg font-semibold text-xs transition-all duration-200 text-on-surface-variant hover:bg-surface-container-low flex items-center gap-2 shrink-0">
+                <span class="material-symbols-outlined text-[16px]">dns</span> Health & Alerts
+            </button>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 1: EXECUTIVE OVERVIEW & PLATFORM GROWTH -->
+        <!-- ======================================================== -->
+        <div id="sectionOverview" class="space-y-md">
+            
+            <!-- Executive Overview 8 KPI Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-sm sm:gap-md">
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-primary">
+                        <span class="text-xs font-semibold text-slate-500">Hospital Groups</span>
+                        <span class="material-symbols-outlined text-[20px]">domain</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewGroups" class="text-xl sm:text-2xl font-bold text-slate-800">0</p>
+                        <p class="text-[10px] text-slate-500 font-medium">Tenant Chains</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-secondary">
+                        <span class="text-xs font-semibold text-slate-500">Total Hospitals</span>
+                        <span class="material-symbols-outlined text-[20px]">home_health</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewHospitals" class="text-xl sm:text-2xl font-bold text-slate-800">0</p>
+                        <p class="text-[10px] text-emerald-600 font-semibold flex items-center gap-0.5">
+                            <span id="kpiOverviewActiveHospitals">0</span> Active
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-teal-600">
+                        <span class="text-xs font-semibold text-slate-500">Total Doctors</span>
+                        <span class="material-symbols-outlined text-[20px]">medical_services</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewDoctors" class="text-xl sm:text-2xl font-bold text-slate-800">0</p>
+                        <p class="text-[10px] text-teal-600 font-semibold flex items-center gap-0.5">
+                            <span id="kpiOverviewActiveDoctors">0</span> Active
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-sky-600">
+                        <span class="text-xs font-semibold text-slate-500">Total Patients</span>
+                        <span class="material-symbols-outlined text-[20px]">group</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewPatients" class="text-xl sm:text-2xl font-bold text-slate-800">0</p>
+                        <p class="text-[10px] text-slate-500 font-medium">Registered Patients</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-indigo-600">
+                        <span class="text-xs font-semibold text-slate-500">Total Appointments</span>
+                        <span class="material-symbols-outlined text-[20px]">event_available</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewAppointments" class="text-xl sm:text-2xl font-bold text-slate-800">0</p>
+                        <p class="text-[10px] text-indigo-600 font-semibold">+18% this month</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-emerald-600">
+                        <span class="text-xs font-semibold text-slate-500">Monthly Revenue (MRR)</span>
+                        <span class="material-symbols-outlined text-[20px]">monetization_on</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewMRR" class="text-xl sm:text-2xl font-bold text-slate-800">$0</p>
+                        <p class="text-[10px] text-slate-500 font-medium">SaaS Subscriptions</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-purple-600">
+                        <span class="text-xs font-semibold text-slate-500">Growth Rate %</span>
+                        <span class="material-symbols-outlined text-[20px]">trending_up</span>
+                    </div>
+                    <div>
+                        <p id="kpiOverviewGrowthRate" class="text-xl sm:text-2xl font-bold text-slate-800">0%</p>
+                        <p class="text-[10px] text-purple-600 font-semibold">User sign-up velocity</p>
+                    </div>
+                </div>
+
+                <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between h-28">
+                    <div class="flex justify-between items-start text-rose-600">
+                        <span class="text-xs font-semibold text-slate-500">Health Index</span>
+                        <span class="material-symbols-outlined text-[20px]">favorite</span>
+                    </div>
+                    <div>
+                        <p class="text-xl sm:text-2xl font-bold text-slate-800">99.98%</p>
+                        <p class="text-[10px] text-slate-500 font-medium">API Uptime Status</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Growth Trends Chart -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+                <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface font-bold">Platform Growth Trends</h3>
+                            <p class="text-xs text-on-surface-variant">Aggregate registration rates for tenants, doctors, and patients</p>
+                        </div>
+                        <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg border border-outline-variant/30">
+                            <button onclick="updateOverviewTimeframe('6m')" id="btnOverview6m" class="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors bg-white text-primary shadow-sm">6M</button>
+                            <button onclick="updateOverviewTimeframe('12m')" id="btnOverview12m" class="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-slate-600 hover:bg-white/50">12M</button>
+                        </div>
+                    </div>
+                    <div class="relative w-full h-[320px]">
+                        <canvas id="platformGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Registration Funnel (New Registrations Breakdown) -->
+                <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">New Registrations</h3>
+                        <p class="text-xs text-on-surface-variant">New accounts created during the selected timeframe</p>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center gap-4">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold text-slate-600">
+                                <span>Hospital Groups</span>
+                                <span id="valNewGroups">0</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary rounded-full" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold text-slate-600">
+                                <span>Hospitals / Branches</span>
+                                <span id="valNewHospitals">0</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-secondary rounded-full" style="width: 35%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold text-slate-600">
+                                <span>Doctors Registered</span>
+                                <span id="valNewDoctors">0</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-teal-500 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-xs font-semibold text-slate-600">
+                                <span>Patients Registered</span>
+                                <span id="valNewPatients">0</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-500 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t border-outline-variant/30 pt-4 text-center">
+                        <p class="text-[11px] text-slate-500 font-medium">Conversion from lead/signup to active hospital usage is <span class="text-emerald-600 font-bold">89.4%</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 2: USER ENGAGEMENT & HOSPITAL ADOPTION -->
+        <!-- ======================================================== -->
+        <div id="sectionEngagement" class="space-y-md hidden">
+            
+            <!-- Engagement Metrics Row -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Daily Active (DAU)</p>
+                        <p id="valDAU" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                    </div>
+                    <span class="text-[10px] text-emerald-600 font-bold mt-2 flex items-center">
+                        <span class="material-symbols-outlined text-[12px] mr-0.5">arrow_upward</span> +4.2% MoM
+                    </span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Weekly Active (WAU)</p>
+                        <p id="valWAU" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-medium mt-2">Unique users per week</span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Active (MAU)</p>
+                        <p id="valMAU" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-medium mt-2">Unique users per month</span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Stickiness Ratio</p>
+                            <p id="valStickiness" class="text-2xl font-bold text-slate-800 mt-1">0%</p>
+                        </div>
+                        <!-- Micro gauge -->
+                        <div class="relative w-12 h-12">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="24" cy="24" r="18" stroke="#f0f3ff" stroke-width="4" fill="transparent" />
+                                <circle id="stickinessGauge" cx="24" cy="24" r="18" stroke="#003d9b" stroke-width="4" fill="transparent" stroke-dasharray="113" stroke-dashoffset="85" />
+                            </svg>
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-medium mt-2">DAU / MAU ratio</span>
+                </div>
+            </div>
+
+            <!-- Login Trends and Retention -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+                <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">User Login Trends</h3>
+                        <p class="text-xs text-on-surface-variant">Daily user sessions and activity timeline</p>
+                    </div>
+                    <div class="relative w-full h-[280px]">
+                        <canvas id="loginTrendsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Doctors Specialty Distribution -->
+                <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">Doctors Specialty</h3>
+                        <p class="text-xs text-on-surface-variant">Distribution of clinical specialties</p>
+                    </div>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                        <canvas id="specialtyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hospital Performance Scorecard & Health Grid -->
+            <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm overflow-hidden">
+                <div class="p-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">Hospital Performance & Adoption Index</h3>
+                        <p class="text-xs text-on-surface-variant">Monitoring active operations, clinical adoption, and health indexes</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-surface-container-low border-b border-outline-variant">
+                            <tr>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Hospital / Group</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Adoption Score</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Health Index</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Uptime status</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Staff/Doc Ratio</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Monthly Appointments</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adoptionTableBody" class="divide-y divide-outline-variant/30">
+                            <tr>
+                                <td colspan="6" class="text-center py-8 text-on-surface-variant text-sm">Loading adoption data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 3: REVENUE ANALYTICS & APPOINTMENT STATS -->
+        <!-- ======================================================== -->
+        <div id="sectionRevenue" class="space-y-md hidden">
+            
+            <!-- SaaS Revenue Unit Economics Row -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-md">
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Annual Recurring Revenue (ARR)</p>
+                        <p id="valARR" class="text-2xl font-bold text-slate-800 mt-2">$0</p>
+                    </div>
+                    <span class="text-[10px] text-emerald-600 font-bold mt-2 flex items-center">Run-rate velocity</span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Subscriptions</p>
+                        <p id="valActiveSubs" class="text-2xl font-bold text-slate-800 mt-2">0</p>
+                    </div>
+                    <span class="text-[10px] text-emerald-600 font-bold mt-2">100% active cycles</span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Expiring in 30 Days</p>
+                        <p id="valExpiringSubs" class="text-2xl font-bold text-rose-500 mt-2">0</p>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-medium mt-2">Renewal alerts pending</span>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Churn Rate %</p>
+                        <p class="text-2xl font-bold text-emerald-600 mt-2">0.0%</p>
+                    </div>
+                    <span class="text-[10px] text-slate-500 font-medium mt-2">Platform target < 2%</span>
+                </div>
+            </div>
+
+            <!-- Revenue Trend & Appointments Breakdown -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+                
+                <!-- Financial trends chart -->
+                <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">Subscription Revenue Trend</h3>
+                        <p class="text-xs text-on-surface-variant">Historical MRR growth and monthly billings trajectory</p>
+                    </div>
+                    <div class="relative w-full h-[280px]">
+                        <canvas id="revenueTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Appointment Status breakdown -->
+                <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">Appointment Statuses</h3>
+                        <p class="text-xs text-on-surface-variant">Breakdown of platform-wide bookings status</p>
+                    </div>
+                    <div class="relative flex-1 flex items-center justify-center min-h-[220px]">
+                        <canvas id="appointmentStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Value Added Insights Section (Premium SaaS stats) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-primary/10 text-primary rounded-lg">
+                        <span class="material-symbols-outlined text-[28px]">payments</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">LTV:CAC Ratio</p>
+                        <p class="text-xl font-bold text-slate-800 mt-1">4.8x</p>
+                        <p class="text-[9px] text-emerald-600 font-semibold mt-0.5">Highly efficient acquisition</p>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-secondary/10 text-secondary rounded-lg">
+                        <span class="material-symbols-outlined text-[28px]">speed</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Appointment Fill Rate</p>
+                        <p class="text-xl font-bold text-slate-800 mt-1">74.2%</p>
+                        <p class="text-[9px] text-slate-500 mt-0.5">Average slot booking efficiency</p>
+                    </div>
+                </div>
+                <div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex items-center gap-4">
+                    <div class="p-3 bg-rose-50 text-rose-500 rounded-lg">
+                        <span class="material-symbols-outlined text-[28px]">crisis_alert</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">No-Show Revenue Leak</p>
+                        <p class="text-xl font-bold text-slate-800 mt-1">$4,850</p>
+                        <p class="text-[9px] text-rose-500 font-semibold mt-0.5">Estimated lost billing across nodes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- TAB 4: SYSTEM HEALTH & CRITICAL ACTION CENTER -->
+        <!-- ======================================================== -->
+        <div id="sectionSystem" class="space-y-md hidden">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+                
+                <!-- Action Center (Critical warnings first to prevent churn) -->
+                <div class="col-span-12 lg:col-span-7 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold text-rose-600 flex items-center gap-2">
+                            <span class="material-symbols-outlined">warning</span> Action Center
+                        </h3>
+                        <p class="text-xs text-on-surface-variant">Crucial alerts requiring Super Admin mediation or customer relations outreach</p>
+                    </div>
+                    
+                    <!-- Action List container -->
+                    <div id="actionCenterList" class="space-y-3 flex-1 overflow-y-auto max-h-[380px] pr-2">
+                        <!-- Alert Cards populate here -->
+                        <div class="flex items-center justify-center py-12 text-slate-400">
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="material-symbols-outlined animate-spin text-[32px] text-primary">progress_activity</span>
+                                <span>Scanning nodes for critical alerts...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Server telemetry and health metrics -->
+                <div class="col-span-12 lg:col-span-5 bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 shadow-sm flex flex-col gap-4">
+                    <div>
+                        <h3 class="font-headline-md text-headline-md text-on-surface font-bold">System Health Monitoring</h3>
+                        <p class="text-xs text-on-surface-variant">Diagnostics stream, servers latency, and live nodes status</p>
+                    </div>
+                    
+                    <!-- Gauges and online counters -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/30 flex flex-col items-center justify-center">
+                            <span class="text-[11px] font-semibold text-slate-500 mb-1">API Health (Avg Latency)</span>
+                            <p class="text-lg font-bold text-slate-700">124 ms</p>
+                            <span class="text-[9px] text-emerald-600 font-bold mt-0.5">Optimal response</span>
+                        </div>
+                        <div class="bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/30 flex flex-col items-center justify-center">
+                            <span class="text-[11px] font-semibold text-slate-500 mb-1">Error Rate (Last 24h)</span>
+                            <p class="text-lg font-bold text-emerald-600">0.02%</p>
+                            <span class="text-[9px] text-slate-500 mt-0.5">Below 1% target</span>
+                        </div>
+                    </div>
+                    
+                    <!-- SVG Gauges (CPU/RAM) -->
+                    <div class="grid grid-cols-2 gap-4 border-t border-outline-variant/30 pt-4">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[11px] font-semibold text-slate-500 mb-2">CPU Utilization</span>
+                            <div class="relative w-20 h-20 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90">
+                                    <circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="6" fill="transparent" />
+                                    <circle id="cpuGauge" cx="40" cy="40" r="32" stroke="#003d9b" stroke-width="6" fill="transparent" stroke-dasharray="201" stroke-dashoffset="150" stroke-linecap="round" class="transition-all duration-500" />
+                                </svg>
+                                <span id="valCPU" class="absolute font-bold text-slate-700 text-xs">25%</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[11px] font-semibold text-slate-500 mb-2">Memory Load</span>
+                            <div class="relative w-20 h-20 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90">
+                                    <circle cx="40" cy="40" r="32" stroke="#e2e8f0" stroke-width="6" fill="transparent" />
+                                    <circle id="ramGauge" cx="40" cy="40" r="32" stroke="#006c47" stroke-width="6" fill="transparent" stroke-dasharray="201" stroke-dashoffset="100" stroke-linecap="round" class="transition-all duration-500" />
+                                </svg>
+                                <span id="valRAM" class="absolute font-bold text-slate-700 text-xs">50%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live transaction stream -->
+                    <div class="flex flex-col flex-1 min-h-[140px] bg-slate-900 text-slate-300 font-mono text-[10px] p-3 rounded-lg overflow-hidden border border-slate-800">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span class="text-[9px] text-slate-400 font-semibold uppercase">Platform Audit Stream</span>
+                            </div>
+                            <button onclick="clearConsoleLogs()" class="text-slate-500 hover:text-slate-300 transition-colors">Clear</button>
+                        </div>
+                        <div id="systemLogsConsole" class="flex-1 overflow-y-auto space-y-1 scrollbar-thin scrollbar-thumb-slate-800 pr-1 h-32">
+                            <p class="text-slate-500">[SYSTEM] Sync session initialized...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Navigation Helper & Global Hooks -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
+    </script>
+    <script src="/js/superadmin/superadminAnalytics.js"></script>
+</body>
+</html>

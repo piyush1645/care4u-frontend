@@ -1,0 +1,32 @@
+<!-- ═══════════════════════════ TOPBAR ═══════════════════════════ -->
+<header class="sticky top-0 z-40 bg-white shadow-sm flex justify-between items-center px-md h-16 ml-0 lg:ml-64">
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()"
+            class="lg:hidden p-2 -ml-2 text-slate-500 hover:text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+
+    </div>
+    <div class="flex items-center space-x-md">
+        <button
+            class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+            <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="h-8 w-px bg-outline-variant"></div>
+        <a href="/staff/profile"
+            class="flex items-center space-x-sm group hover:bg-surface-container rounded-xl px-2 py-1 transition-colors"
+            title="My Profile">
+            <div
+                class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <span class="material-symbols-outlined text-primary text-[18px]">person</span>
+            </div>
+            <div class="hidden xl:block">
+                <p class="text-sm font-bold text-primary group-hover:underline">
+                    <%= (typeof profile !=='undefined' && profile.firstName) ? profile.firstName + ' ' +
+                        (profile.lastName || '' ) : 'Staff Member' %>
+                </p>
+                <p class="text-xs text-outline leading-none">Front Desk · Edit Profile</p>
+            </div>
+        </a>
+    </div>
+</header>

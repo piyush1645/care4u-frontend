@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Staff Dashboard | Care4U</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#93000a",
+              "on-secondary-fixed": "#002113",
+              "primary-fixed": "#dae2ff",
+              error: "#ba1a1a",
+              "on-error": "#ffffff",
+              "on-secondary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-surface": "#101c2d",
+              "inverse-on-surface": "#ebf1ff",
+              "tertiary-container": "#a33500",
+              "surface-container-low": "#f0f3ff",
+              "inverse-primary": "#b2c5ff",
+              "surface-tint": "#0c56d0",
+              "surface-dim": "#cedbf2",
+              "surface-container-high": "#dee9ff",
+              secondary: "#006c47",
+              "on-secondary-container": "#00734c",
+              outline: "#737685",
+              "primary-container": "#0052cc",
+              primary: "#003d9b",
+              "surface-bright": "#f9f9ff",
+              "secondary-fixed-dim": "#65dca4",
+              tertiary: "#7b2600",
+              "surface-variant": "#d7e3fb",
+              "secondary-container": "#82f9be",
+              "secondary-fixed": "#82f9be",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#c4d2ff",
+              "on-background": "#101c2d",
+              "on-surface-variant": "#434654",
+              "primary-fixed-dim": "#b2c5ff",
+              "outline-variant": "#c3c6d6",
+              "tertiary-fixed": "#ffdbcf",
+              "surface-container-lowest": "#ffffff",
+              surface: "#f9f9ff",
+              background: "#f9f9ff",
+              "surface-container-highest": "#d7e3fb",
+              "on-primary-fixed": "#001848",
+            },
+            spacing: {
+              "sidebar-width": "260px",
+              md: "24px",
+              xs: "4px",
+              sm: "12px",
+              base: "8px",
+              lg: "40px",
+            },
+            fontFamily: { sans: ["Inter"] },
+          },
+        },
+      };
+    </script>
+    <style>
+      body { font-family: "Inter", sans-serif; }
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+      input:focus, select:focus {
+        outline: 2px solid #003d9b;
+        outline-offset: 1px;
+      }
+      .slot-btn { transition: all 0.15s ease; }
+
+      /* Tab page transitions */
+      .tab-section { display: none; }
+      .tab-section.active { display: block; animation: fadeIn 0.2s ease; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+      /* Nav link active/inactive styles */
+      .nav-link-active {
+        display: flex; align-items: center; gap: 16px;
+        padding: 12px 16px; border-radius: 8px;
+        background: #002868; color: #fff;
+        font-weight: 600; font-size: 14px;
+        margin-bottom: 4px; box-shadow: 0 1px 4px rgba(0,40,104,.15);
+        cursor: pointer;
+      }
+      .nav-link-inactive {
+        display: flex; align-items: center; gap: 16px;
+        padding: 12px 16px; border-radius: 8px;
+        background: transparent; color: #475569;
+        font-weight: 500; font-size: 14px;
+        margin-bottom: 4px; transition: background .15s, color .15s;
+        cursor: pointer;
+      }
+      .nav-link-inactive:hover { background: #f1f5f9; color: #002868; }
+
+      /* Calendar grid */
+      .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+      .cal-cell { min-height: 88px; border-radius: 8px; padding: 6px; }
+      .cal-cell.today { background: #002868; color: #fff; }
+      .cal-cell.other-month { opacity: 0.4; }
+      .cal-cell:not(.today):not(.other-month) { background: #fff; }
+
+      /* Status badges */
+      .badge-booked   { background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+      .badge-cancelled{ background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+      .badge-completed{ background:#dbeafe; color:#1e40af; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+      .badge-default  { background:#f1f5f9; color:#475569; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+
+      /* Payment status badges */
+      .pay-success{ background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+      .pay-pending{ background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+      .pay-failed { background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+
+      /* Scrollbar thin */
+      .thin-scroll::-webkit-scrollbar { width: 4px; }
+      .thin-scroll::-webkit-scrollbar-track { background: transparent; }
+      .thin-scroll::-webkit-scrollbar-thumb { background: #c3c6d6; border-radius: 99px; }
+
+      /* Loading spinner */
+      .spinner { width:28px; height:28px; border:3px solid #e5e7eb; border-top-color:#003d9b; border-radius:50%; animation:spin .7s linear infinite; }
+      @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
+  </head>
+
+  <body class="bg-[#F4F5F7] text-on-surface">
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden transition-opacity" onclick="toggleSidebar()"></div>
+
+    <!-- ═══════════════════════════ SIDEBAR ═══════════════════════════ -->
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-64 bg-white text-slate-700 flex flex-col transition-transform duration-300 transform -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none border-r border-slate-100 h-full">
+        
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 shrink-0 mt-2 border-b border-slate-100 mb-2">
+            <div class="w-10 h-10 bg-[#002868] text-white rounded-lg flex items-center justify-center mr-3 shrink-0 shadow-sm">
+                <span class="material-symbols-outlined text-[22px]">medical_services</span>
+            </div>
+            <div class="flex flex-col">
+                <h1 class="font-bold text-[#002868] text-[18px] leading-tight">Care4U</h1>
+                <p class="text-[11px] text-slate-500 font-medium">Staff Portal</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto thin-scroll py-2 px-4 space-y-0.5">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-link-active w-full text-left">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span>Dashboard</span>
+            </button>
+            <button onclick="switchTab('appointments')" id="nav-appointments" class="nav-link-inactive w-full text-left">
+                <span class="material-symbols-outlined text-[20px]">event_available</span>
+                <span>Appointments</span>
+            </button>
+            <button onclick="switchTab('patients')" id="nav-patients" class="nav-link-inactive w-full text-left">
+                <span class="material-symbols-outlined text-[20px]">group</span>
+                <span>Patients</span>
+            </button>
+            <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-link-inactive w-full text-left">
+                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                <span>Calendar</span>
+            </button>
+        </nav>
+
+        <!-- Bottom Actions -->
+        <div class="p-4 shrink-0 border-t border-slate-100 space-y-2">
+            <button id="openRegisterPatientBtn"
+                class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-lg font-medium text-[14px] shadow-sm transition-colors active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[18px]">person_add</span> Register Patient
+            </button>
+            <button id="openBookingModalBtn"
+                class="w-full flex items-center justify-center gap-2 bg-[#002868] hover:bg-[#001f52] text-white py-2.5 rounded-lg font-medium text-[14px] shadow-sm transition-colors active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[18px]">add_circle</span> New Appointment
+            </button>
+            <a href="/logout"
+                class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors text-[#dc2626] font-semibold text-[14px]">
+                <span class="material-symbols-outlined text-[18px]">logout</span> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══════════════════════════ TOPBAR ═══════════════════════════ -->
+    <header class="sticky top-0 z-40 bg-white shadow-sm flex justify-between items-center px-md h-16 ml-0 lg:ml-64">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()"
+          class="lg:hidden p-2 -ml-2 text-slate-500 hover:text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="flex items-center bg-surface-container rounded-full px-sm py-xs min-w-[280px]">
+          <span class="material-symbols-outlined text-outline">search</span>
+          <input
+            id="topbarSearch"
+            class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-outline-variant"
+            placeholder="Search patients, records..."
+            type="text"
+            style="outline: none"
+          />
+        </div>
+      </div>
+      <div class="flex items-center space-x-md">
+        <button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container rounded-full transition-all">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <div class="h-8 w-px bg-outline-variant"></div>
+        <div class="flex items-center space-x-sm">
+          <div class="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary text-[18px]">person</span>
+          </div>
+          <div class="hidden xl:block">
+            <p class="text-sm font-bold text-primary">
+              <%= profile.firstName ? profile.firstName + ' ' + profile.lastName : 'Staff Member' %>
+            </p>
+            <p class="text-xs text-outline leading-none">Front Desk</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+    <main class="ml-0 lg:ml-64 p-md max-w-full overflow-x-hidden">
+
+      <!-- ─────────────────── TAB: DASHBOARD ─────────────────── -->
+      <section id="tab-dashboard" class="tab-section active">
+        <!-- Welcome -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-sm">
+          <div>
+            <h2 class="text-2xl font-bold text-on-surface">
+              Good <%= (() => { const h = new Date().getHours(); return h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : 'Evening'; })() %>,
+              <span class="text-primary"><%= profile.firstName || 'Staff' %></span>!
+            </h2>
+            <p class="text-sm text-on-surface-variant">Here's what's happening at your front desk today.</p>
+          </div>
+          <div class="flex items-center space-x-sm bg-surface-container-high rounded-xl p-sm">
+            <span class="material-symbols-outlined text-primary">calendar_month</span>
+            <span class="text-sm font-semibold text-on-surface"><%= todayDate %></span>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg">
+          <!-- Total Appointments -->
+          <div class="bg-white p-md rounded-xl shadow-sm border border-outline-variant/30">
+            <div class="flex justify-between items-start mb-sm">
+              <div class="p-sm bg-primary/10 rounded-lg">
+                <span class="material-symbols-outlined text-primary">event_available</span>
+              </div>
+              <span class="text-xs text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-full">Today</span>
+            </div>
+            <p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Total Appointments</p>
+            <h3 class="text-2xl font-bold text-on-surface"><%= appointments.length %></h3>
+          </div>
+
+          <!-- Booked -->
+          <div class="bg-white p-md rounded-xl shadow-sm border border-outline-variant/30">
+            <div class="flex justify-between items-start mb-sm">
+              <div class="p-sm bg-emerald-50 rounded-lg">
+                <span class="material-symbols-outlined text-emerald-600">check_circle</span>
+              </div>
+              <span class="text-xs text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-full">Active</span>
+            </div>
+            <p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Booked</p>
+            <h3 class="text-2xl font-bold text-on-surface"><%= appointments.filter(a => a.status === 'BOOKED').length %></h3>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="bg-white p-md rounded-xl shadow-sm border border-outline-variant/30">
+            <div class="flex justify-between items-start mb-sm">
+              <div class="p-sm bg-amber-50 rounded-lg">
+                <span class="material-symbols-outlined text-amber-600">bolt</span>
+              </div>
+            </div>
+            <p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Quick Actions</p>
+            <div class="flex gap-2 flex-wrap">
+              <button onclick="openBookingModal()"
+                class="text-xs bg-primary text-white px-3 py-1.5 rounded-full font-semibold hover:bg-primary/90 transition-all flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">add</span> Book
+              </button>
+              <button onclick="openRegisterPatientModal()"
+                class="text-xs bg-emerald-600 text-white px-3 py-1.5 rounded-full font-semibold hover:bg-emerald-700 transition-all flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">person_add</span> Patient
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Appointments Table -->
+        <section class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+          <div class="p-md flex flex-col sm:flex-row sm:justify-between sm:items-center border-b border-outline-variant gap-3">
+            <div>
+              <h4 class="font-bold text-lg text-on-surface">Today's Appointments</h4>
+              <p class="text-xs text-on-surface-variant">All appointments scheduled for today</p>
+            </div>
+            <button id="openBookingModalBtn2"
+              class="flex items-center gap-1 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[16px]">add</span> New Appointment
+            </button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-surface-container-low">
+                <tr>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Patient</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Doctor</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Time</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Status</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Payment</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant/30">
+                <% if (appointments.length === 0) { %>
+                  <tr>
+                    <td colspan="6" class="p-lg text-center">
+                      <div class="flex flex-col items-center gap-2 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[40px] opacity-40">event_busy</span>
+                        <p class="font-medium text-sm">No appointments scheduled for today</p>
+                      </div>
+                    </td>
+                  </tr>
+                <% } else { %>
+                  <% appointments.forEach(function(appt) { %>
+                    <tr class="hover:bg-surface-container/50 transition-colors">
+                      <td class="p-md">
+                        <p class="font-semibold text-sm text-on-surface">
+                          <%= (appt.patient && appt.patient.firstName) ? appt.patient.firstName + ' ' + (appt.patient.lastName || '') : 'Unknown Patient' %>
+                        </p>
+                        <p class="text-xs text-on-surface-variant mt-0.5">
+                          <% if (appt.patient && appt.patient.mobile) { %>
+                            <span class="material-symbols-outlined text-[12px] align-middle">phone</span> <%= appt.patient.mobile %>
+                          <% } else { %>
+                            ID: #<%= appt.patientId ? String(appt.patientId).slice(-8) : 'N/A' %>
+                          <% } %>
+                        </p>
+                      </td>
+                      <td class="p-md">
+                        <p class="text-sm font-medium text-on-surface">
+                          Dr. <%= (appt.doctor && appt.doctor.firstName) ? appt.doctor.firstName + ' ' + (appt.doctor.lastName || '') : (appt.doctor && appt.doctor.lastName ? appt.doctor.lastName : 'Unknown') %>
+                        </p>
+                        <% if (appt.doctor && appt.doctor.specialities) { %>
+                          <p class="text-xs text-on-surface-variant"><%= appt.doctor.specialities %></p>
+                        <% } %>
+                      </td>
+                      <td class="p-md">
+                        <span class="text-sm font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">
+                          <%= appt.appointmentStartTime ? new Date(appt.appointmentStartTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A' %>
+                        </span>
+                      </td>
+                      <td class="p-md">
+                        <% if (appt.status === 'BOOKED') { %>
+                          <span class="badge-booked">BOOKED</span>
+                        <% } else if (appt.status === 'CANCELLED') { %>
+                          <span class="badge-cancelled">CANCELLED</span>
+                        <% } else if (appt.status === 'COMPLETED') { %>
+                          <span class="badge-completed">COMPLETED</span>
+                        <% } else { %>
+                          <span class="badge-default"><%= appt.status || 'UNKNOWN' %></span>
+                        <% } %>
+                      </td>
+                      <td class="p-md">
+                        <% 
+                          const payStatus = appt.payment && appt.payment.paymentStatus ? appt.payment.paymentStatus : null;
+                          const payType = appt.payment && appt.payment.paymentType ? appt.payment.paymentType : null;
+                        %>
+                        <% if (payStatus === 'SUCCESS') { %>
+                          <span class="pay-success">Paid</span>
+                          <% if (payType) { %><p class="text-[10px] text-on-surface-variant mt-0.5"><%= payType %></p><% } %>
+                        <% } else if (payStatus === 'PENDING') { %>
+                          <span class="pay-pending">Pending</span>
+                        <% } else if (payStatus === 'FAILED') { %>
+                          <span class="pay-failed">Failed</span>
+                        <% } else { %>
+                          <span class="badge-default">—</span>
+                        <% } %>
+                      </td>
+                      <td class="p-md">
+                        <button class="p-1.5 hover:bg-surface-container rounded-lg transition-all text-primary" title="View Details">
+                          <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- ─────────────────── TAB: APPOINTMENTS ─────────────────── -->
+      <section id="tab-appointments" class="tab-section">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-sm">
+          <div>
+            <h2 class="text-2xl font-bold text-on-surface">Appointments</h2>
+            <p class="text-sm text-on-surface-variant">Search, filter and manage all appointments</p>
+          </div>
+          <button onclick="openBookingModal()"
+            class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">add</span> New Appointment
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 p-md mb-md">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Date</label>
+              <input id="apptFilterDate" type="date" value="<%= new Date().toISOString().split('T')[0] %>"
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Doctor</label>
+              <select id="apptFilterDoctor" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+                <option value="">All Doctors</option>
+                <% doctors.forEach(function(doc) { %>
+                  <option value="<%= doc.id %>"><%= doc.fullName || (doc.firstName + ' ' + doc.lastName) %></option>
+                <% }); %>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-on-surface-variant mb-1">Status</label>
+              <select id="apptFilterStatus" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+                <option value="">All Statuses</option>
+                <option value="BOOKED">Booked</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button onclick="loadAppointments()"
+                class="w-full bg-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all flex items-center justify-center gap-1">
+                <span class="material-symbols-outlined text-[16px]">search</span> Search
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+          <div class="p-md border-b border-outline-variant/30 flex items-center justify-between">
+            <p class="text-sm font-semibold text-on-surface">Results <span id="apptResultCount" class="text-on-surface-variant font-normal"></span></p>
+            <div id="apptLoadingSpinner" class="hidden"><div class="spinner"></div></div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-surface-container-low">
+                <tr>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Patient</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Doctor</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Date & Time</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Status</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Payment</th>
+                  <th class="p-md text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Action</th>
+                </tr>
+              </thead>
+              <tbody id="apptTableBody" class="divide-y divide-outline-variant/30">
+                <tr>
+                  <td colspan="6" class="p-lg text-center text-on-surface-variant text-sm">
+                    Use the filters above and click <strong>Search</strong> to load appointments.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────── TAB: PATIENTS ─────────────────── -->
+      <section id="tab-patients" class="tab-section">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-sm">
+          <div>
+            <h2 class="text-2xl font-bold text-on-surface">Patients</h2>
+            <p class="text-sm text-on-surface-variant">Search and manage registered patients</p>
+          </div>
+          <button onclick="openRegisterPatientModal()"
+            class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 transition-all active:scale-95">
+            <span class="material-symbols-outlined text-[18px]">person_add</span> Register Patient
+          </button>
+        </div>
+
+        <!-- Search -->
+        <div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 p-md mb-md">
+          <div class="flex gap-3">
+            <div class="relative flex-1">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+              <input id="patientTabSearch" type="text" placeholder="Search by name, mobile, or email…"
+                class="w-full pl-10 pr-4 py-2.5 border border-outline-variant rounded-lg text-sm" />
+            </div>
+            <button onclick="searchPatients()"
+              class="bg-primary text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all flex items-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">search</span> Search
+            </button>
+          </div>
+        </div>
+
+        <!-- Patient Results -->
+        <div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+          <div class="p-md border-b border-outline-variant/30 flex items-center justify-between">
+            <p class="text-sm font-semibold text-on-surface">Search Results <span id="patientResultCount" class="text-on-surface-variant font-normal"></span></p>
+            <div id="patientLoadingSpinner" class="hidden"><div class="spinner"></div></div>
+          </div>
+          <div id="patientResults" class="p-lg text-center text-on-surface-variant text-sm">
+            <div class="flex flex-col items-center gap-2 opacity-50">
+              <span class="material-symbols-outlined text-[40px]">person_search</span>
+              <p>Enter a name, mobile, or email to search patients</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────── TAB: CALENDAR ─────────────────── -->
+      <section id="tab-calendar" class="tab-section">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-lg gap-sm">
+          <div>
+            <h2 class="text-2xl font-bold text-on-surface">Calendar</h2>
+            <p class="text-sm text-on-surface-variant">Monthly view of scheduled appointments</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="changeMonth(-1)" class="w-9 h-9 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-all">
+              <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+            </button>
+            <span id="calMonthLabel" class="text-base font-bold text-on-surface min-w-[140px] text-center"></span>
+            <button onclick="changeMonth(1)" class="w-9 h-9 rounded-lg border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-all">
+              <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+          <!-- Day headers -->
+          <div class="grid grid-cols-7 border-b border-outline-variant/30">
+            <% ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(d) { %>
+              <div class="p-3 text-center text-xs font-bold text-on-surface-variant uppercase tracking-wider"><%= d %></div>
+            <% }); %>
+          </div>
+          <!-- Calendar grid -->
+          <div id="calGrid" class="p-3"></div>
+        </div>
+
+        <!-- Calendar day details -->
+        <div id="calDayDetail" class="hidden mt-md bg-white rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+          <div class="p-md border-b border-outline-variant/30 flex items-center justify-between">
+            <h4 id="calDayDetailTitle" class="font-bold text-on-surface"></h4>
+            <button onclick="document.getElementById('calDayDetail').classList.add('hidden')" class="p-1 hover:bg-surface-container rounded-full">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+          <div id="calDayDetailBody" class="p-md"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+       BOOK APPOINTMENT MODAL (4-step wizard)
+  ════════════════════════════════════════════════════════════════ -->
+    <div id="bookingModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col">
+        <!-- Header -->
+        <div class="p-6 border-b border-outline-variant flex justify-between items-center shrink-0">
+          <h3 class="font-bold text-xl text-on-surface">Book Appointment</h3>
+          <button id="closeBookingModal" class="p-2 hover:bg-surface-container rounded-full transition-all">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <!-- Step Progress Indicator -->
+        <div class="px-6 py-4 border-b border-outline-variant/30 shrink-0">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col items-center gap-1">
+              <div id="stepDot1" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-primary text-white">1</div>
+              <span id="stepLabel1" class="text-xs font-medium text-primary">Patient</span>
+            </div>
+            <div class="flex-1 h-px bg-outline-variant mx-2"></div>
+            <div class="flex flex-col items-center gap-1">
+              <div id="stepDot2" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-outline-variant text-on-surface-variant">2</div>
+              <span id="stepLabel2" class="text-xs font-medium text-on-surface-variant">Doctor & Date</span>
+            </div>
+            <div class="flex-1 h-px bg-outline-variant mx-2"></div>
+            <div class="flex flex-col items-center gap-1">
+              <div id="stepDot3" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-outline-variant text-on-surface-variant">3</div>
+              <span id="stepLabel3" class="text-xs font-medium text-on-surface-variant">Time Slot</span>
+            </div>
+            <div class="flex-1 h-px bg-outline-variant mx-2"></div>
+            <div class="flex flex-col items-center gap-1">
+              <div id="stepDot4" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-outline-variant text-on-surface-variant">4</div>
+              <span id="stepLabel4" class="text-xs font-medium text-on-surface-variant">Payment</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step Content (scrollable) -->
+        <div class="flex-1 overflow-y-auto p-6">
+          <!-- STEP 1: Find Patient -->
+          <div id="step1">
+            <h4 class="font-semibold text-base text-on-surface mb-1">Find Patient</h4>
+            <p class="text-sm text-on-surface-variant mb-4">Search by name, email, or mobile number.</p>
+
+            <div class="relative mb-3">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+              <input id="patientSearchInput" type="text" placeholder="e.g. John Doe or 9876543210"
+                class="w-full pl-10 pr-4 py-2.5 border border-outline-variant rounded-lg text-sm focus:border-primary" />
+            </div>
+
+            <div id="patientSearchResults" class="max-h-48 overflow-y-auto border border-outline-variant/50 rounded-lg mb-4 empty:hidden"></div>
+
+            <div id="selectedPatientCard" class="hidden bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-green-700">check_circle</span>
+                  </div>
+                  <div>
+                    <p id="selectedPatientName" class="font-semibold text-sm text-on-surface"></p>
+                    <p id="selectedPatientMobile" class="text-xs text-on-surface-variant"></p>
+                    <p id="selectedPatientEmail" class="text-xs text-on-surface-variant"></p>
+                  </div>
+                </div>
+                <button id="clearPatientBtn" class="p-1 hover:bg-green-100 rounded-full transition-all">
+                  <span class="material-symbols-outlined text-green-700 text-[18px]">close</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="border-t border-outline-variant/30 pt-4">
+              <p class="text-xs text-on-surface-variant mb-2">Patient not in the system?</p>
+              <button onclick="openRegisterPatientModal()"
+                class="flex items-center gap-2 text-primary text-sm font-semibold hover:underline">
+                <span class="material-symbols-outlined text-[18px]">person_add</span> Register New Patient
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Doctor & Date -->
+          <div id="step2" class="hidden">
+            <h4 class="font-semibold text-base text-on-surface mb-1">Select Doctor & Date</h4>
+            <p class="text-sm text-on-surface-variant mb-4">Choose a doctor and the appointment date.</p>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">Doctor *</label>
+                <select id="doctorSelect" class="w-full border border-outline-variant rounded-lg px-3 py-2.5 text-sm focus:border-primary">
+                  <option value="">Select a doctor</option>
+                  <% doctors.forEach(function(doc) { %>
+                    <option value="<%= doc.id %>">
+                      <%= doc.fullName || ((doc.firstName || '') + ' ' + (doc.lastName || '')) %> (<%= doc.specialities || 'General' %>)
+                    </option>
+                  <% }); %>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">Appointment Date *</label>
+                <input id="appointmentDate" type="date"
+                  class="w-full border border-outline-variant rounded-lg px-3 py-2.5 text-sm focus:border-primary" />
+                <p class="text-xs text-on-surface-variant mt-1">Slots will load based on the doctor's schedule.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Time Slot -->
+          <div id="step3" class="hidden space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+              <h4 class="font-semibold text-base text-on-surface">Pick a Time Slot</h4>
+              <div class="flex items-center gap-2 text-[10px] text-on-surface-variant flex-wrap">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-100 inline-block"></span>Available</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 inline-block"></span>Booked</span>
+              </div>
+            </div>
+            <p id="slotsSummary" class="text-sm text-on-surface-variant"></p>
+            
+            <!-- Slots container -->
+            <div id="slotsContainer" class="space-y-4">
+              <!-- Morning Slots -->
+              <div id="morningSlotSection" class="hidden space-y-2">
+                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-amber-500">light_mode</span>
+                  <span id="morningSlotLabel">Morning Slots</span>
+                </p>
+                <div id="morningSlotsGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
+              </div>
+              <!-- Evening Slots -->
+              <div id="eveningSlotSection" class="hidden space-y-2">
+                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs text-indigo-500">dark_mode</span>
+                  <span id="eveningSlotLabel">Evening Slots</span>
+                </p>
+                <div id="eveningSlotsGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
+              </div>
+            </div>
+            <div id="selectedSlotInfo" class="text-sm font-semibold text-primary bg-primary/10 px-4 py-2 rounded-lg hidden"></div>
+          </div>
+
+          <!-- STEP 4: Payment Details -->
+          <div id="step4" class="hidden">
+            <h4 class="font-semibold text-base text-on-surface mb-1">Payment Details</h4>
+            <p class="text-sm text-on-surface-variant mb-4">Enter the transaction details for this appointment.</p>
+
+            <div class="space-y-4">
+              <!-- Fees row -->
+              <div class="grid grid-cols-3 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-on-surface-variant mb-1">Consultation Fees (₹) *</label>
+                  <input id="consultationFees" type="number" min="0" step="0.01" placeholder="0.00"
+                    class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-on-surface-variant mb-1">Tax Charges (₹)</label>
+                  <input id="taxCharges" type="number" min="0" step="0.01" placeholder="0.00" value="0"
+                    class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-on-surface-variant mb-1">Total Amount (₹) *</label>
+                  <input id="totalAmount" type="number" min="0" step="0.01" placeholder="0.00" readonly
+                    class="w-full border border-outline-variant/50 rounded-lg px-3 py-2 text-sm bg-surface-container-low text-on-surface-variant" />
+                </div>
+              </div>
+
+              <!-- Paid by -->
+              <div>
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">Paid By *</label>
+                <input id="paidBy" type="text" placeholder='e.g. "self", patient name, insurance company'
+                  class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+              </div>
+
+              <!-- Payment type & status -->
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-sm font-medium text-on-surface-variant mb-1">Mode of Payment *</label>
+                  <select id="paymentType" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary">
+                    <option value="">Select mode</option>
+                    <option value="CASH">Cash</option>
+                    <option value="CARD">Card</option>
+                    <option value="UPI">UPI</option>
+                    <option value="NET_BANKING">Net Banking</option>
+                    <option value="ADVANCE">Advance</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-on-surface-variant mb-1">Payment Status *</label>
+                  <select id="paymentStatus" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary">
+                    <option value="">Select status</option>
+                    <option value="SUCCESS">Success</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="FAILED">Failed</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Transaction ID (shown for CARD / UPI / NET_BANKING) -->
+              <div id="transactionIdRow" class="hidden">
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">Transaction ID</label>
+                <input id="transactionId" type="text" placeholder="e.g. TXN123456789"
+                  class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+              </div>
+
+              <!-- Card Number (shown for CARD only) -->
+              <div id="cardNumberRow" class="hidden">
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">Card Number (last 4 digits)</label>
+                <input id="cardNumber" type="text" maxlength="4" placeholder="e.g. 4321"
+                  class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+              </div>
+
+              <!-- UPI ID (shown for UPI only) -->
+              <div id="upiIdRow" class="hidden">
+                <label class="block text-sm font-medium text-on-surface-variant mb-1">UPI ID</label>
+                <input id="upiId" type="text" placeholder="e.g. patient@upi"
+                  class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+              </div>
+
+              <!-- Summary box -->
+              <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 text-sm space-y-1">
+                <p class="font-semibold text-on-surface mb-2">Booking Summary</p>
+                <p class="text-on-surface-variant">Patient: <span id="summaryPatient" class="text-on-surface font-medium"></span></p>
+                <p class="text-on-surface-variant">Doctor: <span id="summaryDoctor" class="text-on-surface font-medium"></span></p>
+                <p class="text-on-surface-variant">Slot: <span id="summarySlot" class="text-on-surface font-medium"></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="p-6 border-t border-outline-variant flex justify-between items-center shrink-0">
+          <button id="prevStepBtn" class="hidden px-5 py-2 border border-outline-variant rounded-lg text-sm font-medium hover:bg-surface-container transition-all">
+            ← Back
+          </button>
+          <div class="ml-auto flex gap-3">
+            <button id="nextStepBtn" class="px-6 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all active:scale-95">
+              Next →
+            </button>
+            <button id="confirmBookingBtn" class="hidden px-6 py-2 bg-secondary text-white rounded-lg text-sm font-semibold hover:bg-secondary/90 transition-all active:scale-95 disabled:opacity-60">
+              Confirm & Book
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+       REGISTER PATIENT MODAL
+  ════════════════════════════════════════════════════════════════ -->
+    <div id="registerPatientModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto">
+        <div class="p-6 border-b border-outline-variant flex justify-between items-center">
+          <h3 class="font-bold text-xl text-on-surface">Register New Patient</h3>
+          <button id="closeRegisterPatientModal" class="p-2 hover:bg-surface-container rounded-full transition-all">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form id="registerPatientForm" class="p-6 space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">First Name *</label>
+              <input id="rpFirstName" type="text" required placeholder="Jane"
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">Middle Name</label>
+              <input id="rpMiddleName" type="text" placeholder="(optional)"
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Last Name *</label>
+            <input id="rpLastName" type="text" required placeholder="Smith"
+              class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">Email *</label>
+              <input id="rpEmail" type="email" required placeholder="jane@email.com"
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">Mobile *</label>
+              <input id="rpMobile" type="tel" required placeholder="9876543210"
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Password *</label>
+            <input id="rpPassword" type="password" required placeholder="Minimum 8 characters"
+              class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">Gender *</label>
+              <select id="rpGender" required class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary">
+                <option value="">Select gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-on-surface-variant mb-1">Date of Birth *</label>
+              <input id="rpDob" type="date" required
+                class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-1">Blood Group *</label>
+            <select id="rpBloodGroup" required class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm focus:border-primary">
+              <option value="">Select blood group</option>
+              <option value="A_POSITIVE">A+</option>
+              <option value="A_NEGATIVE">A-</option>
+              <option value="B_POSITIVE">B+</option>
+              <option value="B_NEGATIVE">B-</option>
+              <option value="O_POSITIVE">O+</option>
+              <option value="O_NEGATIVE">O-</option>
+              <option value="AB_POSITIVE">AB+</option>
+              <option value="AB_NEGATIVE">AB-</option>
+            </select>
+          </div>
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" onclick="closeRegisterPatientModal()"
+              class="px-5 py-2 border border-outline-variant rounded-lg text-sm font-medium hover:bg-surface-container transition-all">
+              Cancel
+            </button>
+            <button id="registerPatientBtn" type="submit"
+              class="px-5 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary/90 transition-all disabled:opacity-60">
+              Register Patient
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed top-4 right-4 z-[9999] px-5 py-3 rounded-xl text-white font-medium shadow-xl transition-all">
+      <span id="toastMessage"></span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+       SCRIPTS
+  ════════════════════════════════════════════════════════════════ -->
+    <script>
+        window.dashboardAppointments = <%- JSON.stringify(appointments) %>;
+    </script>
+    <script src="/js/staff/staffDashboard.js"></script>
+  </body>
+</html>

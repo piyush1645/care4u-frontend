@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Doctor Management | MediFlow Admin</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+    <link rel="stylesheet" href="/css/admin/doctors.css">
+</head>
+
+<body class="bg-background text-on-surface">
+    <%- include('partial/navBar') %>
+        <header
+            class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] h-20 bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-md z-40 backdrop-blur-sm">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <h2 class="font-headline-lg text-headline-lg text-primary">
+                    Doctor Management
+                </h2>
+            </div>
+            <a href="/doctor/register"
+                class="flex items-center gap-2 bg-primary text-on-primary px-md py-3 rounded-xl shadow-md hover:bg-primary-container hover:shadow-lg transition-all duration-200 active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">
+                    person_add
+                </span>
+
+                <span class="font-label-md text-label-md">
+                    Add Doctor
+                </span>
+            </a>
+
+        </header>
+
+        <main class="ml-0 lg:ml-[260px] pt-24 p-md min-h-screen">
+
+            <!-- Filter & Stats Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-md mb-md mt-6">
+                <!-- Stats Card 1 -->
+                <div
+                    class="md:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-primary-container/10 rounded-lg">
+                            <span class="material-symbols-outlined text-primary" data-icon="groups">groups</span>
+                        </div>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total
+                        Doctors
+                    </p>
+                    <p id="displayDoctorCount" class="font-headline-md text-headline-md text-on-surface font-bold">0</p>
+                </div>
+                <!-- Stats Card 2 -->
+                <div
+                    class="md:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-secondary-container/10 rounded-lg">
+                            <span class="material-symbols-outlined text-secondary"
+                                data-icon="check_circle">check_circle</span>
+                        </div>
+                        <span class="text-on-surface-variant font-label-sm text-label-sm">Active Now</span>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Active Doctors
+                    </p>
+                    <p id="totalAvailableDoctor" class="font-headline-md text-headline-md text-on-surface font-bold">0</p>
+                </div>
+            </div>
+            <!-- Comprehensive Doctor Table -->
+            <div
+                class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-surface-container-low border-b border-outline-variant">
+                            <tr>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Doctor Name
+                                </th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Specialty /
+                                    Dept
+                                </th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Contact
+                                    Information</th>
+                                    <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Status</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant text-right">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="displayDoctorDetails" class="divide-y divide-outline-variant/30"></tbody>
+                    </table>
+                </div>
+
+        </main>
+        <script src="/js/admin/dashboard.js"></script>
+        <script src="/js/admin/doctors.js"></script>
+</body>
+
+</html>

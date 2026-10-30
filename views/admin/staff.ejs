@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Staff Management | MediFlow Admin</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+    <link rel="stylesheet" href="/css/admin/doctors.css">
+    <link rel="stylesheet" href="/css/admin/modal.css">
+</head>
+
+<body class="bg-background text-on-surface">
+    <%- include('partial/navBar') %>
+        <header
+            class="fixed top-0 right-0 w-full lg:w-[calc(100%-260px)] h-20 bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-md z-40 backdrop-blur-sm">
+            <div class="flex items-center">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <h2 class="font-headline-lg text-headline-md font-bold text-primary">
+                    Staff Management
+                </h2>
+            </div>
+            <a href="/admin/staff/register"
+                class="flex items-center gap-2 bg-primary text-on-primary px-md py-3 rounded-xl shadow-md hover:bg-primary-container hover:shadow-lg transition-all duration-200 active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">
+                    person_add
+                </span>
+
+                <span class="font-label-md text-label-md">
+                    Add Staff
+                </span>
+            </a>
+
+        </header>
+
+        <main class="ml-0 lg:ml-[260px] pt-24 p-md min-h-screen">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-md mb-md mt-6">
+                <div
+                    class="md:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-primary-container/10 rounded-lg">
+                            <span class="material-symbols-outlined text-primary" data-icon="groups">groups</span>
+                        </div>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total
+                        Staff
+                    </p>
+                    <p class="font-headline-md text-headline-md text-on-surface font-bold">
+                        <%= data.length %>
+                    </p>
+                </div>
+                <div
+                    class="md:col-span-3 bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-secondary-container/10 rounded-lg">
+                            <span class="material-symbols-outlined text-secondary"
+                                data-icon="check_circle">check_circle</span>
+                        </div>
+                        <span class="text-on-surface-variant font-label-sm text-label-sm">Active Now</span>
+                    </div>
+                    <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Active
+                        Staff
+                    </p>
+                    <p class="font-headline-md text-headline-md text-on-surface font-bold">
+                        <% let isActiveStaff=data.filter((staff)=> staff.credential && staff.credential.isActive === true) %>
+                            <%= isActiveStaff.length %>
+                    </p>
+                </div>
+            </div>
+            <!-- Comprehensive Staff Table -->
+            <div
+                class="max-h-[650px] bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 overflow-hidden">
+                <div class="flex justify-end p-4 gap-3">
+                    <form action="/admin/staff" method="GET">
+                        <input type="text" name="searchString" value="<%= searchString || '' %>"  placeholder="Search Staff"
+                            class="border border-outline-variant rounded-lg px-3 py-2 mr-3 w-80">
+
+                        <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg">
+                            Search
+                        </button>
+                    </form>
+
+                    <a href="/admin/staff"
+                        class="px-4 py-2 bg-red-500 text-white rounded-lg inline-flex items-center">
+                        Reset
+                    </a>
+                </div>
+                <div class="max-h-[650px] overflow-y-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead
+                            class="bg-surface-container-low table-fixed border-b border-outline-variant sticky top-0">
+                            <tr>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Staff Name
+                                </th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Gender</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Branch</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Contact
+                                    Information</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant">Status</th>
+                                <th class="px-md py-4 font-label-md text-label-md text-on-surface-variant text-right">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/30">
+                            <% data.forEach( staff=> { %>
+                                <tr class="hover:bg-slate-100 transition-colors cursor-pointer staff-row" onclick="displayStaffProfile('<%= staff.id %>')">
+
+                                    <td class="px-md py-4 font-body-sm text-body-sm truncate">
+                                        <%= staff.firstName + " " + (staff.middleName ? staff.middleName + " " : "") + staff.lastName %>
+                                    </td>
+
+                                    <td
+                                        class="px-md py-4 text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                                        <%= staff.gender.toLowerCase() %>
+                                    </td>
+
+                                    <td class="px-md py-4 font-body-sm text-body-sm text-on-surface-variant">
+                                        <%= staff.hospital ? staff.hospital.branchName : "N/A" %>
+                                    </td>
+
+                                    <td class="px-md py-4">
+                                        <div>
+                                            <p class="font-body-sm text-body-sm text-on-surface flex items-center">
+                                                <span
+                                                    class="material-symbols-outlined text-[16px] mr-1 text-on-surface-variant"
+                                                    data-icon="mail">mail</span>
+                                                <%= staff.credential ? staff.credential.email : "" %>
+                                            </p>
+                                            <p
+                                                class="font-label-sm text-label-sm text-on-surface-variant flex items-center">
+                                                <span
+                                                    class="material-symbols-outlined text-[16px] mr-1 text-on-surface-variant"
+                                                    data-icon="phone">phone</span>
+                                                <%= staff.credential ? staff.credential.mobile : "" %>
+                                            </p>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-md py-4">
+                                        <% if (staff.credential && staff.credential.isActive) { %>
+                                            <span class="status-pill bg-emerald-100 text-emerald-800 border border-emerald-200 inline-flex items-center px-3 py-1 rounded-full font-medium text-xs">
+                                                Active
+                                            </span>
+                                        <% } else { %>
+                                            <span class="status-pill bg-rose-100 text-rose-800 border border-rose-200 inline-flex items-center px-3 py-1 rounded-full font-medium text-xs">
+                                                Inactive
+                                            </span>
+                                        <% } %>
+                                    </td>
+
+                                    <td class="px-md py-4 text-right">
+                                        <div class="flex justify-end space-x-2">
+                                            <button
+                                                class="p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                                                title="Edit"
+                                                onclick="event.stopPropagation(); editStaffProfile('<%= staff.id %>')">
+                                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                                            </button>
+                                            <% if (staff.credential && staff.credential.isActive) { %>
+                                                <button
+                                                    class="p-2 text-error hover:bg-error/5 rounded-lg transition-colors deactivate-staff-btn"
+                                                    title="Deactivate Staff"
+                                                    data-staff-id="<%= staff.id %>"
+                                                    data-staff-name="<%= staff.firstName + ' ' + (staff.middleName ? staff.middleName + ' ' : '') + staff.lastName %>"
+                                                    onclick="event.stopPropagation();">
+                                                    <span class="material-symbols-outlined text-[20px]">block</span>
+                                                </button>
+                                            <% } else { %>
+                                                <span class="p-2 text-slate-400 font-medium text-sm flex items-center gap-1 cursor-default" title="Already Deactivated">
+                                                    <span class="material-symbols-outlined text-[20px]">check_circle</span> Deactivated
+                                                </span>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Deactivate Staff Modal -->
+        <div id="deactivateModal" class="custom-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="deactivateModalTitle">
+            <div class="custom-modal-card">
+                <!-- Header accent -->
+                <div class="custom-modal-header-accent"></div>
+
+                <div class="custom-modal-body">
+                    <div class="custom-modal-icon-wrapper">
+                        <span class="material-symbols-outlined custom-modal-icon">person_off</span>
+                    </div>
+                    
+                    <h3 id="deactivateModalTitle" class="custom-modal-title">
+                        Deactivate Staff Account
+                    </h3>
+                    
+                    <p class="custom-modal-text">
+                        Are you sure you want to deactivate
+                        <span id="deactivateStaffName" style="font-weight: 600; color: #0f172a;">this staff member</span>?
+                        They will no longer be able to sign in to the staff portal.
+                    </p>
+
+                    <div class="custom-modal-warning-box">
+                        <span class="material-symbols-outlined custom-modal-warning-icon">info</span>
+                        <p class="custom-modal-warning-text">
+                            This action disables login access. The staff record remains in the system and can be reviewed later.
+                        </p>
+                    </div>
+
+                    <div class="custom-modal-actions">
+                        <button type="button" id="cancelDeactivate" class="custom-modal-btn custom-modal-btn-cancel">
+                            Cancel
+                        </button>
+                        <button type="button" id="confirmDeactivateBtn" class="custom-modal-btn custom-modal-btn-confirm">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">block</span>
+                            Deactivate Staff
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/admin/staff.js"></script>
+</body>
+
+</html>

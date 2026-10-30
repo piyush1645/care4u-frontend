@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Manage Schedule | MedPortal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="/js/doctor/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/doctor/common.css">
+</head>
+
+<body class="bg-background text-on-surface flex h-screen overflow-hidden">
+    <!-- Side Navigation Bar -->
+    <%- include("partials/leftNavBar.ejs") %>
+    
+    <!-- Main Wrapper -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden w-full">
+        <!-- Top Navigation Bar -->
+        <%- include("partials/topHeader.ejs") %>
+        
+        <!-- Main Content Area -->
+        <main class="p-4 lg:p-xl flex-1 overflow-y-auto">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-primary">Manage Schedule</h2>
+                    <p class="text-body-lg text-on-surface-variant mt-1">Set your weekly working days and shift timings.</p>
+                </div>
+            </div>
+
+            <% 
+                const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+                const selectedDays = schedule && schedule.workingDays ? schedule.workingDays.split(',').map(d => d.trim()) : [];
+
+                const formatTime = (dateStr) => {
+                    if (!dateStr) return '';
+                    const d = new Date(dateStr);
+                    if (isNaN(d.getTime())) return '';
+                    return d.toTimeString().substring(0, 5); // Returns HH:MM
+                };
+
+                const morningStart = formatTime(schedule?.morningStartTime);
+                const morningEnd = formatTime(schedule?.morningEndTime);
+                const eveningStart = formatTime(schedule?.eveningStartTime);
+                const eveningEnd = formatTime(schedule?.eveningEndTime);
+            %>
+
+            <div class="flex flex-col lg:flex-row gap-8 max-w-7xl">
+                <form id="scheduleForm" class="flex-1 space-y-8 max-w-4xl">
+                
+                <!-- Working Days -->
+                <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">calendar_today</span> Working Days
+                    </h3>
+                    <p class="text-body-md text-on-surface-variant mb-4">Select the days of the week you are available for appointments.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <% daysOfWeek.forEach(day => { %>
+                            <label class="flex items-center gap-2 cursor-pointer bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant hover:border-primary hover:bg-primary/5 transition-colors select-none">
+                                <input type="checkbox" name="workingDays" value="<%= day %>" <%= selectedDays.includes(day) ? 'checked' : '' %> class="w-5 h-5 text-primary rounded border-outline-variant focus:ring-primary focus:ring-offset-0 bg-white">
+                                <span class="font-label-lg text-on-surface"><%= day.charAt(0) + day.slice(1).toLowerCase() %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <!-- Shift Timings -->
+                <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                    <h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined">schedule</span> Shift Timings
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        
+                        <!-- Morning Shift -->
+                        <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/50 relative">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-label-lg text-label-lg text-on-surface flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary">light_mode</span> Morning Shift
+                                </h4>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="toggleMorning" class="sr-only peer" <%= morningStart ? 'checked' : '' %>>
+                                    <div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div id="morningInputs" class="grid grid-cols-2 gap-4 <%= morningStart ? '' : 'opacity-50 pointer-events-none' %> transition-opacity">
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">Start Time</label>
+                                    <input type="time" name="morningStartTime" id="morningStartTime" value="<%= morningStart %>" class="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">End Time</label>
+                                    <input type="time" name="morningEndTime" id="morningEndTime" value="<%= morningEnd %>" class="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Evening Shift -->
+                        <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/50 relative">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-label-lg text-label-lg text-on-surface flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary">dark_mode</span> Evening Shift
+                                </h4>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="toggleEvening" class="sr-only peer" <%= eveningStart ? 'checked' : '' %>>
+                                    <div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                            <div id="eveningInputs" class="grid grid-cols-2 gap-4 <%= eveningStart ? '' : 'opacity-50 pointer-events-none' %> transition-opacity">
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">Start Time</label>
+                                    <input type="time" name="eveningStartTime" id="eveningStartTime" value="<%= eveningStart %>" class="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-label-sm text-on-surface-variant mb-1">End Time</label>
+                                    <input type="time" name="eveningEndTime" id="eveningEndTime" value="<%= eveningEnd %>" class="w-full bg-white border border-outline-variant rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4 mt-8 pb-12">
+                    <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-lg active:scale-95 transition-transform hover:shadow-lg flex items-center gap-2">
+                        <span class="material-symbols-outlined">save</span>
+                        Save Schedule
+                    </button>
+                </div>
+            </form>
+
+                <!-- Current Schedule Panel -->
+                <div class="w-full lg:w-80 shrink-0">
+                    <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] sticky top-8">
+                        <h3 class="font-headline-sm text-headline-sm text-primary mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined">assignment_turned_in</span> Active Schedule
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Working Days -->
+                            <div>
+                                <span class="text-label-sm text-on-surface-variant block mb-2">Working Days</span>
+                                <div class="flex flex-wrap gap-2" id="currentWorkingDays">
+                                    <% if (selectedDays.length > 0) { %>
+                                        <% selectedDays.forEach(day => { %>
+                                            <span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full uppercase tracking-wider">
+                                                <%= day.substring(0, 3) %>
+                                            </span>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <span class="text-body-md text-on-surface-variant italic">No working days set</span>
+                                    <% } %>
+                                </div>
+                            </div>
+
+                            <!-- Morning Shift -->
+                            <div class="border-t border-slate-100 pt-4">
+                                <span class="text-label-sm text-on-surface-variant block mb-2">Morning Shift</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-primary text-xl">light_mode</span>
+                                    <div>
+                                        <p class="font-label-lg text-on-surface" id="currentMorningTime">
+                                            <%= morningStart && morningEnd ? `${morningStart} - ${morningEnd}` : 'Off Duty' %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Evening Shift -->
+                            <div class="border-t border-slate-100 pt-4">
+                                <span class="text-label-sm text-on-surface-variant block mb-2">Evening Shift</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-primary text-xl">dark_mode</span>
+                                    <div>
+                                        <p class="font-label-lg text-on-surface" id="currentEveningTime">
+                                            <%= eveningStart && eveningEnd ? `${eveningStart} - ${eveningEnd}` : 'Off Duty' %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="successToast" class="fixed bottom-8 right-8 bg-secondary text-on-secondary px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-32 opacity-0 transition-all duration-300 z-50">
+        <span class="material-symbols-outlined text-secondary-fixed">check_circle</span>
+        <div>
+            <h4 class="font-bold text-sm">Schedule Updated</h4>
+            <p class="text-xs opacity-90">Your weekly schedule has been saved.</p>
+        </div>
+    </div>
+
+    <script src="/js/doctor/sidebar.js"></script>
+    <script src="/js/doctor/schedule.js"></script>
+</body>
+
+</html>

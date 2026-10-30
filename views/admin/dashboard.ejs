@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MediFlow Admin - Hospital Dashboard</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+</head>
+
+<body class="bg-surface text-on-surface">
+    <!-- Side Navigation Shell -->
+    <%- include('partial/navBar') %>
+        <!-- Main Content Area -->
+        <main class="ml-0 lg:ml-[260px] min-h-screen flex flex-col">
+            <!-- Top Navigation Bar -->
+            <header
+                class="h-16 flex justify-between items-center px-md bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant sticky top-0 z-40">
+                <div class="flex items-center space-x-md">
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[24px]">menu</span>
+                    </button>
+                    <h2 class="font-headline-lg text-headline-md font-bold text-primary">Dashboard Overview</h2>
+                </div>
+            </header>
+            <!-- Content Canvas -->
+            <div class="p-md space-y-md">
+                <!-- Statistics Bento Grid -->
+                <section class="grid grid-cols-1 md:grid-cols-4 gap-md">
+                    <div class="bg-surface-container-lowest p-md rounded-xl custom-shadow border-l-4 border-primary">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg"
+                                data-icon="person">person</span>
+                        </div>
+                        <p class="text-on-surface-variant text-label-sm font-medium">Total Doctors</p>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface">
+                            <%= data.doctorCount %>
+                        </h3>
+                    </div>
+
+                    <div class="bg-surface-container-lowest p-md rounded-xl custom-shadow border-l-4 border-secondary">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded-lg"
+                                data-icon="medical_information">medical_information</span>
+                            <span class="text-on-surface-variant text-label-sm">Live Now</span>
+                        </div>
+                        <p class="text-on-surface-variant text-label-sm font-medium">Available Doctors</p>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface">
+                            <%= data.availableDoctorCount %>
+                        </h3>
+                    </div>
+                    <div class="bg-surface-container-lowest p-md rounded-xl custom-shadow border-l-4 border-tertiary">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg"
+                                data-icon="event_available">event_available</span>
+                        </div>
+                        <p class="text-on-surface-variant text-label-sm font-medium">Total Staff</p>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface">
+                            <%= data.staffCount %>
+                        </h3>
+                    </div>
+                    <div
+                        class="bg-surface-container-lowest p-md rounded-xl custom-shadow border-l-4 border-primary-container">
+                        <div class="flex justify-between items-start mb-2">
+                            <span
+                                class="material-symbols-outlined text-primary-container bg-primary-container/10 p-2 rounded-lg"
+                                data-icon="payments">payments</span>
+                        </div>
+                        <p class="text-on-surface-variant text-label-sm font-medium">Total Appointments Today</p>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface">
+                            <%= data.appointmentsCount %>
+                        </h3>
+                    </div>
+                </section>
+
+                <section
+                    class="w-full h-[650px] bg-surface-container-lowest rounded-xl custom-shadow overflow-hidden flex flex-col "
+                    style="max-height: 650px !important">
+
+                    <div class="p-sm border-b border-outline-variant shrink-0 flex justify-between items-center">
+                        <h4 class="font-medium text-primary text-lg">All Appointments</h4>
+                        <div class="flex justify-end p-4 gap-3">
+                            <form action="/admin/dashboard" method="GET">
+                                <input type="text" name="searchString" value="<%= searchString || "" %>" placeholder="Search Appointment"
+                                    class="border border-outline-variant rounded-lg px-3 py-2 mr-3 w-80">
+
+                                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg">
+                                    Search
+                                </button>
+                            </form>
+
+                            <a href="/admin/dashboard"
+                                class="px-4 py-2 bg-red-500 text-white rounded-lg inline-flex items-center">
+                                Reset
+                            </a>
+                        </div>
+                    </div>
+                     
+                    <div class="flex-1 overflow-y-auto">
+                        <table class="w-full table-fixed text-left">
+                            <thead class="sticky top-0 z-20 bg-surface-container-low shadow-sm">
+                                <tr>
+                                    <th class="w-[24%] px-md py-3 font-label-md text-label-md text-on-surface-variant">
+                                        Patient Name
+                                    </th>
+                                    <th class="w-[24%] px-md py-3 font-label-md text-label-md text-on-surface-variant">
+                                        Appointment Date
+                                    </th>
+                                    <th class="w-[32%] px-md py-3 font-label-md text-label-md text-on-surface-variant">
+                                        Assigned Doctor
+                                    </th>
+                                    <th class="w-[20%] px-md py-3 font-label-md text-label-md text-on-surface-variant">
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-outline-variant">
+                                <% data.allAppointments.forEach(ele=> { %>
+                                    <tr class="hover:bg-surface-container-low/50 transition-colors">
+
+                                        <td class="px-md py-4 font-body-sm text-body-sm truncate">
+                                            <%= ele.patient.firstName + " " + ele.patient.lastName %>
+                                        </td>
+
+                                        <td
+                                            class="px-md py-4 text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                                            <%= new Date(ele.appointmentDate).toLocaleDateString('en-IN', {
+                                                day: 'numeric' , month: 'long' , year: 'numeric' }) %>
+                                        </td>
+
+                                        <td class="px-md py-4 font-body-sm text-body-sm truncate">
+                                            <%= "Dr. " + ele.doctor.firstName + " " + ele.doctor.lastName %>
+                                        </td>
+
+                                        <td class="px-md py-4 font-body-sm text-body-sm capitalize whitespace-nowrap">
+                                            <%= ele.status.toLowerCase().replaceAll("_", " " ) %>
+                                        </td>
+
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </div>
+        </main>
+        <script src="/js/admin/dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        <%= staff.firstName %>
+            <%= staff.lastName %> | Staff Profile
+    </title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/admin/common.css">
+    <link rel="stylesheet" href="/css/admin/modal.css">
+</head>
+
+<body class="bg-background text-on-surface h-screen overflow-hidden flex">
+
+    <!-- Sidebar -->
+    <%- include("../partial/navBar.ejs") %>
+
+        <!-- Content Wrapper -->
+        <div class="flex-1 flex flex-col ml-0 lg:ml-[260px] h-screen overflow-hidden">
+
+            <!-- Header -->
+            <header
+                class="h-20 shrink-0 bg-surface-container-lowest border-b border-outline-variant flex items-center gap-4 px-6 z-20">
+                <button onclick="toggleSidebar()"
+                    class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg mr-2 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[24px]">menu</span>
+                </button>
+                <a href="/admin/staff"
+                    class="inline-flex items-center justify-center p-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors border border-slate-200">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+                <div>
+                    <h2 class="font-headline-lg text-headline-md font-bold text-primary">
+                        Staff Management
+                    </h2>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-8">
+
+                <!-- Profile Hero Header -->
+                <section
+                    class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_12px_rgba(0,0,0,0.05)] mb-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-xl text-center sm:text-left">
+                        <div class="relative">
+                            <img alt="<%= staff.firstName %> <%= staff.lastName %>"
+                                class="w-32 h-32 rounded-xl object-cover shadow-sm"
+                                src="<%= staff.profilePhoto || '/images/default-avatar.svg' %>"
+                                onerror="this.onerror=null; this.src='/images/default-avatar.svg';" />
+                        </div>
+
+                        <div>
+                            <h2 class="text-4xl font-bold text-primary mb-1">
+                                <%= staff.firstName %>
+                                    <%= (staff.middleName ? staff.middleName + ' ' : '' ) %>
+                                        <%= staff.lastName %>
+                            </h2>
+
+                            <p class="text-on-surface-variant flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">
+                                    badge
+                                </span>
+                                Hospital Staff Member
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span
+                                    class="px-4 py-1 bg-secondary-container/30 text-secondary rounded-full border border-secondary/20">
+                                    <%= staff.hospital ? staff.hospital.branchName : "General Branch" %>
+                                </span>
+
+                                <span class="px-4 py-1 bg-primary-fixed text-on-primary-fixed rounded-full">
+                                    Staff ID: #<%= staff.id %>
+                                </span>
+
+                                <% if (staff.credential && staff.credential.isActive) { %>
+                                    <span
+                                        class="px-4 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200 font-semibold text-[13px]">
+                                        Active
+                                    </span>
+                                    <% } else { %>
+                                        <span
+                                            class="px-4 py-1 bg-rose-100 text-rose-800 rounded-full border border-rose-200 font-semibold text-[13px]">
+                                            Deactivated
+                                        </span>
+                                        <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="/admin/staffProfile/edit?staffId=<%= staff.id %>"
+                            class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-lg hover:shadow-lg transition text-sm font-semibold">
+                            <span class="material-symbols-outlined">edit</span>
+                            Edit Profile
+                        </a>
+
+                        <% if (staff.credential && staff.credential.isActive) { %>
+                            <button
+                                onclick="openDeactivateStaffModal('<%= staff.id %>', '<%= staff.firstName %> <%= staff.lastName %>')"
+                                class="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold border border-rose-200 text-rose-600 hover:bg-rose-50 transition text-sm">
+                                <span class="material-symbols-outlined">block</span>
+                                Deactivate
+                            </button>
+                            <% } %>
+                    </div>
+                </section>
+
+                <!-- Profile details -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Left Column: Personal details -->
+                    <div class="space-y-6">
+                        <section class="bg-surface-container-lowest p-6 rounded-xl shadow">
+                            <h4 class="font-semibold text-primary mb-4">
+                                Personal Information
+                            </h4>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Date of Birth</p>
+                                    <p class="font-medium">
+                                        <%= staff.dateOfBirth ? new
+                                            Date(staff.dateOfBirth).toLocaleDateString(undefined, { year: 'numeric' ,
+                                            month: 'long' , day: 'numeric' }) : 'Not Provided' %>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Gender</p>
+                                    <p class="font-medium">
+                                        <%= staff.gender ? staff.gender.charAt(0) + staff.gender.slice(1).toLowerCase()
+                                            : 'Not Provided' %>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right Column: Account and Hospital details -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <section class="bg-surface-container-lowest p-6 rounded-xl shadow">
+                            <h4 class="font-semibold text-primary mb-4">
+                                Account & Contact Details
+                            </h4>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Email Address</p>
+                                    <p class="font-medium flex items-center gap-2 mt-1">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">mail</span>
+                                        <%= staff.credential ? staff.credential.email : 'N/A' %>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Phone Number</p>
+                                    <p class="font-medium flex items-center gap-2 mt-1">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">phone</span>
+                                        <%= staff.credential ? staff.credential.mobile : 'N/A' %>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Assigned Branch</p>
+                                    <p class="font-medium flex items-center gap-2 mt-1">
+                                        <span class="material-symbols-outlined text-[18px] text-primary">home</span>
+                                        <%= staff.hospital ? staff.hospital.branchName : 'Not Assigned' %>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-on-surface-variant">Member Since</p>
+                                    <p class="font-medium flex items-center gap-2 mt-1">
+                                        <span
+                                            class="material-symbols-outlined text-[18px] text-primary">calendar_today</span>
+                                        <%= staff.createdAt ? new Date(staff.createdAt).toLocaleDateString(undefined, {
+                                            year: 'numeric' , month: 'long' , day: 'numeric' }) : 'N/A' %>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+        </div>
+
+        <!-- Deactivate Staff Modal -->
+        <div id="deactivateModal" class="custom-modal-backdrop" role="dialog" aria-modal="true"
+            aria-labelledby="deactivateModalTitle">
+            <div class="custom-modal-card">
+                <!-- Header accent -->
+                <div class="custom-modal-header-accent"></div>
+
+                <div class="custom-modal-body">
+                    <div class="custom-modal-icon-wrapper">
+                        <span class="material-symbols-outlined custom-modal-icon">person_off</span>
+                    </div>
+
+                    <h3 id="deactivateModalTitle" class="custom-modal-title">
+                        Deactivate Staff Account
+                    </h3>
+
+                    <p class="custom-modal-text">
+                        Are you sure you want to deactivate <span id="deactivateStaffName"
+                            style="font-weight: 600; color: #0f172a;">this staff member</span>?
+                        They will no longer be able to access the staff front-desk portal.
+                    </p>
+
+                    <div class="custom-modal-warning-box">
+                        <span class="material-symbols-outlined custom-modal-warning-icon">info</span>
+                        <p class="custom-modal-warning-text">
+                            This action disables login access to the front-desk dashboard. All history and data will be
+                            preserved.
+                        </p>
+                    </div>
+
+                    <div class="custom-modal-actions">
+                        <button type="button" id="cancelDeactivate" onclick="closeDeactivateModal()"
+                            class="custom-modal-btn custom-modal-btn-cancel">
+                            Cancel
+                        </button>
+                        <button type="button" id="confirmDeactivateBtn" onclick="confirmDeactivateStaff()"
+                            class="custom-modal-btn custom-modal-btn-confirm">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">block</span>
+                            Deactivate Staff
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/admin/staff.js"></script>
+        <script>
+            function openDeactivateStaffModal(staffId, staffName) {
+                openDeactivateModal(staffId, staffName);
+            }
+            function confirmDeactivateStaff() {
+                handleDeactivate();
+            }
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Payment - MediCare</title>
+    <%- include('partials/head') %>
+    <link rel="stylesheet" href="/css/patient/payment.css">
+</head>
+<body class="text-slate-800 flex h-screen overflow-hidden">
+
+<%- include('partials/sidebar') %>
+
+<div class="flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+    <%- include('partials/topheader') %>
+
+    <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+        <div class="max-w-5xl mx-auto space-y-6">
+
+            <!-- Back -->
+            <a id="backBtn" href="/patient/doctors" class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back to Doctor
+            </a>
+
+            <!-- Page Title -->
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800">Complete Payment</h2>
+                <p class="text-slate-500 text-sm mt-1">Review your booking and pay to confirm the appointment.</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div id="errorBanner" class="hidden p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium"></div>
+
+            <!-- Main Grid: Payment form (left) + Booking summary (right) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- LEFT: Payment Form -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-5">
+                    <h3 class="font-bold text-slate-800 pb-3 border-b border-slate-100">Payment Details</h3>
+
+                    <!-- Payment method tabs -->
+                    <div class="flex gap-2">
+                        <button id="tabUpi" onclick="switchTab('upi')"
+                            class="pay-tab flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all bg-primary text-white border-primary">
+                            UPI
+                        </button>
+                        <button id="tabCard" onclick="switchTab('card')"
+                            class="pay-tab flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100">
+                            Card
+                        </button>
+                        <!-- <button id="tabCash" onclick="switchTab('cash')"
+                            class="pay-tab flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100">
+                            Cash
+                        </button> -->
+                    </div>
+
+                    <!-- UPI Fields -->
+                    <div id="fieldsUpi" class="space-y-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">UPI ID</label>
+                            <input id="upiId" type="text" placeholder="e.g. name@upi"
+                                class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Transaction ID</label>
+                            <input id="upiTransactionId" type="text" placeholder="12-digit transaction ID"
+                                class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                        </div>
+                    </div>
+
+                    <!-- Card Fields -->
+                    <div id="fieldsCard" class="hidden space-y-4">
+                        <!-- Mock Payment Card -->
+                        <div class="flip-card w-full h-44 rounded-2xl text-white select-none mb-4 mx-auto max-w-[340px]">
+                            <div id="mockCardInner" class="flip-card-inner">
+                                <!-- FRONT -->
+                                <div class="flip-card-front bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-5 flex flex-col justify-between shadow-lg border border-slate-700/30">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="text-[9px] uppercase tracking-widest text-slate-400 font-semibold">Credit Card</p>
+                                            <span class="font-bold text-sm tracking-wider text-white">MediCare Pay</span>
+                                        </div>
+                                        <!-- Card Brand (Visa/Mastercard style circles) -->
+                                        <div class="flex gap-1.5 items-center">
+                                            <div class="w-8 h-5 bg-amber-400/90 rounded-md flex items-center justify-center border border-amber-300 shadow-inner relative mr-1">
+                                                <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 gap-0.5 opacity-20">
+                                                    <span class="border-r border-b border-black"></span><span class="border-r border-b border-black"></span><span class="border-b border-black"></span>
+                                                    <span class="border-r border-b border-black"></span><span class="border-r border-b border-black"></span><span class="border-b border-black"></span>
+                                                    <span class="border-r border-black"></span><span class="border-r border-black"></span><span></span>
+                                                </div>
+                                            </div>
+                                            <div class="relative w-8 h-6 flex">
+                                                <div class="w-4 h-4 bg-red-500 rounded-full opacity-80 absolute left-0"></div>
+                                                <div class="w-4 h-4 bg-amber-500 rounded-full opacity-80 absolute right-0"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Number -->
+                                    <div class="text-base font-mono tracking-widest text-center py-1 text-white" id="mockCardNumber">
+                                        •••• •••• •••• ••••
+                                    </div>
+                                    <!-- Footer (Expiry + Name) -->
+                                    <div class="flex justify-between items-end">
+                                        <div>
+                                            <p class="text-[8px] uppercase tracking-wider text-slate-400">Card Holder</p>
+                                            <p class="text-[10px] font-semibold tracking-wide text-white uppercase" id="mockCardHolder"><%= locals.patient ? (patient.firstName + ' ' + (patient.lastName || '')).trim().toUpperCase() : 'PATIENT USER' %></p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[8px] uppercase tracking-wider text-slate-400">Expires</p>
+                                            <p class="text-[10px] font-semibold font-mono text-white" id="mockCardExpiry">MM/YY</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- BACK -->
+                                <div class="flip-card-back bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] flex flex-col justify-between py-4 shadow-lg border border-slate-700/30">
+                                    <div class="w-full h-8 bg-slate-950 mt-1"></div>
+                                    <div class="px-5 space-y-1">
+                                        <p class="text-[8px] uppercase tracking-widest text-slate-400 text-right">CVV</p>
+                                        <div class="w-full bg-white text-slate-800 font-mono py-1 px-3 text-right text-xs rounded font-bold italic tracking-widest shadow-inner relative flex items-center justify-end">
+                                            <span class="absolute left-3 text-[8px] opacity-40 font-sans tracking-normal not-italic text-slate-600">Authorized Signature</span>
+                                            <span id="mockCardCvv" class="text-slate-900 font-bold">•••</span>
+                                        </div>
+                                    </div>
+                                    <div class="px-5 text-right flex justify-between items-center">
+                                        <span class="text-[8px] font-semibold tracking-wider text-slate-500">MediCare Global Services</span>
+                                        <div class="relative w-6 h-4 flex opacity-40">
+                                            <div class="w-3 h-3 bg-red-500 rounded-full absolute left-0"></div>
+                                            <div class="w-3 h-3 bg-amber-500 rounded-full absolute right-0"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Card Number</label>
+                            <input id="cardNumber" type="text" placeholder="1234 5678 9012 3456" maxlength="19"
+                                class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Expiry</label>
+                                <input id="cardExpiry" type="text" placeholder="MM/YY" maxlength="5"
+                                    class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">CVV</label>
+                                <input id="cardCvv" type="password" placeholder="•••" maxlength="3"
+                                    class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Transaction ID</label>
+                            <input id="cardTransactionId" type="text" placeholder="Bank reference number"
+                                class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Card Holder's Name</label>
+                            <input id="cardHolderName" type="text" placeholder="Card Holder's Name"
+                                pattern="[A-Za-z]+" maxlength="50" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all" />
+                        </div>
+                    </div>
+
+                    <!-- Cash Fields -->
+                    <div id="fieldsCash" class="hidden">
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700">
+                          <span class="material-symbols-outlined text-[18px] align-middle mr-1">info</span>
+                            Pay at the hospital reception on the day of your appointment.
+                        </div>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <button id="payBtn"
+                        class="w-full bg-primary text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-primary/90 transition-colors shadow-sm flex items-center justify-center gap-2 mt-2">
+                        <span class="material-symbols-outlined text-[18px]">lock</span>
+                        <span id="payBtnLabel">Pay & Book Appointment</span>
+                    </button>
+
+                    <p class="text-xs text-slate-400 text-center">Your appointment is confirmed only after payment.</p>
+                </div>
+
+                <!-- RIGHT: Booking Summary -->
+                <div class="space-y-4">
+
+                    <!-- Booking Details Card -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-4">
+                        <h3 class="font-bold text-slate-800 pb-3 border-b border-slate-100">Booking Summary</h3>
+
+                        <!-- Loading -->
+                        <div id="summaryLoading" class="text-center py-8 text-slate-400 text-sm">
+                            <span class="material-symbols-outlined text-3xl block mb-2 opacity-40">hourglass_empty</span>
+                            Loading...
+                        </div>
+
+                        <!-- Summary content -->
+                        <div id="summaryContent" class="hidden space-y-3">
+                            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                                </div>
+                                <div>
+                                    <p id="summDoctorName" class="font-semibold text-slate-800 text-sm">—</p>
+                                    <p id="summSpeciality" class="text-xs text-slate-500"></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-slate-50 rounded-xl p-3">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Date</p>
+                                    <p id="summDate" class="text-sm font-semibold text-slate-700 mt-0.5">—</p>
+                                </div>
+                                <div class="bg-slate-50 rounded-xl p-3">
+                                    <p class="text-[10px] text-slate-400 font-semibold uppercase">Time</p>
+                                    <p id="summTime" class="text-sm font-semibold text-slate-700 mt-0.5">—</p>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-3">
+                                <p class="text-[10px] text-slate-400 font-semibold uppercase">Hospital</p>
+                                <p id="summHospital" class="text-sm font-semibold text-slate-700 mt-0.5">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fee Breakdown Card -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-3">
+                        <h3 class="font-bold text-slate-800 pb-3 border-b border-slate-100">Fee Breakdown</h3>
+
+                        <div id="feeLoading" class="text-center py-4 text-slate-400 text-sm">
+                            <span class="material-symbols-outlined text-2xl block mb-1 opacity-40">receipt_long</span>
+                            Calculating...
+                        </div>
+
+                        <div id="feeContent" class="hidden space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600">Consultation Fee</span>
+                                <span id="feeConsultation" class="font-semibold text-slate-800">—</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span id="feeTaxLabel" class="text-slate-600">Tax</span>
+                                <span id="feeTaxAmount" class="font-semibold text-slate-800">—</span>
+                            </div>
+                            <div class="flex justify-between text-sm font-bold pt-2 border-t border-slate-200">
+                                <span class="text-slate-800">Total</span>
+                                <span id="feeTotal" class="text-primary text-base">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="/js/patient/utils.js"></script>
+<script src="/js/patient/api-client.js"></script>
+<script src="/js/patient/payment.js"></script>
+</body>
+</html>

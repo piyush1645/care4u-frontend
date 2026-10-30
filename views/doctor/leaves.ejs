@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Request Leave - MedCentral</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="/js/doctor/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/doctor/common.css">
+</head>
+
+<body class="bg-background text-on-surface flex h-screen ">
+    <!-- Side Navigation Bar -->
+    <%- include("partials/leftNavBar.ejs") %>
+
+        <!-- Main Wrapper -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden w-full">
+            <!-- Top Navigation Bar -->
+            <%- include("partials/topHeader.ejs") %>
+                <!-- Main Content Area: Scrollable -->
+                <main class="flex-1 overflow-y-auto p-6 bg-slate-50">
+                
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                           
+                
+                            <!-- Form -->
+                
+                            <div class="lg:col-span-3">
+                
+                                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                
+                                    <div class="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-start gap-4 mb-8">
+                                        <div>
+                                            <h1 class="text-3xl font-bold text-slate-800">
+                                                Leave Request
+                                            </h1>
+                                            <p class="text-slate-500 mt-2">
+                                                Fill out the details below to submit your leave request.
+                                            </p>
+                                        </div>
+                                        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl shrink-0">
+                                            📅
+                                        </div>
+                                    </div>
+                
+                                    <form class="space-y-7" id="leaveRequestForm">
+                
+                                        <!-- Date -->
+                
+                                        <div>
+                
+                                            <label class="block mb-2 text-sm font-semibold text-slate-700">
+                
+                                                Leave Date
+                
+                                            </label>
+                
+                                            <input type="date" id="leaveDate" required
+                                                class="w-full h-14 rounded-xl border border-slate-300 bg-white px-4 outline-none transition focus:ring-4 focus:ring-blue-100 focus:border-blue-600">
+                
+                                        </div>
+                
+                                        <!-- Time -->
+                
+                                        <div class="grid md:grid-cols-2 gap-6">
+                
+                                            <div>
+                
+                                                <label class="block mb-2 text-sm font-semibold text-slate-700">
+                
+                                                    Start Time
+                
+                                                </label>
+                
+                                                <input type="time" id="leaveStartTime"
+                                                    class="w-full h-14 rounded-xl border border-slate-300 px-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">
+                
+                                            </div>
+                
+                                            <div>
+                
+                                                <label class="block mb-2 text-sm font-semibold text-slate-700">
+                
+                                                    End Time
+                
+                                                </label>
+                
+                                                <input type="time" id="leaveEndTime"
+                                                    class="w-full h-14 rounded-xl border border-slate-300 px-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">
+                
+                                            </div>
+                
+                                        </div>
+                
+                                        <!-- Category -->
+                
+                                        <div>
+                
+                                            <label class="block mb-2 text-sm font-semibold text-slate-700">
+                
+                                                Leave Category
+                
+                                            </label>
+                
+                                            <select id="leaveCategory" required
+                                                class="w-full h-14 rounded-xl border border-slate-300 px-4 focus:ring-4 focus:ring-blue-100 focus:border-blue-600 outline-none">
+                
+                                                <option>Select Category</option>
+                                                <option>Sick Leave</option>
+                                                <option>Annual Leave</option>
+                                                <option>Casual Leave</option>
+                
+                                            </select>
+                
+                                        </div>
+                
+                                        <!-- Description -->
+                
+                                        <div>
+                
+                                            <label class="block mb-2 text-sm font-semibold text-slate-700">
+                
+                                                Description
+                
+                                            </label>
+                
+                                            <textarea id="description" rows="5" placeholder="Briefly describe the reason for your leave request..."
+                                                class="w-full rounded-xl border border-slate-300 p-4 resize-none outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-600"></textarea>
+                
+                                        </div>
+                
+                                        <!-- Buttons -->
+                
+                                        <div class="flex flex-col sm:flex-row justify-end gap-4 pt-4">
+                                            <button type="button"
+                                                class="w-full sm:w-auto px-8 h-12 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition">
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                class="w-full sm:w-auto px-8 h-12 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-700 text-white font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-70 disabled:cursor-not-allowed">
+                                                Submit Request →
+                                            </button>
+                                        </div>
+                
+                                    </form>
+                
+                                </div>
+                
+                            </div>
+                
+                        </div>
+
+                        <!-- Upcoming Leaves List -->
+                        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                            <div class="flex items-center justify-between mb-6 pb-2 border-b border-slate-100">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-amber-600">event_busy</span>
+                                        Upcoming Leaves
+                                    </h2>
+                                    <p class="text-slate-500 mt-1 text-sm">Review or cancel your scheduled leave requests.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <% if (upcomingLeaves && upcomingLeaves.length > 0) { %>
+                                    <% upcomingLeaves.forEach(leave => { %>
+                                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between transition-all hover:shadow-md hover:border-slate-300">
+                                            <div class="space-y-3">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="font-bold text-slate-800 text-lg">
+                                                        <%= new Date(leave.leaveDate).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC'}) %>
+                                                    </span>
+                                                    <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-amber-50 text-amber-700 border border-amber-100">
+                                                        On Leave
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="space-y-1.5">
+                                                    <% if (leave.leaveStartTime && leave.leaveEndTime) { %>
+                                                        <p class="text-sm text-slate-600 flex items-center gap-2">
+                                                            <span class="material-symbols-outlined text-slate-400 text-sm">schedule</span>
+                                                            <%= new Date(leave.leaveStartTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'}) %> - 
+                                                            <%= new Date(leave.leaveEndTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'}) %>
+                                                        </p>
+                                                    <% } else { %>
+                                                        <p class="text-sm text-slate-600 flex items-center gap-2">
+                                                            <span class="material-symbols-outlined text-slate-400 text-sm">calendar_today</span>
+                                                            Full Day Leave
+                                                        </p>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-5 pt-3 border-t border-slate-200/60 flex justify-end">
+                                                <button onclick="deleteLeave('<%= leave.id %>')" class="flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3.5 py-2 rounded-xl transition">
+                                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                                    Cancel Leave
+                                                </button>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <div class="col-span-full flex flex-col items-center justify-center py-12 text-slate-400">
+                                        <span class="material-symbols-outlined text-5xl mb-3 opacity-30">event_busy</span>
+                                        <p class="text-sm">No upcoming leaves scheduled.</p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                
+                    </div>
+                
+                </main>
+                <!-- Feedback Toast (Hidden by default) -->
+                <div class="fixed bottom-xl right-xl bg-secondary text-on-secondary px-xl py-lg rounded-xl shadow-2xl flex items-center gap-md transform translate-y-32 opacity-0 transition-all duration-500 z-[100]"
+                    id="successToast">
+                    <div class="bg-white/20 p-sm rounded-full">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    </div>
+                    <div>
+                        <p class="font-label-lg text-label-lg">Request Submitted Successfully</p>
+                        <p class="text-xs opacity-90">An admin will review your leave shortly.</p>
+                    </div>
+                </div>
+                <script src="/js/doctor/leaves.js"></script>
+        </div>
+</body>
+
+</html>

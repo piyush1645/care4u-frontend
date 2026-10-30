@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>OTP Verification | MedCentral Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config" src="/js/auth/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/auth/otp.css">
+</head>
+
+<body
+    class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+    <!-- Atmospheric WebGL Background Overlay (Simulated) -->
+    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+
+    </div>
+    <!-- Main Verification Canvas -->
+    <main class="z-10 w-full max-w-md px-margin-mobile md:px-0">
+        <!-- Brand Header Section -->
+        <div class="text-center mb-xl">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container mb-md">
+                <span class="material-symbols-outlined text-on-primary-container text-[32px]">verified_user</span>
+            </div>
+            <h1 class="font-headline-md text-headline-md text-primary tracking-tight">MedCentral Portal</h1>
+            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-xs">Clinical
+                Security Protocol</p>
+        </div>
+        <!-- Verification Card -->
+        <div
+            class="bg-surface-container-lowest rounded-xl p-xl shadow-sm tonal-elevation border border-outline-variant/30">
+            <header class="mb-lg">
+                <h2 class="font-display-lg text-headline-md text-on-surface mb-sm">Verify Your Identity</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant">
+                    Enter the 6-digit code sent to your registered mobile number and email.
+                </p>
+            </header>
+            <!-- OTP Input Form -->
+            <form class="space-y-xl" id="otp-form">
+                <div class="flex justify-between gap-sm" id="otp-container">
+                    <input autofocus=""
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="0" maxlength="1" type="text" />
+                    <input
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="1" maxlength="1" type="text" />
+                    <input
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="2" maxlength="1" type="text" />
+                    <input
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="3" maxlength="1" type="text" />
+                    <input
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="4" maxlength="1" type="text" />
+                    <input
+                        class="otp-input w-12 h-14 text-center text-headline-md font-bold rounded-lg bg-surface-container-low border-0 transition-all focus:ring-0"
+                        data-index="5" maxlength="1" type="text" />
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-xs font-label-lg text-label-lg text-on-surface-variant"
+                        id="timer-container">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span>Resend code in <span class="font-bold text-primary" id="timer">01:59</span></span>
+                    </div>
+                    <button
+                        class="font-label-lg text-label-lg text-primary hover:underline transition-opacity opacity-50 cursor-not-allowed"
+                        disabled="" id="resend-btn" type="button">
+                        Resend code
+                    </button>
+                </div>
+                <button
+                    class="w-full h-14 bg-primary text-on-primary rounded-lg font-label-lg text-label-lg shadow-md hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-sm"
+                    type="submit">
+                    Verify Account
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </button>
+            </form>
+        </div>
+        <!-- Footer Links -->
+        <footer class="mt-xl text-center space-y-md">
+            <p class="font-body-md text-body-md text-on-surface-variant">
+                Having trouble? <a class="text-primary font-semibold hover:underline" href="#">Contact Support</a>
+            </p>
+            <div class="flex items-center justify-center gap-md pt-lg border-t border-outline-variant/50">
+                <span class="font-label-sm text-label-sm text-outline">© 2024 MedCentral Healthcare Systems</span>
+                <div class="h-1 w-1 bg-outline-variant rounded-full"></div>
+                <span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">HIPAA Compliant</span>
+            </div>
+        </footer>
+    </main>
+    <!-- Side Graphic for Visual Depth (Hidden on Mobile) -->
+    <div class="hidden 2xl:block absolute right-12 top-1/2 -translate-y-1/2 w-[400px]">
+        <div
+            class="bg-surface-container-lowest p-lg rounded-xl shadow-lg border border-outline-variant/20 relative overflow-hidden group">
+            <div
+                class="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl transition-all group-hover:bg-primary/10">
+            </div>
+            <h3 class="font-label-lg text-label-lg text-primary mb-md flex items-center gap-sm">
+                <span class="material-symbols-outlined">security</span>
+                Secure Access
+            </h3>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-lg">
+                Multi-factor authentication protects sensitive patient records and ensures only authorized clinicians
+                can access the portal.
+            </p>
+            <div class="space-y-sm">
+                <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+                    <div class="h-full bg-secondary w-full animate-pulse"></div>
+                </div>
+                <div class="h-2 w-3/4 bg-surface-container-highest rounded-full"></div>
+            </div>
+            <img alt="Professional medical environment"
+                class="mt-lg rounded-lg w-full h-40 object-cover grayscale opacity-60 mix-blend-multiply"
+                data-alt="A clean, high-tech medical laboratory setting with soft focus on advanced diagnostic equipment. The scene is illuminated by cool, clinical blue and white lighting, emphasizing a sterile and secure atmosphere. Professional medical staff in the background are blurred, suggesting a busy yet organized clinical workspace. The overall mood is focused, trustworthy, and technologically advanced."
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcDwSEnDqYJx0jHmEb1qhB5RmLlA8N0OaID_r-j-oicjn8dGLpVfjjBJdw5uAtLzsk6QLIwKweQdpaWqMI8BRfBn-xbqrR17Qrv3evfJ18TcA81pT153myWo283-I29Web4ADR_x2xPCOGh52XqEXpfe7iAroroNiiKg6IVycVpCZFM8vH2x4QN_-Y98QWMBHHpC4cC_mCWRn4Dm2vglX0U_QVpz31bVhH_L1AHIHmlFS6wTbujHnajSchuduARcSMljO_w42y3AM" />
+        </div>
+    </div>
+    <script src="/js/auth/otp.js"></script>
+</body>
+
+</html>

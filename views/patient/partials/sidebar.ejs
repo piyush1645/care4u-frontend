@@ -1,0 +1,47 @@
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+<aside id="sidebar"
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-white flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0 lg:static lg:flex-shrink-0 shadow-xl lg:shadow-none border-r border-slate-100">
+
+    <!-- Logo -->
+    <div class="h-20 flex items-center px-6 border-b border-slate-100 shrink-0">
+        <div class="w-10 h-10 bg-[#002868] text-white rounded-xl flex items-center justify-center mr-3 shrink-0">
+            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">medical_services</span>
+        </div>
+        <div>
+            <p class="font-bold text-[#002868] text-[17px] leading-tight">MediCare</p>
+            <p class="text-[11px] text-slate-500">Patient Portal</p>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-3 py-4 space-y-1">
+        <a href="/patient/dashboard" id="nav-dashboard"
+            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-[#002868] text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[20px]">grid_view</span> Dashboard
+        </a>
+        <a href="/patient/doctors" id="nav-doctors"
+            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-[#002868] text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[20px]">stethoscope</span> Find Doctors
+        </a>
+        <a href="/patient/appointments" id="nav-appointments"
+            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-[#002868] text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[20px]">event</span> Appointments
+        </a>
+        <a href="/patient/profile" id="nav-profile"
+            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-[#002868] text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[20px]">manage_accounts</span> My Profile
+        </a>
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-3 border-t border-slate-100 shrink-0">
+        <button id="logoutBtn"
+            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-50 text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[20px]">logout</span> Logout
+        </button>
+    </div>
+</aside>
+
+<script src="/js/patient/sidebar.js"></script>

@@ -1,0 +1,32 @@
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-8 z-30 shrink-0">
+    <!-- Mobile Menu Toggle -->
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()"
+            class="lg:hidden p-2 -ml-2 text-slate-500 hover:text-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h1 class="font-bold text-lg hidden sm:block text-slate-800">Doctor Portal</h1>
+    </div>
+
+    
+
+    <!-- Right Header Actions -->
+    <div class="flex items-center gap-3">
+        <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition-colors relative">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        </button>
+
+        <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
+
+        <!-- Profile Action -->
+        <button onclick="window.location.href='/doctor/profile'"
+            class="flex items-center gap-2 hover:bg-slate-50 p-1 pr-2 rounded-full border border-transparent hover:border-slate-200 transition-all">
+            <div
+                class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center overflow-hidden">
+                <span class="material-symbols-outlined text-[20px]">person</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700 hidden sm:block">Profile</span>
+        </button>
+    </div>
+</header>

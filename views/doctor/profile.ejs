@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dr. <%= doctor.firstName %> <%= doctor.lastName %> | MedPortal Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+        <script src="/js/doctor/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/css/doctor/common.css">
+    <style>
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        /* ── Custom Premium Modal Styles ── */
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .custom-modal-backdrop.show {
+            opacity: 1;
+        }
+
+        .custom-modal-card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+            opacity: 0;
+        }
+
+        .custom-modal-backdrop.show .custom-modal-card {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .custom-modal-header-accent {
+            height: 6px;
+            background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+            width: 100%;
+        }
+
+        .custom-modal-body {
+            padding: 32px;
+        }
+
+        .custom-modal-icon-wrapper {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+
+        .custom-modal-icon {
+            font-size: 32px;
+            color: #dc2626;
+        }
+
+        .custom-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .custom-modal-text {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .custom-modal-warning-box {
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            align-items: start;
+        }
+
+        .custom-modal-warning-icon {
+            color: #d97706;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .custom-modal-warning-text {
+            font-size: 12px;
+            color: #92400e;
+            line-height: 1.5;
+            text-align: left;
+            margin: 0;
+        }
+
+        .custom-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .custom-modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-modal-btn-cancel {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+        }
+
+        .custom-modal-btn-cancel:hover {
+            background-color: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .custom-modal-btn-confirm {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+
+        .custom-modal-btn-confirm:hover {
+            background-color: #b91c1c;
+            box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2), 0 2px 4px -1px rgba(220, 38, 38, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface flex h-screen overflow-hidden">
+    <!-- Side Navigation Bar -->
+    <%- include("partials/leftNavBar.ejs") %>
+    
+    <!-- Main Wrapper -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden w-full">
+        <!-- Top Navigation Bar -->
+        <%- include("partials/topHeader.ejs") %>
+        
+        <!-- Main Content Area -->
+        <main class="p-4 lg:p-xl flex-1 overflow-y-auto">
+        <!-- Profile Hero Header -->
+        <section
+            class="bg-surface-container-lowest rounded-xl p-lg shadow-[0px_4px_12px_rgba(0,0,0,0.05)] mb-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-xl text-center sm:text-left">
+                <div class="relative">
+                    <img alt="Dr. <%= doctor.firstName %> <%= doctor.lastName %> Portrait" class="w-32 h-32 rounded-xl object-cover shadow-sm"
+                        src="<%= doctor.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" />
+                    <button onclick="openPhotoModal()"
+                        class="absolute -bottom-2 -right-2 bg-primary text-on-primary p-2 rounded-full shadow-lg active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-sm" data-icon="photo_camera">photo_camera</span>
+                    </button>
+                </div>
+                <div>
+                    <h2 class="font-display-lg text-display-lg text-primary mb-1">Dr. <%= doctor.firstName %> <%= doctor.lastName %></h2>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary"
+                            data-icon="medical_services">medical_services</span>
+                        <% if(doctor.speciality && doctor.speciality.length > 0) { %>
+                            <%= doctor.speciality[0].name %> Specialist
+                        <% } else { %>
+                            General Practitioner
+                        <% } %>
+                    </p>      
+                    <div class="flex gap-sm mt-md">
+                        <span
+                            class="px-md py-1 bg-secondary-container/30 text-secondary text-label-sm rounded-full flex items-center gap-1 border border-secondary/20">
+                            <span class="material-symbols-outlined text-sm" data-icon="verified"
+                                style="font-variation-settings: 'FILL' 1;">verified</span> Verified Professional
+                        </span>
+                        <span
+                            class="px-md py-1 bg-primary-fixed text-on-primary-fixed text-label-sm rounded-full font-medium">Medical
+                            ID: #<%= doctor.id %></span>
+                        <% if (typeof user !== 'undefined' && user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN')) { %>
+                            <% if (doctor.credential && doctor.credential.isActive) { %>
+                                <span class="px-3 py-0.5 bg-emerald-100 text-emerald-800 text-label-sm rounded-full border border-emerald-200 font-semibold">
+                                    Active
+                                </span>
+                            <% } else { %>
+                                <span class="px-3 py-0.5 bg-rose-100 text-rose-800 text-label-sm rounded-full border border-rose-200 font-semibold">
+                                    Deactivated
+                                </span>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="/doctor/profile/edit"
+                    class="flex items-center gap-2 bg-primary text-on-primary px-xl py-md rounded-lg font-label-lg active:scale-95 transition-transform hover:shadow-lg">
+                    <span class="material-symbols-outlined" data-icon="edit">edit</span>
+                    Edit Profile
+                </a>
+                <% if (typeof user !== 'undefined' && user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && doctor.credential) { %>
+                    <button onclick="toggleDoctorStatus('<%= doctor.credentialId %>', <%= doctor.credential.isActive %>)"
+                        class="flex items-center gap-2 px-xl py-md rounded-lg font-label-lg active:scale-95 transition-transform border hover:shadow-lg text-sm <%= doctor.credential.isActive ? 'border-rose-200 text-rose-600 hover:bg-rose-50' : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50' %>">
+                        <span class="material-symbols-outlined">
+                            <%= doctor.credential.isActive ? 'block' : 'check_circle' %>
+                        </span>
+                        <%= doctor.credential.isActive ? 'Deactivate' : 'Activate' %>
+                    </button>
+                <% } %>
+            </div>
+        </section>
+        <!-- Bento Grid Information -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-lg mb-xl">
+            <!-- Experience Card -->
+            <div
+                class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border-l-4 border-primary">
+                <p class="text-label-sm text-on-surface-variant mb-xs">Professional Experience</p>
+                <h3 class="text-display-lg font-display-lg text-primary"><%= doctor.expereince %> <span
+                        class="text-headline-sm font-normal">Years</span></h3>
+                <div class="mt-md flex items-center text-secondary text-label-sm">
+                    <span class="material-symbols-outlined mr-1" data-icon="trending_up">trending_up</span> Top 5% in
+                    hospital
+                </div>
+            </div>
+            <!-- Fee Card -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                <p class="text-label-sm text-on-surface-variant mb-xs">Consultation Fee</p>
+                <h3 class="text-display-lg font-display-lg text-primary"> &#8377;<%= doctor.charges %></h3>
+                <p class="text-label-sm text-on-surface-variant mt-md">Per session</p>
+            </div>
+            <!-- Slot Duration -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                <p class="text-label-sm text-on-surface-variant mb-xs">Slot Duration</p>
+                <h3 class="text-display-lg font-display-lg text-primary"><%= doctor.slotDuration || 15 %> <span
+                        class="text-headline-sm font-normal">mins</span></h3>
+                <div
+                    class="mt-md bg-surface-container text-on-surface-variant px-sm py-1 rounded-full text-[10px] w-fit">
+                    Efficiency optimized</div>
+            </div>
+            <!-- Languages -->
+            <div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                <p class="text-label-sm text-on-surface-variant mb-xs">Languages</p>
+                <div class="flex flex-wrap gap-sm mt-xs">
+                    <span class="font-body-md text-body-md text-on-surface"><%= Array.isArray(doctor.preferedLanguages) ? doctor.preferedLanguages.join(', ') : (doctor.preferedLanguages || 'Not specified') %></span>
+                </div>
+                <div class="mt-md flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-sm" data-icon="translate">translate</span>
+                    <span class="text-label-sm text-outline">Multilingual Expert</span>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+            <!-- Specialties & Expertise -->
+            <div class="lg:col-span-1 space-y-lg">
+                <section class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                    <div class="flex items-center gap-sm mb-lg border-b border-outline-variant/30 pb-sm">
+                        <span class="material-symbols-outlined text-primary" data-icon="stethoscope">stethoscope</span>
+                        <h4 class="font-headline-sm text-headline-sm text-primary">Specialties</h4>
+                    </div>
+                    <ul class="space-y-md">
+                        <% if(doctor.speciality && doctor.speciality.length > 0) { %>
+                            <% doctor.speciality.forEach((spec, index) => { %>
+                            <li class="flex items-start gap-md">
+                                <span class="w-2 h-2 rounded-full <%= index % 2 === 0 ? 'bg-primary' : 'bg-secondary' %> mt-2"></span>
+                                <div>
+                                    <p class="font-label-lg text-label-lg"><%= spec.name %></p>
+                                </div>
+                            </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li class="text-on-surface-variant text-body-md">No specialties listed.</li>
+                        <% } %>
+                    </ul>
+                </section>
+                <section class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                    <div class="flex items-center gap-sm mb-lg border-b border-outline-variant/30 pb-sm">
+                        <span class="material-symbols-outlined text-primary" data-icon="cake">cake</span>
+                        <h4 class="font-headline-sm text-headline-sm text-primary">Personal Details</h4>
+                    </div>
+                    <div class="space-y-md">
+                        <div>
+                            <p class="text-label-sm text-on-surface-variant">Date of Birth</p>
+                            <p class="font-body-md text-body-md">
+                                <%= doctor.dateOfBirth ? new Date(doctor.dateOfBirth).toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'}) : 'Not Provided' %>
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-label-sm text-on-surface-variant">Gender</p>
+                            <p class="font-body-md text-body-md"><%= doctor.gender %></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+                    <div class="flex items-center gap-sm mb-lg border-b border-outline-variant/30 pb-sm">
+                        <span class="material-symbols-outlined text-primary">event_busy</span>
+                        <h4 class="font-headline-sm text-headline-sm text-primary">Upcoming Leaves</h4>
+                    </div>
+                    <div class="space-y-md max-h-60 overflow-y-auto pr-1">
+                        <% if (upcomingLeaves && upcomingLeaves.length > 0) { %>
+                            <div class="space-y-3">
+                                <% upcomingLeaves.forEach(leave => { %>
+                                    <div class="bg-surface-container-low p-3 rounded-lg border border-outline-variant/50">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-label-lg text-on-surface font-semibold">
+                                                <%= new Date(leave.leaveDate).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}) %>
+                                            </span>
+                                        </div>
+                                        <% if (leave.leaveStartTime && leave.leaveEndTime) { %>
+                                            <p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-xs">schedule</span>
+                                                <%= new Date(leave.leaveStartTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}) %> - 
+                                                <%= new Date(leave.leaveEndTime).toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}) %>
+                                            </p>
+                                        <% } else { %>
+                                            <p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-xs">calendar_today</span>
+                                                Full Day
+                                            </p>
+                                        <% } %>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } else { %>
+                            <p class="text-on-surface-variant text-body-md italic">No upcoming leaves scheduled.</p>
+                        <% } %>
+                    </div>
+                </section>
+            </div>
+            <!-- Education & Degrees -->
+            <div class="lg:col-span-2">
+                <section
+                    class="bg-surface-container-lowest p-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] h-full">
+                    <div class="flex items-center gap-sm mb-lg border-b border-outline-variant/30 pb-sm">
+                        <span class="material-symbols-outlined text-primary" data-icon="school">school</span>
+                        <h4 class="font-headline-sm text-headline-sm text-primary">Education &amp; Degrees</h4>
+                    </div>
+                    <div
+                        class="relative space-y-xl before:content-[''] before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-surface-container-high ml-1">
+                        
+                        <% if(doctor.degree && doctor.degree.length > 0) { %>
+                            <% doctor.degree.forEach((deg, index) => { %>
+                                <div class="relative pl-12">
+                                    <% const colors = ['bg-primary text-on-primary', 'bg-secondary text-on-secondary', 'bg-primary-fixed text-on-primary-fixed']; %>
+                                    <span
+                                        class="absolute left-0 top-0 w-8 h-8 rounded-full <%= colors[index % colors.length] %> flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-sm"
+                                            data-icon="history_edu">history_edu</span>
+                                    </span>
+                                    <div class="bg-surface-container-low p-md rounded-lg">
+                                        <h5 class="font-label-lg text-label-lg text-on-surface mt-1"><%= deg.courseName %> (<%= deg.abbreviation %>)</h5>
+                                        <p class="text-body-md text-on-surface-variant"><%= deg.institution %></p>
+                                        <p class="text-[11px] text-on-surface-variant/70 mt-1 uppercase tracking-wider">Class of <%= deg.passingYear %></p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-on-surface-variant text-body-md pl-8">No degrees listed.</p>
+                        <% } %>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    </div>
+
+    <!-- Photo Upload Modal -->
+    <div id="photoModal" class="fixed inset-0 bg-slate-900/50 z-[100] hidden items-center justify-center transition-opacity opacity-0">
+        <div class="bg-surface-container-lowest rounded-2xl p-8 shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline-sm text-headline-sm text-primary">Update Profile Photo</h3>
+                <button onclick="closePhotoModal()" class="text-on-surface-variant hover:text-error transition-colors rounded-full p-1 hover:bg-error/10">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            
+            <div class="flex flex-col items-center">
+                <div class="relative group mb-6">
+                    <div class="w-40 h-40 rounded-full overflow-hidden border-4 border-surface-variant/50 bg-surface-container-low shadow-sm">
+                        <img id="modalProfileImagePreview" src="<%= doctor.profilePhoto || '/images/default-avatar.svg' %>" onerror="this.onerror=null; this.src='/images/default-avatar.svg';" alt="Profile Photo" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                
+                <input type="file" id="modalProfilePhotoInput" accept="image/*" class="hidden">
+                <button type="button" onclick="document.getElementById('modalProfilePhotoInput').click()" class="w-full bg-secondary-container text-on-secondary-container hover:bg-secondary-fixed-dim px-4 py-2 rounded-lg font-label-lg transition-colors flex items-center justify-center gap-2 mb-3 shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">photo_camera</span>
+                    Select Photo
+                </button>
+                <button type="button" id="modalUploadPhotoBtn" class="w-full bg-primary text-on-primary px-4 py-2 rounded-lg font-label-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hidden shadow-sm">
+                    <span class="material-symbols-outlined text-[18px]">upload</span>
+                    Upload & Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.AppConfig = {
+            serverPort: "<%= serverPort %>",
+            doctorProfilePhoto: "<%= doctor.profilePhoto || '/images/default-avatar.svg' %>"
+        };
+    </script>
+    <script src="/js/doctor/profile.js"></script>
+    <script>
+        let activeCredentialId = null;
+
+        function openDeactivateDoctorModal(credentialId) {
+            activeCredentialId = credentialId;
+            const modal = document.getElementById("deactivateDoctorModal");
+            if (modal) {
+                modal.style.display = "flex";
+                void modal.offsetWidth;
+                modal.classList.add("show");
+                document.body.style.overflow = "hidden";
+            }
+        }
+
+        function closeDeactivateDoctorModal() {
+            activeCredentialId = null;
+            const modal = document.getElementById("deactivateDoctorModal");
+            if (modal) {
+                modal.classList.remove("show");
+                setTimeout(() => {
+                    if (!modal.classList.contains("show")) {
+                        modal.style.display = "none";
+                    }
+                }, 250);
+                document.body.style.overflow = "";
+            }
+        }
+
+        async function confirmDeactivateDoctor() {
+            if (!activeCredentialId) return;
+            
+            const btn = document.getElementById("confirmDeactivateBtn");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">progress_activity</span> Deactivating...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`/admin/doctors/${activeCredentialId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'deactive' })
+                });
+
+                const result = await response.json();
+                if (response.ok || result.success) {
+                    alert(`Doctor account deactivated successfully!`);
+                    window.location.reload();
+                } else {
+                    alert(result.message || `Failed to deactivate doctor status.`);
+                }
+            } catch (error) {
+                console.error('Error toggling doctor status:', error);
+                alert('An error occurred. Please try again.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                closeDeactivateDoctorModal();
+            }
+        }
+
+        async function toggleDoctorStatus(credentialId, isActive) {
+            if (isActive) {
+                openDeactivateDoctorModal(credentialId);
+            } else {
+                if (!confirm("Are you sure you want to activate this doctor's account?")) return;
+
+                try {
+                    const response = await fetch(`/admin/doctors/${credentialId}/status`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ action: 'active' })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok || result.success) {
+                        alert(`Doctor account activated successfully!`);
+                        window.location.reload();
+                    } else {
+                        alert(result.message || `Failed to activate doctor status.`);
+                    }
+                } catch (error) {
+                    console.error('Error activating doctor status:', error);
+                    alert('An error occurred. Please try again.');
+                }
+            }
+        }
+
+        // Close modal when clicking on backdrop
+        document.getElementById("deactivateDoctorModal")?.addEventListener("click", (e) => {
+            if (e.target === e.currentTarget) {
+                closeDeactivateDoctorModal();
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            const modal = document.getElementById("deactivateDoctorModal");
+            if (e.key === "Escape" && modal && modal.classList.contains("show")) {
+                closeDeactivateDoctorModal();
+            }
+        });
+    </script>
+        <!-- Deactivate Doctor Modal -->
+        <div id="deactivateDoctorModal" class="custom-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="deactivateDoctorModalTitle">
+            <div class="custom-modal-card">
+                <!-- Header accent -->
+                <div class="custom-modal-header-accent"></div>
+
+                <div class="custom-modal-body">
+                    <div class="custom-modal-icon-wrapper">
+                        <span class="material-symbols-outlined custom-modal-icon">person_off</span>
+                    </div>
+                    
+                    <h3 id="deactivateDoctorModalTitle" class="custom-modal-title">
+                        Deactivate Doctor Account
+                    </h3>
+                    
+                    <p class="custom-modal-text">
+                        Are you sure you want to deactivate
+                        <span style="font-weight: 600; color: #0f172a;">Dr. <%= doctor.firstName %> <%= doctor.lastName %></span>?
+                        They will no longer be able to sign in or manage their schedule.
+                    </p>
+
+                    <div class="custom-modal-warning-box">
+                        <span class="material-symbols-outlined custom-modal-warning-icon">info</span>
+                        <p class="custom-modal-warning-text">
+                            This action disables login access and patient booking capabilities for this doctor. The record remains in the system for history.
+                        </p>
+                    </div>
+
+                    <div class="custom-modal-actions">
+                        <button type="button" id="cancelDeactivateDoctor" onclick="closeDeactivateDoctorModal()" class="custom-modal-btn custom-modal-btn-cancel">
+                            Cancel
+                        </button>
+                        <button type="button" id="confirmDeactivateBtn" onclick="confirmDeactivateDoctor()" class="custom-modal-btn custom-modal-btn-confirm">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">block</span>
+                            Deactivate Doctor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

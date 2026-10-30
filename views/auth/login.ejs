@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MediCare System - Practitioner Login</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/login.css">
+
+</head>
+
+<body>
+    <div class="login-layout">
+        <!-- Left: Illustrated Hero Panel -->
+        <section class="left-panel">
+            <div class="left-overlay"></div>
+            <img
+                alt="MediCare Portal - Modern healthcare facility"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkQ5b-AobDbAgPNemXvmOdtfHQyaskXkBs49hQaxJqf2B3xDm3NuW6JOa_vs-RuCkHDbFcidyYwxn_lLnPROYx1UnE-fiRgAi8c7zSXRwvylD3d_JXXO-O4g4Ct5_V3UZtUKx1MV7u4vWj2rSqJQiR2EWdN6mR45G1O8CbCkfw87Y6JCfRauLJQdYC6A0nzaCvkydRue8okwS2PMGMinsVBdY6GdGbkcjlRXjP395JhCq5C8Rai2bElI7bG4v9VW6PEdziBXM8yADH"
+            />
+
+            <!-- Brand Badge -->
+        <div class="brand-badge">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined" style="font-size:20px;">medical_services</span>
+            </div>
+            <div>
+                <div class="brand-name">MediCare Central</div>
+                <div class="brand-sub">Practitioner Portal v2.4</div>
+            </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-pill">
+                <div class="val">12K+</div>
+                <div class="lbl">Patients Served</div>
+            </div>
+            <div class="stat-pill">
+                <div class="val">98%</div>
+                <div class="lbl">Uptime SLA</div>
+            </div>
+            <div class="stat-pill">
+                <div class="val">340+</div>
+                <div class="lbl">Practitioners</div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Right: Login Form -->
+        <section class="right-panel" style="position: relative;">
+            <button onclick="window.location.href = '/'" class="back-btn">
+                <span class="material-symbols-outlined" style="font-size: 20px;">arrow_back</span>
+                <span class="back-btn-text">Back</span>
+            </button>
+            <div class="blob-1"></div>
+            <div class="blob-2"></div>
+
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <div class="eyebrow">Practitioner Portal</div>
+                    <h1>Welcome back 👋</h1>
+                    <p>Sign in to access your clinical dashboard.</p>
+                </div>
+                <div id="error-message" class="error-message hidden"></div>
+                <form id="login-form" action="#" method="POST" onsubmit="event.preventDefault();">
+                    <!-- Email / Mobile -->
+                    <div class="input-group">
+                        <label for="identity">Email or Mobile Number</label>
+                        <div class="input-wrap">
+                            <span class="input-icon material-symbols-outlined">person</span>
+                            <input id="identity" name="identity" type="text" placeholder="Your email or mobile number"
+                                required autocomplete="username" />
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <div class="input-row">
+                            <label for="password">Password</label>
+                            <a class="forgot-link" href="/auth/forgot-password">Forgot password?</a>
+                        </div>
+                        <div class="input-wrap">
+                            <span class="input-icon material-symbols-outlined">lock</span>
+                            <input id="password" name="password" type="password" placeholder="••••••••" required
+                                autocomplete="current-password" style="padding-right: 48px;" />
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                                <span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="remember-row">
+                        <input id="remember-me" name="remember-me" type="checkbox" />
+                        <label for="remember-me">Keep me logged in for 30 days</label>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button id="login-btn" class="btn-login" type="submit">
+                        Login to Portal
+                        <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+                    </button>
+                
+                </form>
+
+                <div class="form-footer">
+                    Don't have an account?
+                    <a href="/auth/register">Register account</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/auth/loginPage.js"></script>
+</body>
+
+</html>

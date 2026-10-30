@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/auth/email.css">
+    <script id="tailwind-config" src="/js/auth/tailwind-config.js"></script>
+</head>
+
+<body class="bg-surface-container-low min-h-screen flex flex-col overflow-hidden">
+    <!-- Top Navigation (Browser App Chrome) -->
+    <header
+        class="w-full top-0 sticky shadow-sm bg-surface flex justify-between items-center h-16 px-margin-desktop z-50">
+        <div class="flex items-center gap-md">
+            <div class="flex gap-xs">
+                <div class="w-3 h-3 rounded-full bg-error/20 border border-error/40"></div>
+                <div class="w-3 h-3 rounded-full bg-secondary-container border border-secondary"></div>
+                <div class="w-3 h-3 rounded-full bg-outline-variant border border-outline"></div>
+            </div>
+            <div class="ml-md font-headline-sm text-headline-sm font-bold text-primary">MedCentral Portal</div>
+        </div>
+        <div class="flex items-center gap-md">
+            <span
+                class="material-symbols-outlined text-on-surface-variant cursor-pointer p-sm hover:bg-surface-container rounded-full transition-colors">notifications</span>
+            <span
+                class="material-symbols-outlined text-on-surface-variant cursor-pointer p-sm hover:bg-surface-container rounded-full transition-colors">help_outline</span>
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+                <img alt="Professional profile avatar"
+                    data-alt="A professional headshot of a healthcare clinician in a white coat with a friendly expression, captured with soft, high-key studio lighting. The background is a clean, neutral clinical setting with a soft blue-gray color palette, reflecting a modern and trustworthy medical environment. The image is crisp, bright, and polished."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-IHhAYyojcDnguuyfZeIoam2foZ26xNT0EVexZW-SooyYc-DIIpIrQ64nT1B7A8v5Ara9QaYaHyO_NupU14KNf0kgByRLrDZKxMN_A64iE9bZE7xXVbeZ0PJMPWNCnywl8TQlHM46IQXg3IUQyekbBNNHzGIeOg-OpwArznAhTAGCB27alPh1rZncxpEtxEDT-R7wM74yctiZE_8KlgVgu4V9rlSMHIIunX5GDra-9PNX0H6Zhd4yaYXAJyoyI3aLrUsI8WhBPQI"
+                    onerror="this.onerror=null; this.src='/images/default-avatar.svg';" />
+            </div>
+        </div>
+    </header>
+    <main class="flex flex-1 overflow-hidden h-[calc(100vh-64px)]">
+        <!-- Left Navigation (Email Folders) -->
+        <aside class="h-full w-[280px] bg-surface shadow-md flex flex-col py-xl gap-sm z-40">
+            <div class="px-lg mb-md">
+                <button
+                    class="w-full bg-primary-container text-on-primary-container flex items-center justify-center gap-sm py-md rounded-xl font-label-lg text-label-lg shadow-sm hover:opacity-90 transition-opacity">
+                    <span class="material-symbols-outlined">edit</span>
+                    Compose
+                </button>
+            </div>
+            <nav class="flex-1">
+                <div
+                    class="flex items-center gap-md py-sm px-lg bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-lg mx-2 cursor-pointer transition-all">
+                    <span class="material-symbols-outlined">inbox</span>
+                    <span class="font-label-lg text-label-lg">Inbox</span>
+                    <span class="ml-auto font-label-sm text-label-sm bg-on-primary/20 px-2 py-0.5 rounded-full">1</span>
+                </div>
+                <div
+                    class="flex items-center gap-md py-sm px-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg mx-2 cursor-pointer transition-all mt-1">
+                    <span class="material-symbols-outlined">send</span>
+                    <span class="font-label-lg text-label-lg">Sent</span>
+                </div>
+                <div
+                    class="flex items-center gap-md py-sm px-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg mx-2 cursor-pointer transition-all mt-1">
+                    <span class="material-symbols-outlined">draft</span>
+                    <span class="font-label-lg text-label-lg">Drafts</span>
+                </div>
+                <div
+                    class="flex items-center gap-md py-sm px-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg mx-2 cursor-pointer transition-all mt-1">
+                    <span class="material-symbols-outlined">report</span>
+                    <span class="font-label-lg text-label-lg">Spam</span>
+                </div>
+                <div
+                    class="flex items-center gap-md py-sm px-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg mx-2 cursor-pointer transition-all mt-1">
+                    <span class="material-symbols-outlined">delete</span>
+                    <span class="font-label-lg text-label-lg">Trash</span>
+                </div>
+            </nav>
+            <div class="mt-auto px-lg py-md border-t border-outline-variant/30">
+                <div class="flex items-center gap-sm text-secondary font-label-lg text-label-lg cursor-pointer">
+                    <span class="material-symbols-outlined"
+                        style="font-variation-settings: 'FILL' 1;">support_agent</span>
+                    Emergency Support
+                </div>
+            </div>
+        </aside>
+        <!-- Main Email Content Area -->
+        <section class="flex-1 bg-surface-container-low overflow-y-auto p-xl">
+            <div class="max-w-4xl mx-auto">
+                <!-- Browser Bar -->
+                <div
+                    class="bg-surface-container-highest flex items-center px-md py-xs rounded-t-xl border-x border-t border-outline-variant/50">
+                    <div
+                        class="flex items-center gap-sm bg-surface px-lg py-1.5 rounded-lg border border-outline-variant/50 flex-1 max-w-2xl text-on-surface-variant text-label-sm">
+                        <span class="material-symbols-outlined text-[16px]">lock</span>
+                        <span>https://mail.medcentral.health/inbox/reset-request</span>
+                    </div>
+                </div>
+                <!-- Email Client Shell -->
+                <div
+                    class="bg-surface-container-lowest rounded-b-xl border border-outline-variant/50 shadow-lg overflow-hidden min-h-[700px] flex flex-col">
+                    <!-- Email Header Actions -->
+                    <div class="px-xl py-md border-b border-outline-variant/30 flex items-center justify-between">
+                        <div class="flex items-center gap-lg">
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">arrow_back</span>
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">archive</span>
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">report</span>
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">delete</span>
+                        </div>
+                        <div class="flex items-center gap-md">
+                            <span class="text-label-sm text-outline">1 of 124</span>
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">chevron_left</span>
+                            <span
+                                class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">chevron_right</span>
+                        </div>
+                    </div>
+                    <!-- Email Thread Info -->
+                    <div class="px-xl py-lg">
+                        <h1 class="font-headline-md text-headline-md text-on-surface mb-md">Password Reset Request -
+                            Clinical Portal</h1>
+                        <div class="flex items-start gap-md">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary font-bold text-label-lg shrink-0">
+                                MC
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="font-label-lg text-label-lg text-on-surface">MedCentral
+                                            Support</span>
+                                        <span
+                                            class="text-label-sm text-outline ml-sm">&lt;support@medcentral.health&gt;</span>
+                                    </div>
+                                    <span class="text-label-sm text-outline">10:42 AM (2 minutes ago)</span>
+                                </div>
+                                <div class="text-label-sm text-on-surface-variant mt-xs">
+                                    to me
+                                    <span
+                                        class="material-symbols-outlined text-[14px] align-middle ml-xs">arrow_drop_down</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- THE EMAIL CONTENT (Nested Frame) -->
+                    <div class="flex-1 p-xl flex flex-col items-center">
+                        <div
+                            class="w-full max-w-xl bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden email-shadow">
+                            <!-- Branding Header -->
+                            <div class="bg-primary p-lg flex flex-col items-center text-center">
+                                <div class="font-headline-md text-headline-md font-bold text-on-primary mb-xs">
+                                    MedCentral</div>
+                                <div
+                                    class="text-primary-fixed-dim font-label-sm text-label-sm uppercase tracking-widest">
+                                    Healthcare Systems</div>
+                            </div>
+                            <!-- Content Body -->
+                            <div class="p-xl space-y-lg">
+                                <div class="space-y-sm">
+                                    <h2 class="font-headline-sm text-headline-sm text-on-surface">Hello Dr.,</h2>
+                                    <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                                        We received a request to reset the password for your MedCentral Clinical Portal
+                                        account. To proceed with the security verification, please use the unique code
+                                        provided below.
+                                    </p>
+                                </div>
+                                <!-- Verification Code Block -->
+                                <div
+                                    class="bg-surface-container rounded-2xl p-xl flex flex-col items-center border border-primary/10">
+                                    <span
+                                        class="font-label-sm text-label-sm text-outline mb-sm uppercase tracking-wide">Your
+                                        Verification Code</span>
+                                    <div
+                                        id="otp-display"
+                                        class="font-display-lg text-display-lg text-primary tracking-[0.2em] font-extrabold bg-surface-container-lowest px-xl py-md rounded-xl border-2 border-primary-container shadow-inner">
+                                        482-931
+                                    </div>
+                                    <span class="mt-sm font-label-sm text-label-sm text-secondary italic" id="expiry-timer">Code expires in 2 minutes</span>
+                                </div>
+                                <!-- Security Instructions -->
+                                <div
+                                    class="bg-surface-container-low p-md rounded-lg space-y-sm border-l-4 border-error">
+                                    <h3 class="font-label-lg text-label-lg text-on-surface flex items-center gap-xs">
+                                        <span class="material-symbols-outlined text-error text-[20px]">security</span>
+                                        Security Instructions
+                                    </h3>
+                                    <ul
+                                        class="font-body-md text-body-md text-on-surface-variant space-y-xs list-disc list-inside">
+                                        <li>Do not share this code with anyone, including hospital staff.</li>
+                                        <li>If you did not request this code, please <span
+                                                class="text-primary font-bold cursor-pointer">change your
+                                                password</span> immediately.</li>
+                                        <li>Logins are monitored per HIPAA compliance protocols.</li>
+                                    </ul>
+                                </div>
+                                <div class="pt-md border-t border-outline-variant/30">
+                                    <p class="font-body-md text-body-md text-on-surface-variant">
+                                        Thank you for your dedication to patient care.<br />
+                                        <strong>The MedCentral Security Team</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Email Footer -->
+                            <div class="bg-surface-container-highest p-md text-center">
+                                <p class="text-[10px] text-outline leading-tight">
+                                    This is an automated security notification. Replies to this email address are not
+                                    monitored.<br />
+                                    © 2024 MedCentral Healthcare Systems. Confidential Clinician Portal.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Action Buttons (Outer Client) -->
+                        <div class="mt-xl w-full max-w-xl flex gap-md">
+                            <button
+                                class="flex-1 py-md border border-outline-variant rounded-lg font-label-lg text-label-lg text-on-surface-variant flex items-center justify-center gap-sm hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined">reply</span>
+                                Reply
+                            </button>
+                            <button
+                                class="flex-1 py-md border border-outline-variant rounded-lg font-label-lg text-label-lg text-on-surface-variant flex items-center justify-center gap-sm hover:bg-surface-container transition-colors">
+                                <span class="material-symbols-outlined">forward</span>
+                                Forward
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Global Footer -->
+    <footer class="w-full py-md bg-surface-container-lowest border-t border-outline-variant z-50">
+        <div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop w-full mx-auto max-w-7xl">
+            <span class="font-label-sm text-label-sm text-on-surface-variant">
+                © 2024 MedCentral Healthcare Systems. All rights reserved. Confidential Clinician Portal.
+            </span>
+            <div class="flex gap-md mt-md md:mt-0">
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-colors"
+                    href="#">Privacy Policy</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-colors"
+                    href="#">Terms of Service</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary underline transition-colors"
+                    href="#">HIPAA Compliance</a>
+            </div>
+        </div>
+    </footer>
+    <script src="/js/auth/email.js"></script>
+</body>
+
+</html>

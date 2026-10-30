@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <title>MediCare Portal | Healthcare for a Modern World</title>
+        <link rel="stylesheet" href="/css/output.css">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/global/home.css">
+    </head>
+    
+    <body
+        class="bg-background text-on-background font-body-md selection:bg-primary-fixed-dim selection:text-on-primary-fixed">
+        <!-- TopNavBar -->
+        <header
+            class="fixed top-0 right-0 w-full h-16 bg-surface shadow-sm z-50 flex justify-between items-center px-6 py-3">
+            <div class="flex items-center gap-4">
+                <span class="font-headline-md text-headline-md font-bold text-primary">MediCare Portal</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-4 mr-2">
+                    <a href="/auth/login" class="text-on-surface-variant font-label-md hover:text-primary transition-colors px-4 py-2">Login</a>
+                    <a href="/auth/register" class="bg-primary text-on-primary px-5 py-2 rounded-lg font-label-md hover:shadow-md transition-all active:scale-95">Sign Up</a>
+                </div>    
+            </div>
+        </header>
+        <main class="pt-16">
+            <!-- Hero Section -->
+            <section class="relative min-h-[85vh] flex items-center overflow-hidden bg-surface-container-low">
+                <div
+                    class="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 transition-all duration-700 opacity-100 translate-y-0">
+                    <div class="space-y-8 animate-in fade-in slide-in-from-left duration-1000">
+                        <div
+                            class="inline-flex items-center gap-2 px-3 py-1 bg-primary-container/10 text-primary-container rounded-full border border-primary-container/20">
+                            <span class="material-symbols-outlined text-[16px]"
+                                style="font-variation-settings: 'FILL' 1;">verified</span>
+                            <span class="text-label-sm font-label-sm uppercase tracking-wider">Trusted by 10k+
+                                Patients</span>
+                        </div>
+                        <h1 class="font-headline-xl text-headline-xl text-on-surface leading-tight">
+                            Healthcare for a <span class="text-gradient">Modern World</span>
+                        </h1>
+                        <p class="text-body-lg text-on-surface-variant">
+                            Experience a new standard of care. We provide accessible, personalized medical attention powered
+                            by world-class specialists and cutting-edge technology.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                            <button
+                                class="px-8 py-4 border-2 border-primary text-primary rounded-xl font-label-md hover:bg-primary/5 active:scale-95 transition-all flex items-center justify-center"
+                                onclick="window.location.href='/auth/register'">
+                                Join MediCare
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative hidden lg:block">
+                        <div class="absolute -top-12 -right-12 w-64 h-64 bg-primary-fixed/30 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-secondary-fixed/20 rounded-full blur-3xl"></div>
+                        <div
+                            class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform hover:scale-[1.02] transition-transform duration-500">
+                            <img alt="Professional Healthcare" class="w-full aspect-[1] object-cover"
+                                data-alt="A smiling female nurse in vibrant blue scrubs standing in a sunlit, high-ceiling modern hospital lobby with floor-to-ceiling windows. She is holding a digital tablet and looking at it with a satisfied, professional expression. The background is a clean, white, and airy architectural space with subtle green plants, conveying an atmosphere of clinical excellence and compassionate care."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvKJEdI6YbEf08zYudrjB7LMZv94uTpilw6qNcFUq5JKwalLpywz7sk-ueApcb7DzprgN4JYA2WHr5_CNl1bMARADLbGAlD1xM_T75vJS4Fyow2j-ZwdXYA2GwERyGZiThCtea6uoJIWWKo1iyM23L_YURyu5C-22sWbxaDCU-jjjPvlu6GTj2ihEjg_7mVSk84PoLEdg5JuHqRfJnh_qUcUkK0P9FCAnrEnINmxCDXJvs2bLnEd4E9gQI4KFwH2tFlYlQG-UoLtCq">
+                            <div
+                                class="absolute bottom-6 left-6 right-6 glass-card p-6 rounded-2xl shadow-lg border border-white/40">
+                                <div class="flex items-center gap-4">
+                                    <div class="bg-secondary-container p-3 rounded-xl">
+                                        <span
+                                            class="material-symbols-outlined text-on-secondary-container">health_and_safety</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-on-surface font-bold">24/7 Digital Care</p>
+                                        <p class="text-on-surface-variant text-body-sm">Access your doctor anytime,
+                                            anywhere.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Features Bento Grid -->
+            <section class="py-24 bg-surface">
+                <div class="container mx-auto px-6 transition-all duration-700 opacity-100 translate-y-0">
+                    <div class="text-center mb-16 space-y-4">
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface">Precision Care Designed for You</h2>
+                        <p class="text-body-md text-on-surface-variant max-w-2xl mx-auto">Our ecosystem integrates advanced
+                            technology with human compassion to deliver seamless healthcare experiences.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div
+                            class="group bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                            <div
+                                class="w-16 h-16 bg-primary-container/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-container transition-colors">
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors text-[32px]">medical_services</span>
+                            </div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Expert Doctors</h3>
+                            <p class="text-body-md text-on-surface-variant leading-relaxed">
+                                Connect with board-certified specialists across 50+ medical fields, all vetted for
+                                excellence and empathy.
+                            </p>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div
+                            class="group bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                            <div
+                                class="w-16 h-16 bg-secondary-container/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secondary-container transition-colors">
+                                <span
+                                    class="material-symbols-outlined text-on-secondary-container group-hover:text-on-secondary transition-colors text-[32px]">event_available</span>
+                            </div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Easy Scheduling</h3>
+                            <p class="text-body-md text-on-surface-variant leading-relaxed">
+                                Book appointments in seconds with our intuitive calendar sync. No more waiting on hold or
+                                long queues.
+                            </p>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div
+                            class="group bg-surface-container-lowest p-8 rounded-3xl shadow-sm border border-outline-variant/30 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                            <div
+                                class="w-16 h-16 bg-tertiary-container/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-tertiary-container transition-colors">
+                                <span
+                                    class="material-symbols-outlined text-on-tertiary-fixed-variant group-hover:text-on-tertiary transition-colors text-[32px]">security</span>
+                            </div>
+                            <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Secure Records</h3>
+                            <p class="text-body-md text-on-surface-variant leading-relaxed">
+                                Your health data is protected by enterprise-grade encryption. Access your records and test
+                                results instantly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Stats Section -->
+            <section class="py-20 bg-primary overflow-hidden relative">
+                <div class="absolute inset-0 opacity-10 transition-all duration-700 translate-y-0">
+                    <div
+                        class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-primary-container to-transparent">
+                    </div>
+                </div>
+                <div class="container mx-auto px-6 relative z-10 transition-all duration-700 opacity-100 translate-y-0">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+                        <div class="text-center space-y-2">
+                            <div class="text-headline-xl font-headline-xl text-on-primary">10k+</div>
+                            <div class="text-label-md text-on-primary-container uppercase tracking-widest">Active Patients
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="text-headline-xl font-headline-xl text-on-primary">50+</div>
+                            <div class="text-label-md text-on-primary-container uppercase tracking-widest">Top Specialists
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="text-headline-xl font-headline-xl text-on-primary">15+</div>
+                            <div class="text-label-md text-on-primary-container uppercase tracking-widest">Years Experience
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <div class="text-headline-xl font-headline-xl text-on-primary">99%</div>
+                            <div class="text-label-md text-on-primary-container uppercase tracking-widest">Patient Rating
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- About Section -->
+            <section class="py-24 bg-surface-container-low">
+                <div class="container mx-auto px-6 transition-all duration-700 opacity-100 translate-y-0">
+                    <div class="flex flex-col lg:flex-row gap-16 items-center">
+                        <div class="lg:w-1/2 relative">
+                            <div class="absolute -top-6 -left-6 w-32 h-32 bg-primary-fixed rounded-2xl -z-10"></div>
+                            <img alt="Modern Clinic Interior" class="rounded-3xl shadow-2xl w-full h-[100] object-cover"
+                                data-alt="A serene and futuristic hospital interior featuring minimalist architecture, soft neutral tones, and abundant natural light. The space is clean and organized with ergonomic seating areas and digital information kiosks. A polished floor reflects the bright, airy atmosphere, creating a sense of calm and institutional reliability in a premium clinical environment."
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH5m3K1KzHf_uNxAIgGXjFTjMY71mRiPfSY_1GZzE7q0CkGAzcT8H_3k_j1yesNFsnLl7bE-EvsRW3vfbifwOL1n_zCnwzx7NkkQzdVBmksGb5FftrmEecZs1yYrGtn3YBXugDvRLxX9jYVANq499e0ESM05u2k63E4ae0cG5vBYeiz05giFkYv-8_O_Rw46OFTgUe3P11IBvqECOD1P5Ob28OMh6xPMwIIdTQZ92qkTQN7gm8Mfxzb9HtbBvo3ETpCMesj7vHAjsx">
+                        </div>
+                        <div class="lg:w-1/2 space-y-6">
+                            <h2 class="font-headline-lg text-headline-lg text-on-surface">Redefining the Clinical Experience
+                            </h2>
+                            <p class="text-body-lg text-on-surface-variant">
+                                Our modern clinics are designed to eliminate the anxiety often associated with medical
+                                visits. From the moment you walk through our doors, you'll encounter a space that
+                                prioritizes your comfort and peace of mind.
+                            </p>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                                    <span class="text-body-md text-on-surface">Zero-wait check-in systems for minimal
+                                        exposure.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                                    <span class="text-body-md text-on-surface">Private, sound-proof consultation
+                                        suites.</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                                    <span class="text-body-md text-on-surface">On-site advanced diagnostic labs for faster
+                                        results.</span>
+                                </li>
+                            </ul>
+                            <button class="font-label-md text-primary flex items-center gap-2 group">
+                                Learn more about our facilities
+                                <span
+                                    class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Testimonials -->
+            <section class="py-24 bg-surface">
+                <div class="container mx-auto px-6 transition-all duration-700 opacity-100 translate-y-0">
+                    <div class="text-center mb-16">
+                        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-4">What Our Patients Say</h2>
+                        <div class="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Testimonial 1 -->
+                        <div
+                            class="bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/30 shadow-sm relative">
+                            <div class="flex gap-1 text-secondary mb-4">
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                            </div>
+                            <p class="text-body-md text-on-surface italic mb-6">"The digital portal made scheduling my
+                                surgery so simple. I could track everything from prep to recovery. Truly a modern
+                                experience."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
+                                    <img alt="Sarah J." class="object-cover"
+                                        data-alt="A portrait of a cheerful middle-aged woman with a warm, authentic smile, representing a satisfied patient. She is in a casual, bright setting with soft natural light. The aesthetic is clean and high-quality, emphasizing a positive and healthy lifestyle."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp_5b-3StfPjvp7JuK5GvhcJsThKioHPZNeWzK6OfVOiMRl9gOItiG5wsRBzUbYcY2VVB215KC1iDmup3N-jrzVt79gGNKQHbNw2ymJSIduR5olicvbCuZW4UuFa3kX27RX_bpUicGNT83_8O3Pm9CHpovS1O7a60p5bxVVjexlhf4jILXEMvasVERpVob1SYDVcdzcpn8l6jGqRwsdoxYXdspDbaIAz6j9RUJDhoA3mROpOYjQ8FXmVcy-zSuKyCqPwdlAq2ENayV">
+                                </div>
+                                <div>
+                                    <p class="text-on-surface font-bold">Sarah Jenkins</p>
+                                    <p class="text-body-sm text-on-surface-variant">Cardiology Patient</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Testimonial 2 -->
+                        <div
+                            class="bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/30 shadow-sm relative">
+                            <div class="flex gap-1 text-secondary mb-4">
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                            </div>
+                            <p class="text-body-md text-on-surface italic mb-6">"Finally, a healthcare provider that values
+                                my time. No paperwork, just efficient and compassionate care from expert doctors."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
+                                    <img alt="Michael R." class="object-cover"
+                                        data-alt="A portrait of a professional man in his 40s looking confident and healthy. He has a subtle, friendly smile and is standing in a brightly lit modern environment. The photo is crisp and clean, reflecting a high-standard of medical care and wellness."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3hFL_HNyRQah88NQ0L6b-o24ToJYq1z5oKPk__dUEfYgzYZGk8J-HdVwnWpPuUkEvFmlylwoXvCFe8c8QKNHxpTzGieSB2EKsrFnXEMsXl4du6a11fJP_Cf_GDJCH7Ux9E571QPjtTCac5JyjqDezpwHEBsAXcIDnVMUzW-XMc1U3Z8thDBbAC70nX1naWhUMHFAlGCFF54gDN1MOxjQPfM8HIo05CVDeTLjACNua-y8VjDVfeHHcR4D0s-l_BdO02_TaqAVm76N_">
+                                </div>
+                                <div>
+                                    <p class="text-on-surface font-bold">Michael Reed</p>
+                                    <p class="text-body-sm text-on-surface-variant">Family Wellness</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Testimonial 3 -->
+                        <div
+                            class="bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/30 shadow-sm relative">
+                            <div class="flex gap-1 text-secondary mb-4">
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-[20px]"
+                                    style="font-variation-settings: 'FILL' 1;">star</span>
+                            </div>
+                            <p class="text-body-md text-on-surface italic mb-6">"The facilities are incredible, but the
+                                staff is what makes MediCare special. They truly listen and treat you like a person, not a
+                                file."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
+                                    <img alt="Elena V." class="object-cover"
+                                        data-alt="A profile photo of a young woman with a calm and peaceful expression. The lighting is soft and airy, creating a high-key light-mode aesthetic. Her appearance is healthy and vibrant, reinforcing the message of comprehensive and caring healthcare."
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb4xRK8miifBOJJPK41Gw_sQNNOfbnV6CX1s5PsktauUvmlqYTZJZcmF3hjBTJ6wlB1BSK7tXGq2BLJJXI_jdr-fWp9JBnXYhy3Z6du4oO7bMGkw83WczyiOIrLA6ITUOzJ0cPovyx5ZOYw5qEZ5OkIHgzuzOqh2jzbxh-Sdwl4eP78szYSKyzTKEQifCtvj--p6lLhGR8uZ6MYLxPTnvSoLAsNGVahoq24EYKX6Divdb-o6lWTgslF31hLz_M_iDYDbHMMSjQ_X4x">
+                                </div>
+                                <div>
+                                    <p class="text-on-surface font-bold">Elena Vance</p>
+                                    <p class="text-body-sm text-on-surface-variant">General Health</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- CTA Section -->
+            <section class="py-24 container mx-auto px-6">
+                <div
+                    style="background: linear-gradient(135deg, #003d9b 0%, #0052cc 50%, #1a6fd4 100%);"
+                    class="rounded-[40px] p-12 lg:p-20 text-center relative overflow-hidden">
+
+                    <!-- Decorative blobs -->
+                    <div class="absolute top-0 right-0 w-96 h-96 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none" style="background: rgba(255,255,255,0.07);"></div>
+                    <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl pointer-events-none" style="background: rgba(100,180,255,0.12);"></div>
+                    <div class="absolute top-1/2 left-1/4 w-48 h-48 rounded-full blur-2xl pointer-events-none" style="background: rgba(255,255,255,0.04);"></div>
+
+                    <div class="relative z-10 max-w-3xl mx-auto">
+
+                        <!-- Badge -->
+                        <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full" style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);">
+                            <span class="material-symbols-outlined" style="font-size:16px; color:#a8d8ff;">favorite</span>
+                            <span style="font-size:12px; font-weight:600; letter-spacing:0.08em; color:#cce4ff; text-transform:uppercase;">Join 12,000+ Patients</span>
+                        </div>
+
+                        <!-- Heading -->
+                        <h2 style="font-size:clamp(28px, 4vw, 48px); font-weight:800; color:#ffffff; line-height:1.15; letter-spacing:-0.025em; margin-bottom:20px;">
+                            Ready for a<br>
+                            <span style="color:#a8d8ff;">Healthier Future?</span>
+                        </h2>
+
+                        <!-- Subtext -->
+                        <p style="font-size:17px; color:rgba(255,255,255,0.75); line-height:1.7; max-width:520px; margin:0 auto 40px;">
+                            Join thousands of patients who have switched to MediCare for a more personalized,
+                            digital-first healthcare journey.
+                        </p>
+
+                        <!-- Feature pills -->
+                        <div class="flex flex-wrap justify-center gap-3 mb-10">
+                            <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);">
+                                <span class="material-symbols-outlined" style="font-size:15px;">check_circle</span> Free Consultation
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);">
+                                <span class="material-symbols-outlined" style="font-size:15px;">check_circle</span> 200+ Specialists
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium" style="background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);">
+                                <span class="material-symbols-outlined" style="font-size:15px;">check_circle</span> 24/7 Support
+                            </span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="/auth/login"
+                                style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:16px 36px; background:#ffffff; color:#003d9b; border-radius:14px; font-size:15px; font-weight:700; letter-spacing:0.02em; text-decoration:none; box-shadow: 0 8px 30px rgba(0,0,0,0.2); transition: all 0.25s;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 40px rgba(0,0,0,0.3)';"
+                                onmouseout="this.style.transform=''; this.style.boxShadow='0 8px 30px rgba(0,0,0,0.2)';">
+                                <span class="material-symbols-outlined" style="font-size:18px;">person_add</span>
+                                Create Your Account
+                            </a>
+                            <a href="/auth/login"
+                                style="display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:16px 36px; background:rgba(255,255,255,0.12); color:#ffffff; border:1.5px solid rgba(255,255,255,0.35); border-radius:14px; font-size:15px; font-weight:600; text-decoration:none; transition: all 0.25s; backdrop-filter: blur(8px);"
+                                onmouseover="this.style.background='rgba(255,255,255,0.2)'; this.style.borderColor='rgba(255,255,255,0.6)';"
+                                onmouseout="this.style.background='rgba(255,255,255,0.12)'; this.style.borderColor='rgba(255,255,255,0.35)';">
+                                <span class="material-symbols-outlined" style="font-size:18px;">groups</span>
+                                View Specialist List
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="bg-inverse-surface text-inverse-on-surface py-20 px-6">
+            <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div class="space-y-6">
+                    <span class="font-headline-md text-headline-md font-bold text-primary-fixed">MediCare Portal</span>
+                    <p class="text-body-sm text-outline-variant leading-relaxed">
+                        Setting the standard for modern medicine through innovation, compassion, and clinical excellence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a class="w-10 h-10 rounded-full bg-on-surface-variant/20 flex items-center justify-center hover:bg-primary-fixed hover:text-primary transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined">share</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full bg-on-surface-variant/20 flex items-center justify-center hover:bg-primary-fixed hover:text-primary transition-all"
+                            href="#">
+                            <span class="material-symbols-outlined">public</span>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-label-md text-primary-fixed uppercase tracking-widest mb-6">Services</h4>
+                    <ul class="space-y-4 text-body-sm text-outline-variant">
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-label-md text-primary-fixed uppercase tracking-widest mb-6">Patient Portal</h4>
+                    <ul class="space-y-4 text-body-sm text-outline-variant">
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                        <li class=""><a class="hover:text-primary-fixed transition-colors" href="#">Patient Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-label-md text-primary-fixed uppercase tracking-widest mb-6">Contact</h4>
+                    <ul class="space-y-4 text-body-sm text-outline-variant">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">call</span>
+                            1-800-MEDICARE
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">mail</span>
+                            care@medicare.com
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">location_on</span>
+                            123 Health Ave, NY 10001
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="container mx-auto mt-20 pt-8 border-t border-outline-variant/20 text-center text-label-sm text-outline-variant">
+                © 2024 MediCare Portal. All rights reserved. Privacy Policy | Terms of Service
+            </div>
+        </footer>
+        <script src="/js/global/home.js"></script>
+    </body>
+</html>
